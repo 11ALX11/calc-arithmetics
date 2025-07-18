@@ -3,16 +3,17 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/11ALX11/calc-arithmetics/i18n"
 	"github.com/spf13/cobra"
 )
 
 // cliCmd represents the cli command
 var cliCmd = &cobra.Command{
 	Use:   "cli",
-	Short: "Use a command-line interface",
+	Short: i18n.T("Use a command-line interface"),
 	// Long:  `Use command-line interface.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("cli not supported yet.")
+		fmt.Println(i18n.T("cli not supported yet."))
 	},
 }
 

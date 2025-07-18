@@ -3,16 +3,17 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/11ALX11/calc-arithmetics/i18n"
 	"github.com/spf13/cobra"
 )
 
 // guiCmd represents the gui command
 var guiCmd = &cobra.Command{
 	Use:   "gui",
-	Short: "Use a graphic user interface",
+	Short: i18n.T("Use a graphic user interface"),
 	// Long: `Use an user interface.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("gui not supported yet.")
+		fmt.Println(i18n.T("gui not supported yet."))
 	},
 }
 

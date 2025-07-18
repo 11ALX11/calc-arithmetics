@@ -3,14 +3,15 @@ package cmd
 import (
 	"os"
 
+	"github.com/11ALX11/calc-arithmetics/i18n"
 	"github.com/spf13/cobra"
 )
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "calc-arithmetics",
-	Short: "Find all arithmetic operations, calculate and replace.",
-	Long:  `Find all arithmetic operations in the input file, calculate and replace with the results in the output file.`,
+	Short: i18n.T("Find all arithmetic operations, calculate and replace."),
+	Long:  i18n.T(`Find all arithmetic operations in the input file, calculate and replace with the results in the output file.`),
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },

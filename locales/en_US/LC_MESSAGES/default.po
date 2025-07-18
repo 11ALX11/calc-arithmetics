@@ -1,0 +1,50 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8\n"
+
+# filename: cmd/cli.go, offset: 199, line: 13, column: 16
+msgid "Use a command-line interface"
+msgstr "Use a command-line interface"
+
+# filename: cmd/cli.go, offset: 336, line: 16, column: 15
+msgid "cli not supported yet."
+msgstr "cli not supported yet."
+
+# filename: cmd/console.go, offset: 215, line: 13, column: 16
+msgid "Use a console-based interface"
+msgstr "Use a console-based interface"
+
+# filename: cmd/console.go, offset: 356, line: 16, column: 15
+msgid "console not supported yet."
+msgstr "console not supported yet."
+
+# filename: cmd/gui.go, offset: 199, line: 13, column: 16
+msgid "Use a graphic user interface"
+msgstr "Use a graphic user interface"
+
+# filename: cmd/gui.go, offset: 330, line: 16, column: 15
+msgid "gui not supported yet."
+msgstr "gui not supported yet."
+
+# filename: cmd/root.go, offset: 250, line: 13, column: 16
+msgid "Find all arithmetic operations, calculate and replace."
+msgstr "Find all arithmetic operations, calculate and replace."
+
+# filename: cmd/root.go, offset: 324, line: 14, column: 16
+msgid ""
+"Find all arithmetic operations in the input file, calculate and replace with "
+"the results in the output file."
+msgstr ""
+"Find all arithmetic operations in the input file, calculate and replace with "
+"the results in the output file."
+
+# filename: cmd/web.go, offset: 199, line: 13, column: 16
+msgid "Use a web-based interface"
+msgstr "Use a web-based interface"
+
+# filename: cmd/web.go, offset: 332, line: 16, column: 15
+msgid "web not supported yet."
+msgstr "web not supported yet."
+
+# filename: main.go, offset: 185, line: 12, column: 14
+msgid "failed to initialize i18n: %v"
+msgstr "failed to initialize i18n: %v"
