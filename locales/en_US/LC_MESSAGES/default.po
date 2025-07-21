@@ -1,6 +1,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\n"
 
+# filename: i18n/lang_test.go, line: 9, column: 25
+msgid "Test"
+msgstr "Test"
+
 # filename: cmd/cli.go, offset: 199, line: 13, column: 16
 msgid "Use a command-line interface"
 msgstr "Use a command-line interface"

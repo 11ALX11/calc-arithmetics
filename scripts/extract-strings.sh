@@ -1,10 +1,12 @@
 # !/bin/bash
+#
 # source: https://github.com/PhraseApp-Blog/go-internationalization/blob/master/scripts/extract-strings.sh
+#
 
 # Set up directories relative to the current directory
 workdir="tmp"
 localesdir="locales"
-ignored="^(i18n|tmp|$workdir)"
+ignored="^(i18n|$workdir)"
 
 # Function to extract messages
 extract_messages() {
