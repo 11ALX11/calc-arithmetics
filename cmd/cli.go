@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/11ALX11/calc-arithmetics/app"
 	"github.com/11ALX11/calc-arithmetics/i18n"
 	"github.com/spf13/cobra"
 )
@@ -12,8 +13,21 @@ var cliCmd = &cobra.Command{
 	Use:   "cli",
 	Short: i18n.T("Use a command-line interface"),
 	// Long:  `Use command-line interface.`,
+	Args: cobra.ExactArgs(2),
+
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(i18n.T("cli not supported yet."))
+
+		content, err := app.ReadFile(args[0])
+		if err != nil {
+			fmt.Errorf("failed to read a file: %s; error: %s", args[0], err)
+			return
+		}
+
+		err = app.WriteFile(args[1], app.ReplaceMathExpressions(content))
+		if err != nil {
+			fmt.Errorf("failed to write a file: %s; error: %s", args[1], err)
+			return
+		}
 	},
 }
 
