@@ -138,11 +138,21 @@ func TestSetCurrentLocale(t *testing.T) {
 	t.Setenv("LANGUAGE", "ru_RU")
 
 	SetCurrentLocale(EN.String())
+	expectedStr := "Test"
+	translationStr := T("Test")
+	if translationStr != expectedStr {
+		t.Errorf("Expected translation to EN \"%s\" to match \"%s\", but it does not", translationStr, expectedStr)
+	}
 	if lang := GetCurrentLanguage(); lang != EN {
 		t.Errorf("Expected switch to EN locale, current locale: %s", lang)
 	}
 
 	SetCurrentLocale(RU.String())
+	expectedStr = "Тест"
+	translationStr = T("Test")
+	if translationStr != expectedStr {
+		t.Errorf("Expected translation to RU \"%s\" to match \"%s\", but it does not", translationStr, expectedStr)
+	}
 	if lang := GetCurrentLanguage(); lang != RU {
 		t.Errorf("Expected switch to RU locale, current locale: %s", lang)
 	}

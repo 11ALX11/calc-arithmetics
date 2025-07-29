@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/11ALX11/calc-arithmetics/app"
 	"github.com/11ALX11/calc-arithmetics/i18n"
@@ -19,13 +19,29 @@ var cliCmd = &cobra.Command{
 
 		content, err := app.ReadFile(args[0])
 		if err != nil {
-			fmt.Errorf("failed to read a file: %s; error: %s", args[0], err)
+			log.Fatalf("Failed to read a file: %s; error: %s", args[0], err)
 			return
 		}
 
-		err = app.WriteFile(args[1], app.ReplaceMathExpressions(content))
+		// flag: useEvalLib
+		var evalFunction func(string) int
+		if useEvalLib {
+			evalFunction = app.EvalLib
+		} else {
+			evalFunction = app.Eval
+		}
+
+		// flag: useFilterRegex
+		var sResult string
+		if useFilterRegex {
+			sResult = app.ReplaceMathExpressionsRegex(content, evalFunction)
+		} else {
+			sResult = ""
+		}
+
+		err = app.WriteFile(args[1], sResult)
 		if err != nil {
-			fmt.Errorf("failed to write a file: %s; error: %s", args[1], err)
+			log.Fatalf("Failed to write a file: %s; error: %s", args[1], err)
 			return
 		}
 	},

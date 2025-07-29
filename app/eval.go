@@ -1,18 +1,19 @@
 package app
 
 /*
-Eval evaluates(calculates) an arithmetic expr.
+Eval evaluates(calculates) an arithmetic expression.
 
-@param expr string - string with an arithmetic expr to evaluate.
-String is allowed to contain only 0-9, +-/* and (), also expr itself needs to be correct.
+@param expression string - string with an arithmetic expression to evaluate.
+String is allowed to contain only 0-9, +-/* and (), also expression itself needs to be correct.
 
 @return int - result of an expr.
 */
-func Eval(expr string) int {
+func Eval(expression string) int {
 	var precedence = func(operand byte) int {
-		if operand == '(' || operand == ')' {
+		switch operand {
+		case '(', ')':
 			return 0
-		} else if operand == '+' || operand == '-' {
+		case '+', '-':
 			return 1
 		}
 		return 2
@@ -36,21 +37,21 @@ func Eval(expr string) int {
 	var operands []byte
 
 	i := 0
-	for i < len(expr) {
-		if expr[i] == ' ' {
+	for i < len(expression) {
+		if expression[i] == ' ' {
 			i++
 			continue
-		} else if expr[i] >= '0' && expr[i] <= '9' {
+		} else if expression[i] >= '0' && expression[i] <= '9' {
 			number := 0
-			for i < len(expr) && expr[i] >= '0' && expr[i] <= '9' {
-				number = number*10 + int(expr[i]-'0')
+			for i < len(expression) && expression[i] >= '0' && expression[i] <= '9' {
+				number = number*10 + int(expression[i]-'0')
 				i++
 			}
 			numbers = append(numbers, number)
 			i--
-		} else if expr[i] == '(' {
-			operands = append(operands, expr[i])
-		} else if expr[i] == ')' {
+		} else if expression[i] == '(' {
+			operands = append(operands, expression[i])
+		} else if expression[i] == ')' {
 			for operands[len(operands)-1] != '(' {
 				number2 := numbers[len(numbers)-1]
 				numbers = numbers[:len(numbers)-1]
@@ -62,7 +63,7 @@ func Eval(expr string) int {
 			}
 			operands = operands[:len(operands)-1]
 		} else {
-			for len(operands) > 0 && operands[len(operands)-1] != '(' && precedence(operands[len(operands)-1]) >= precedence(expr[i]) {
+			for len(operands) > 0 && operands[len(operands)-1] != '(' && precedence(operands[len(operands)-1]) >= precedence(expression[i]) {
 				number2 := numbers[len(numbers)-1]
 				numbers = numbers[:len(numbers)-1]
 				number1 := numbers[len(numbers)-1]
@@ -71,7 +72,7 @@ func Eval(expr string) int {
 				operands = operands[:len(operands)-1]
 				numbers = append(numbers, applyOperand(operand, number2, number1))
 			}
-			operands = append(operands, expr[i])
+			operands = append(operands, expression[i])
 		}
 		i++
 	}

@@ -12,6 +12,12 @@ var rootCmd = &cobra.Command{
 	Use:   "calc-arithmetics",
 	Short: i18n.T("Find all arithmetic operations, calculate and replace."),
 	Long:  i18n.T(`Find all arithmetic operations in the input file, calculate and replace with the results in the output file.`),
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		// flag: forceTranslation
+		if forceTranslation != "" {
+			i18n.SetCurrentLocale(forceTranslation)
+		}
+	},
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
@@ -24,7 +30,14 @@ func Execute() {
 	if err != nil {
 		os.Exit(1)
 	}
+
 }
+
+var (
+	forceTranslation string
+	useEvalLib       bool
+	useFilterRegex   bool
+)
 
 func init() {
 	// Here you will define your flags and configuration settings.
@@ -36,4 +49,9 @@ func init() {
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+
+	rootCmd.PersistentFlags().StringVarP(&forceTranslation, "forceTranslation", "t", "", "Forces translation of an app to prefered locale. Options: \"en_US\" | \"ru_RU\"")
+
+	rootCmd.PersistentFlags().BoolVarP(&useEvalLib, "evalLib", "e", false, "Use an evaluation library expr-lang.")
+	rootCmd.PersistentFlags().BoolVarP(&useFilterRegex, "filterRegex", "f", false, "Use regex for filtering arithmetic expressions from file.")
 }
