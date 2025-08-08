@@ -67,7 +67,7 @@ func (s *HelpersSuite) TestGetPwdDirPathWithEmptyEnv(t provider.T) {
 
 	path, err := getPwdDirPath()
 	t.Assert().Error(err, "Expected error when APPROOTDIR is empty")
-	t.Assert().Equal(path, "", "Expected path to be empty")
+	t.Assert().Equal("", path, "Expected path to be empty")
 }
 
 func TestHelpersSuite(t *testing.T) {

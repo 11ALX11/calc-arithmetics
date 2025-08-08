@@ -30,8 +30,8 @@ func (s *I18nSuite) TestInit(t provider.T) {
 
 	t.Assert().True(len(langMap) >= 2, "Expected at least 2 languages, got %d", len(langMap))
 
-	t.Assert().Equal(EN.T("Test"), "Test", "Expected translation to EN to match")
-	t.Assert().Equal(RU.T("Test"), "Тест", "Expected translation to RU to match")
+	t.Assert().Equal("Test", EN.T("Test"), "Expected translation to EN to match")
+	t.Assert().Equal("Тест", RU.T("Test"), "Expected translation to RU to match")
 }
 
 func (s *I18nSuite) TestGetLanguageCodeLANGUAGE(t provider.T) {
@@ -40,7 +40,7 @@ func (s *I18nSuite) TestGetLanguageCodeLANGUAGE(t provider.T) {
 	t.Setenv("LANGUAGE", "ru_RU")
 
 	lang := getLanguageCode()
-	t.Assert().Equal(lang, "ru_RU", "Expected language code to be ru_RU")
+	t.Assert().Equal("ru_RU", lang, "Expected language code to be ru_RU")
 }
 
 func (s *I18nSuite) TestGetLanguageCodeLC_ALL(t provider.T) {
@@ -49,7 +49,7 @@ func (s *I18nSuite) TestGetLanguageCodeLC_ALL(t provider.T) {
 	t.Setenv("LC_ALL", "ru_RU")
 
 	lang := getLanguageCode()
-	t.Assert().Equal(lang, "ru_RU", "Expected language code to be ru_RU")
+	t.Assert().Equal("ru_RU", lang, "Expected language code to be ru_RU")
 }
 
 func (s *I18nSuite) TestGetLanguageCodeLC_MESSAGES(t provider.T) {
@@ -58,7 +58,7 @@ func (s *I18nSuite) TestGetLanguageCodeLC_MESSAGES(t provider.T) {
 	t.Setenv("LC_MESSAGES", "ru_RU")
 
 	lang := getLanguageCode()
-	t.Assert().Equal(lang, "ru_RU", "Expected language code to be ru_RU")
+	t.Assert().Equal("ru_RU", lang, "Expected language code to be ru_RU")
 }
 
 func (s *I18nSuite) TestGetLanguageCodeLANG(t provider.T) {
@@ -67,7 +67,7 @@ func (s *I18nSuite) TestGetLanguageCodeLANG(t provider.T) {
 	t.Setenv("LANG", "ru_RU")
 
 	lang := getLanguageCode()
-	t.Assert().Equal(lang, "ru_RU", "Expected language code to be ru_RU")
+	t.Assert().Equal("ru_RU", lang, "Expected language code to be ru_RU")
 }
 
 func (s *I18nSuite) TestGetSupportedLanguages(t provider.T) {
@@ -94,7 +94,7 @@ func (s *I18nSuite) TestGetCurrentLanguage(t provider.T) {
 	Init()
 
 	lang := GetCurrentLanguage()
-	t.Assert().Equal(lang, RU, "Expected current language to be RU")
+	t.Assert().Equal(RU, lang, "Expected current language to be RU")
 }
 
 func (s *I18nSuite) TestT(t provider.T) {
@@ -105,7 +105,7 @@ func (s *I18nSuite) TestT(t provider.T) {
 
 	expected := "Тест"
 	got := T("Test")
-	t.Assert().Equal(got, expected, "Expected translation to RU to match")
+	t.Assert().Equal(expected, got, "Expected translation to RU to match")
 }
 
 func (s *I18nSuite) TestSetCurrentLocale(t provider.T) {
@@ -115,12 +115,12 @@ func (s *I18nSuite) TestSetCurrentLocale(t provider.T) {
 	t.Setenv("LANGUAGE", "ru_RU")
 
 	SetCurrentLocale(EN.String())
-	t.Assert().Equal(T("Test"), "Test", "Expected translation to EN")
-	t.Assert().Equal(GetCurrentLanguage(), EN, "Expected current locale to be EN")
+	t.Assert().Equal("Test", T("Test"), "Expected translation to EN")
+	t.Assert().Equal(EN, GetCurrentLanguage(), "Expected current locale to be EN")
 
 	SetCurrentLocale(RU.String())
-	t.Assert().Equal(T("Test"), "Тест", "Expected translation to RU")
-	t.Assert().Equal(GetCurrentLanguage(), RU, "Expected current locale to be RU")
+	t.Assert().Equal("Тест", T("Test"), "Expected translation to RU")
+	t.Assert().Equal(RU, GetCurrentLanguage(), "Expected current locale to be RU")
 }
 
 func TestI18nSuite(t *testing.T) {

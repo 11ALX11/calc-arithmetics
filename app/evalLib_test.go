@@ -19,19 +19,13 @@ func (s *EvalLibSuite) BeforeEach(t provider.T) {
 }
 
 func (s *EvalLibSuite) TestEvalLib(t provider.T) {
+	t.Description("Test EvalLib() on a series of strings that contain arithmetic expression")
 	t.Parallel()
+
 	for _, tt := range evalTests {
-		t.Run(tt.in, func(t provider.T) {
-			// ToDo: BeforeEach somehow doesnt apply
-			t.Epic("App")
-			t.Feature("Eval")
-			t.Tags("app", "math", "lib", "parallel")
-
-			tti := tt
-			t.Parallel()
-
-			num := EvalLib(tti.in)
-			t.Assert().Equal(fmt.Sprint(num), tti.out, "expected %s, got %s", tti.out, fmt.Sprint(num))
+		t.WithNewAsyncStep(tt.in, func(sCtx provider.StepCtx) {
+			num := EvalLib(tt.in)
+			sCtx.Assert().Equal(tt.out, fmt.Sprint(num), "expected %s, got %s", tt.out, fmt.Sprint(num))
 		})
 	}
 }

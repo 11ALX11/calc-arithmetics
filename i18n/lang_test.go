@@ -27,18 +27,18 @@ func (s *LanguageSuite) TestLanguageT(t provider.T) {
 
 	expectedEN := "Test"
 	gotEN := EN.T("Test")
-	t.Assert().Equal(gotEN, expectedEN, "Expected translation to EN to be %s", expectedEN)
+	t.Assert().Equal(expectedEN, gotEN, "Expected translation to EN to be %s", expectedEN)
 
 	expectedRU := "Тест"
 	gotRU := RU.T("Test")
-	t.Assert().Equal(gotRU, expectedRU, "Expected translation to RU to be %s", expectedRU)
+	t.Assert().Equal(expectedRU, gotRU, "Expected translation to RU to be %s", expectedRU)
 }
 
 func (s *LanguageSuite) TestString(t provider.T) {
 	t.Description("Test String() for LanguageCode EN and RU")
 
-	t.Assert().Equal(EN.String(), "en_US", "Expected EN.String() to be en_US")
-	t.Assert().Equal(RU.String(), "ru_RU", "Expected RU.String() to be ru_RU")
+	t.Assert().Equal("en_US", EN.String(), "Expected EN.String() to be en_US")
+	t.Assert().Equal("ru_RU", RU.String(), "Expected RU.String() to be ru_RU")
 }
 
 func TestLanguageSuite(t *testing.T) {

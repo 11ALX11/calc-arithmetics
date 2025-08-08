@@ -29,6 +29,8 @@ func (s *FilterSuite) BeforeEach(t provider.T) {
 }
 
 func (s *FilterSuite) TestFilter(t provider.T) {
+	t.Description("Test ReplaceMathExpressions() on a series of strings that contain arithmetic expression to filter from sentences (using EvalLib())")
+
 	var tests []struct{ in, out string }
 
 	tests = append(tests, filterTests...)
@@ -37,17 +39,9 @@ func (s *FilterSuite) TestFilter(t provider.T) {
 	t.Parallel()
 
 	for _, tt := range tests {
-		t.Run(tt.in, func(t provider.T) {
-			// ToDo: BeforeEach somehow doesnt apply
-			t.Epic("App")
-			t.Feature("Filter")
-			t.Tags("app", "math", "parallel")
-
-			tti := tt
-			t.Parallel()
-
-			str := strings.Trim(ReplaceMathExpressions(tti.in, EvalLib), " ")
-			t.Assert().Equal(str, tti.out, "expected %s, got %s", tti.out, str)
+		t.WithNewAsyncStep(tt.in, func(sCtx provider.StepCtx) {
+			str := strings.Trim(ReplaceMathExpressions(tt.in, EvalLib), " ")
+			sCtx.Assert().Equal(tt.out, str, "expected %s, got %s", tt.out, str)
 		})
 	}
 }

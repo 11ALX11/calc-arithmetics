@@ -29,19 +29,13 @@ func (s *EvalSuite) BeforeEach(t provider.T) {
 }
 
 func (s *EvalSuite) TestEval(t provider.T) {
+	t.Description("Test Eval() on a series of strings that contain arithmetic expression")
 	t.Parallel()
+
 	for _, tt := range evalTests {
-		t.Run(tt.in, func(t provider.T) {
-			// ToDo: BeforeEach somehow doesnt apply
-			t.Epic("App")
-			t.Feature("Eval")
-			t.Tags("app", "math", "parallel")
-
-			tti := tt
-			t.Parallel()
-
-			num := Eval(tti.in)
-			t.Assert().Equal(fmt.Sprint(num), tti.out, "expected %s, got %s", tti.out, fmt.Sprint(num))
+		t.WithNewAsyncStep(tt.in, func(sCtx provider.StepCtx) {
+			num := Eval(tt.in)
+			sCtx.Assert().Equal(tt.out, fmt.Sprint(num), "expected %s, got %s", tt.out, fmt.Sprint(num))
 		})
 	}
 }

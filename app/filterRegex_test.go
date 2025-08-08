@@ -19,23 +19,17 @@ func (s *FilterRegexSuite) BeforeEach(t provider.T) {
 }
 
 func (s *FilterRegexSuite) TestFilterRegex(t provider.T) {
+	t.Description("Test ReplaceMathExpressionsRegex() on a series of strings that contain arithmetic expression to filter from sentences (using EvalLib())")
+
 	var tests []struct{ in, out string }
 
 	tests = append(tests, filterTests...)
 	tests = append(tests, evalTests...)
 
 	for _, tt := range tests {
-		t.Run(tt.in, func(t provider.T) {
-			// ToDo: BeforeEach somehow doesnt apply
-			t.Epic("App")
-			t.Feature("Filter")
-			t.Tags("app", "math", "regex", "parallel")
-
-			tti := tt
-			t.Parallel()
-
-			str := strings.Trim(ReplaceMathExpressionsRegex(tti.in, EvalLib), " ")
-			t.Assert().Equal(str, tti.out, "expected %s, got %s", tti.out, str)
+		t.WithNewAsyncStep(tt.in, func(sCtx provider.StepCtx) {
+			str := strings.Trim(ReplaceMathExpressionsRegex(tt.in, EvalLib), " ")
+			sCtx.Assert().Equal(tt.out, str, "expected %s, got %s", tt.out, str)
 		})
 	}
 }
