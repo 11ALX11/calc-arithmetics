@@ -4,156 +4,125 @@ import (
 	"testing"
 
 	"github.com/joho/godotenv"
+	"github.com/ozontech/allure-go/pkg/framework/provider"
+	"github.com/ozontech/allure-go/pkg/framework/suite"
 )
 
-func TestInit(t *testing.T) {
-	if err := godotenv.Load("../.env"); err != nil {
-		t.Fatalf("Error loading .env file")
-		return
-	}
-
-	if err := Init(); err != nil {
-		t.Fatalf("Expected no error, got %v", err)
-	}
-
-	if len := len(langMap); len < 2 {
-		t.Errorf("Expected to have at least 2 locales in a map, got %d", len)
-	}
-
-	expectedStr := "Test"
-	translationStr := EN.T("Test")
-	if translationStr != expectedStr {
-		t.Errorf("Expected translation to EN \"%s\" to match \"%s\", but it does not", translationStr, expectedStr)
-	}
-
-	expectedStr = "Тест"
-	translationStr = RU.T("Test")
-	if translationStr != expectedStr {
-		t.Errorf("Expected translation to RU \"%s\" to match \"%s\", but it does not", translationStr, expectedStr)
-	}
+type I18nSuite struct {
+	suite.Suite
 }
 
-func TestGetLanguageCodeLANGUAGE(t *testing.T) {
+func (s *I18nSuite) BeforeAll(t provider.T) {
+	_ = godotenv.Load("../.env")
+}
+
+func (s *I18nSuite) BeforeEach(t provider.T) {
+	t.Epic("i18n")
+	t.Feature("i18n-core")
+	t.Tags("i18n", "env")
+}
+
+func (s *I18nSuite) TestInit(t provider.T) {
+	t.Description("Test Init: loading environment, initializing translations and checking basic translations")
+
+	err := Init()
+	t.Assert().NoError(err, "Expected no error on Init()")
+
+	t.Assert().True(len(langMap) >= 2, "Expected at least 2 languages, got %d", len(langMap))
+
+	t.Assert().Equal(EN.T("Test"), "Test", "Expected translation to EN to match")
+	t.Assert().Equal(RU.T("Test"), "Тест", "Expected translation to RU to match")
+}
+
+func (s *I18nSuite) TestGetLanguageCodeLANGUAGE(t provider.T) {
+	t.Description("Test getLanguageCode with LANGUAGE env")
+
 	t.Setenv("LANGUAGE", "ru_RU")
 
 	lang := getLanguageCode()
-	if lang != "ru_RU" {
-		t.Errorf("Expected to get language code ru_RU, got %s", lang)
-	}
+	t.Assert().Equal(lang, "ru_RU", "Expected language code to be ru_RU")
 }
 
-func TestGetLanguageCodeLC_ALL(t *testing.T) {
+func (s *I18nSuite) TestGetLanguageCodeLC_ALL(t provider.T) {
+	t.Description("Test getLanguageCode with LC_ALL env")
+
 	t.Setenv("LC_ALL", "ru_RU")
 
 	lang := getLanguageCode()
-	if lang != "ru_RU" {
-		t.Errorf("Expected to get language code ru_RU, got %s", lang)
-	}
+	t.Assert().Equal(lang, "ru_RU", "Expected language code to be ru_RU")
 }
 
-func TestGetLanguageCodeLC_MESSAGES(t *testing.T) {
+func (s *I18nSuite) TestGetLanguageCodeLC_MESSAGES(t provider.T) {
+	t.Description("Test getLanguageCode with LC_MESSAGES env")
+
 	t.Setenv("LC_MESSAGES", "ru_RU")
 
 	lang := getLanguageCode()
-	if lang != "ru_RU" {
-		t.Errorf("Expected to get language code ru_RU, got %s", lang)
-	}
+	t.Assert().Equal(lang, "ru_RU", "Expected language code to be ru_RU")
 }
 
-func TestGetLanguageCodeLANG(t *testing.T) {
+func (s *I18nSuite) TestGetLanguageCodeLANG(t provider.T) {
+	t.Description("Test getLanguageCode with LANG env")
+
 	t.Setenv("LANG", "ru_RU")
 
 	lang := getLanguageCode()
-	if lang != "ru_RU" {
-		t.Errorf("Expected to get language code ru_RU, got %s", lang)
-	}
+	t.Assert().Equal(lang, "ru_RU", "Expected language code to be ru_RU")
 }
 
-func TestGetSupportedLanguages(t *testing.T) {
-	if err := godotenv.Load("../.env"); err != nil {
-		t.Fatalf("Error loading .env file")
-		return
-	}
+func (s *I18nSuite) TestGetSupportedLanguages(t provider.T) {
+	t.Description("Test GetSupportedLanguages returns at least 2 languages")
 
 	Init()
 
-	if len := len(GetSupportedLanguages()); len < 2 {
-		t.Errorf("Expected at least 2 supported languages, got %d", len)
-	}
+	supported := GetSupportedLanguages()
+	t.Assert().True(len(supported) >= 2, "Expected at least 2 supported languages, got %d", len(supported))
 }
 
-func TestNewLanguageFromString(t *testing.T) {
-	if lang := NewLanguageFromString("ru_RU"); lang != RU {
-		t.Errorf("Expected for ru_RU to match RU enum, got %s", lang)
-	}
+func (s *I18nSuite) TestNewLanguageFromString(t provider.T) {
+	t.Description("Test NewLanguageFromString parses language codes")
 
-	if lang := NewLanguageFromString("ru"); lang != RU {
-		t.Errorf("Expected for ru to match RU enum, got %s", lang)
-	}
-
-	if lang := NewLanguageFromString("en_US"); lang != EN {
-		t.Errorf("Expected for en_US to match EN enum, got %s", lang)
-	}
+	t.Assert().Equal(NewLanguageFromString("ru_RU"), RU, "Expected ru_RU to be RU")
+	t.Assert().Equal(NewLanguageFromString("ru"), RU, "Expected ru to be RU")
+	t.Assert().Equal(NewLanguageFromString("en_US"), EN, "Expected en_US to be EN")
 }
 
-func TestGetCurrentLanguage(t *testing.T) {
+func (s *I18nSuite) TestGetCurrentLanguage(t provider.T) {
+	t.Description("Test GetCurrentLanguage returns correct language based on LANGUAGE env")
+
 	t.Setenv("LANGUAGE", "ru_RU")
 	Init()
 
 	lang := GetCurrentLanguage()
-	if lang != RU {
-		t.Errorf("Expected to get language (enum) RU, got %s", lang)
-	}
+	t.Assert().Equal(lang, RU, "Expected current language to be RU")
 }
 
-func TestT(t *testing.T) {
+func (s *I18nSuite) TestT(t provider.T) {
+	t.Description("Test T() returns correct translation for RU")
+
 	t.Setenv("LANGUAGE", "ru_RU")
+	Init()
 
-	if err := godotenv.Load("../.env"); err != nil {
-		t.Fatalf("Error loading .env file")
-		return
-	}
-
-	if err := Init(); err != nil {
-		t.Fatalf("Expected no error, got %v", err)
-	}
-
-	expectedStr := "Тест"
-	translationStr := T("Test")
-	if translationStr != expectedStr {
-		t.Errorf("Expected translation to RU \"%s\" to match \"%s\", but it does not", translationStr, expectedStr)
-	}
+	expected := "Тест"
+	got := T("Test")
+	t.Assert().Equal(got, expected, "Expected translation to RU to match")
 }
 
-func TestSetCurrentLocale(t *testing.T) {
-	if err := godotenv.Load("../.env"); err != nil {
-		t.Fatalf("Error loading .env file")
-		return
-	}
+func (s *I18nSuite) TestSetCurrentLocale(t provider.T) {
+	t.Description("Test SetCurrentLocale switches languages correctly")
 
-	if err := Init(); err != nil {
-		t.Fatalf("Expected no error, got %v", err)
-	}
-
+	Init()
 	t.Setenv("LANGUAGE", "ru_RU")
 
 	SetCurrentLocale(EN.String())
-	expectedStr := "Test"
-	translationStr := T("Test")
-	if translationStr != expectedStr {
-		t.Errorf("Expected translation to EN \"%s\" to match \"%s\", but it does not", translationStr, expectedStr)
-	}
-	if lang := GetCurrentLanguage(); lang != EN {
-		t.Errorf("Expected switch to EN locale, current locale: %s", lang)
-	}
+	t.Assert().Equal(T("Test"), "Test", "Expected translation to EN")
+	t.Assert().Equal(GetCurrentLanguage(), EN, "Expected current locale to be EN")
 
 	SetCurrentLocale(RU.String())
-	expectedStr = "Тест"
-	translationStr = T("Test")
-	if translationStr != expectedStr {
-		t.Errorf("Expected translation to RU \"%s\" to match \"%s\", but it does not", translationStr, expectedStr)
-	}
-	if lang := GetCurrentLanguage(); lang != RU {
-		t.Errorf("Expected switch to RU locale, current locale: %s", lang)
-	}
+	t.Assert().Equal(T("Test"), "Тест", "Expected translation to RU")
+	t.Assert().Equal(GetCurrentLanguage(), RU, "Expected current locale to be RU")
+}
+
+func TestI18nSuite(t *testing.T) {
+	suite.RunSuite(t, new(I18nSuite))
 }

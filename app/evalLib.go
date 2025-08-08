@@ -19,13 +19,14 @@ String is allowed to contain only 0-9, +-/* and (), also expr itself needs to be
 func EvalLib(expression string) int {
 	out, err := expr.Eval(expression, nil)
 	if err != nil {
-		log.Fatalf("failed to evaluate an expression %s: %v", expression, err)
+		log.Printf("failed to evaluate an expression %s: %v", expression, err)
+		return -1
 	}
 
 	result, err := strconv.Atoi(fmt.Sprint(out))
 	if err != nil {
 		log.Printf("failed to convert result of an evaluation of %s to int: %v", expression, err)
-		return -1
+		return -2
 	}
 
 	return result

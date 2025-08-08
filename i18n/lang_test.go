@@ -4,35 +4,43 @@ import (
 	"testing"
 
 	"github.com/joho/godotenv"
+	"github.com/ozontech/allure-go/pkg/framework/provider"
+	"github.com/ozontech/allure-go/pkg/framework/suite"
 )
 
-func TestLanguageT(t *testing.T) {
-	if err := godotenv.Load("../.env"); err != nil {
-		t.Fatalf("Error loading .env file")
-		return
-	}
-
-	Init()
-
-	expectedStr := "Test"
-	translationStr := EN.T("Test")
-	if translationStr != expectedStr {
-		t.Errorf("Expected translation to EN \"%s\" to match \"%s\", but it does not", translationStr, expectedStr)
-	}
-
-	expectedStr = "Тест"
-	translationStr = RU.T("Test")
-	if translationStr != expectedStr {
-		t.Errorf("Expected translation to RU \"%s\" to match \"%s\", but it does not", translationStr, expectedStr)
-	}
+type LanguageSuite struct {
+	suite.Suite
 }
 
-func TestString(t *testing.T) {
-	if EN.String() != "en_US" {
-		t.Errorf("Expected LanguageCode EN to have string representation en_US, but it does not")
-	}
+func (s *LanguageSuite) BeforeEach(t provider.T) {
+	t.Epic("i18n")
+	t.Feature("Language")
+	t.Tags("i18n")
+}
 
-	if RU.String() != "ru_RU" {
-		t.Errorf("Expected LanguageCode RU to have string representation ru_RU, but it does not")
-	}
+func (s *LanguageSuite) TestLanguageT(t provider.T) {
+	t.Description("Test Language.T() for EN and RU returns expected strings")
+	t.Tag("env")
+
+	_ = godotenv.Load("../.env")
+	Init()
+
+	expectedEN := "Test"
+	gotEN := EN.T("Test")
+	t.Assert().Equal(gotEN, expectedEN, "Expected translation to EN to be %s", expectedEN)
+
+	expectedRU := "Тест"
+	gotRU := RU.T("Test")
+	t.Assert().Equal(gotRU, expectedRU, "Expected translation to RU to be %s", expectedRU)
+}
+
+func (s *LanguageSuite) TestString(t provider.T) {
+	t.Description("Test String() for LanguageCode EN and RU")
+
+	t.Assert().Equal(EN.String(), "en_US", "Expected EN.String() to be en_US")
+	t.Assert().Equal(RU.String(), "ru_RU", "Expected RU.String() to be ru_RU")
+}
+
+func TestLanguageSuite(t *testing.T) {
+	suite.RunSuite(t, new(LanguageSuite))
 }

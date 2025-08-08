@@ -3,6 +3,9 @@ package app
 import (
 	"fmt"
 	"testing"
+
+	"github.com/ozontech/allure-go/pkg/framework/provider"
+	"github.com/ozontech/allure-go/pkg/framework/suite"
 )
 
 var evalTests = []struct {
@@ -15,14 +18,34 @@ var evalTests = []struct {
 	{"(2+6* 3+5- (3*14/7+2)*5)+3", "-12"},
 }
 
-func TestEval(t *testing.T) {
+type EvalSuite struct {
+	suite.Suite
+}
+
+func (s *EvalSuite) BeforeEach(t provider.T) {
+	t.Epic("App")
+	t.Feature("Eval")
+	t.Tags("app", "math")
+}
+
+func (s *EvalSuite) TestEval(t provider.T) {
+	t.Parallel()
 	for _, tt := range evalTests {
-		t.Run(tt.in, func(t *testing.T) {
+		t.Run(tt.in, func(t provider.T) {
+			// ToDo: BeforeEach somehow doesnt apply
+			t.Epic("App")
+			t.Feature("Eval")
+			t.Tags("app", "math", "parallel")
+
+			tti := tt
 			t.Parallel()
-			num := Eval(tt.in)
-			if fmt.Sprint(num) != tt.out {
-				t.Errorf("got %d, want %s", num, tt.out)
-			}
+
+			num := Eval(tti.in)
+			t.Assert().Equal(fmt.Sprint(num), tti.out, "expected %s, got %s", tti.out, fmt.Sprint(num))
 		})
 	}
+}
+
+func TestEvalSuite(t *testing.T) {
+	suite.RunSuite(t, new(EvalSuite))
 }
