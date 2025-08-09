@@ -22,65 +22,104 @@ func ReplaceMathExpressions(input string, evalFunc func(string) int) string {
 	return result
 }
 
-// isMathChar checks if a rune is an arithmetic operator or parenthesis
+// isMathChar checks if a rune is a digit, arithmetic operator or parenthesis.
+// Also checks if closing parenthesis ')' is valid
 func isMathChar(r rune) bool {
 	return unicode.IsDigit(r) || strings.ContainsRune("+-*/()", r)
 }
 
 // extractMathExpressions extracts arithmetic expressions from a given input string.
-//
-// ToDo: manipulate i to return to a begining of an expr if ( didn't got closed.
-// As of now, (1+1,2+4) breaks
-// Also expr can end with ) if parentheses is 0
+// It doesnt work at all...
 func extractMathExpressions(s string) []string {
 	var result []string
 	var expr strings.Builder
 	inExpr := false
 	parentheses := 0
+	startExprInd := 0
+	lastMathRune := 'd'
+	possibleEnd := false
 
-	for i, r := range s {
-		if isMathChar(r) {
+	i := 0
+	for i < len(s) {
+		r := rune(s[i])
+
+		if isMathChar(r) && parentheses >= 0 {
 			if !inExpr {
 				// Start of a new expression
 				inExpr = true
 				expr.Reset()
 				parentheses = 0
+				startExprInd = i
+				lastMathRune = 'd'
 			}
-			expr.WriteRune(r)
-			switch r {
-			case '(':
+
+			if r == '(' {
+				if unicode.IsDigit(r) || lastMathRune == ')' {
+					possibleEnd = true
+				}
+
 				parentheses++
-			case ')':
+			} else if r == ')' {
+				if strings.ContainsRune("(+-/*", lastMathRune) || parentheses == 0 {
+					possibleEnd = true
+				}
+
 				parentheses--
+			} else if strings.ContainsRune("+-*/", lastMathRune) {
+				if lastMathRune == '(' {
+					possibleEnd = true
+				}
+			} else if unicode.IsDigit(r) {
+				if lastMathRune == ')' {
+					possibleEnd = true
+				}
 			}
-		} else if unicode.IsSpace(r) && inExpr {
-			// Allow spaces *within* expressions but not at the start
-			// To prevent splitting expressions like "2 + 2"
-			expr.WriteRune(' ')
+
 		} else {
 			// Non-math character, possibly end of an expression
-			if inExpr {
-				trimmed := strings.TrimSpace(expr.String())
-				if len(trimmed) > 0 && (parentheses == 0) {
-					// Avoid single numbers
-					if strings.ContainsAny(trimmed, "+-*/") {
-						result = append(result, trimmed)
-					}
-				}
-				inExpr = false
-			}
+			possibleEnd = true
 		}
 
 		// Handle end of string
 		if i == len(s)-1 && inExpr {
+			possibleEnd = true
+		}
+
+		if possibleEnd && inExpr {
+
 			trimmed := strings.TrimSpace(expr.String())
-			if len(trimmed) > 0 && (parentheses == 0) {
-				if strings.ContainsAny(trimmed, "+-*/") {
-					result = append(result, trimmed)
+			if len(trimmed) > 0 && (parentheses == 0) && strings.ContainsAny(trimmed, "+-*/") {
+
+				result = append(result, trimmed)
+
+				// revisit and start new expr from current rune
+				// only if its not ')'
+				if r != ')' {
+					i--
 				}
+
+			} else {
+				// end of an expression,
+				// but its 0 length or invalid parenthesis
+				i = startExprInd
 			}
+
 			inExpr = false
 		}
+		possibleEnd = false
+
+		if inExpr {
+			if unicode.IsSpace(r) {
+				// Allow spaces *within* expressions but not at the start
+				// To prevent splitting expressions like "2 + 2"
+				expr.WriteRune(' ')
+			} else {
+				expr.WriteRune(r)
+			}
+		}
+
+		lastMathRune = r
+		i++
 	}
 
 	return result
