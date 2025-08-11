@@ -24,19 +24,15 @@ var cliCmd = &cobra.Command{
 		}
 
 		// flag: useEvalLib
-		var evalFunction func(string) int
+		evalFunction := app.Eval
 		if useEvalLib {
 			evalFunction = app.EvalLib
-		} else {
-			evalFunction = app.Eval
 		}
 
 		// flag: useFilterRegex
-		var replaceFunction func(string, func(string) int) string
+		replaceFunction := app.ReplaceMathExpressions
 		if useFilterRegex {
 			replaceFunction = app.ReplaceMathExpressionsRegex
-		} else {
-			replaceFunction = app.ReplaceMathExpressions
 		}
 
 		sResult := replaceFunction(content, evalFunction)
