@@ -39,8 +39,7 @@ jobs:
         continue-on-error: true
         run: |
           mkdir -p allure-results
-          go install github.com/ozontech/allure-go/cmd/allure-go@latest
-          allure-go run ./... --output ./allure-results
+          go test -v ./... -args --allure_output=./allure-results
 
       # Load previous report history
       - name: Load test report history
