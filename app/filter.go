@@ -22,14 +22,7 @@ func ReplaceMathExpressions(input string, evalFunc func(string) int) string {
 	return result
 }
 
-// isMathChar checks if a rune is a digit, arithmetic operator or parenthesis.
-// Also checks if closing parenthesis ')' is valid
-func isMathChar(r rune) bool {
-	return unicode.IsDigit(r) || strings.ContainsRune("+-*/()", r)
-}
-
 // extractMathExpressions extracts arithmetic expressions from a given input string.
-// It doesnt work at all...
 func extractMathExpressions(s string) []string {
 	var result []string
 	var expr strings.Builder
@@ -37,13 +30,19 @@ func extractMathExpressions(s string) []string {
 	parentheses := 0
 	startExprInd := 0
 	lastMathRune := 'd'
+	lastDigitOperRune := 'd'
 	possibleEnd := false
+	faultOperInd := -1
+	faultyOperator := false
+
+	// simple fix to a check at an end of a line.
+	s = s + " "
 
 	i := 0
 	for i < len(s) {
 		r := rune(s[i])
 
-		if isMathChar(r) && parentheses >= 0 {
+		if unicode.IsDigit(r) || strings.ContainsRune("+-*/()", r) {
 			if !inExpr {
 				// Start of a new expression
 				inExpr = true
@@ -51,32 +50,39 @@ func extractMathExpressions(s string) []string {
 				parentheses = 0
 				startExprInd = i
 				lastMathRune = 'd'
+				lastDigitOperRune = 'd'
 			}
 
 			if r == '(' {
-				if unicode.IsDigit(r) || lastMathRune == ')' {
+				if unicode.IsDigit(lastMathRune) || lastMathRune == ')' {
 					possibleEnd = true
+				} else {
+					parentheses++
 				}
-
-				parentheses++
 			} else if r == ')' {
 				if strings.ContainsRune("(+-/*", lastMathRune) || parentheses == 0 {
 					possibleEnd = true
+				} else {
+					parentheses--
 				}
-
-				parentheses--
-			} else if strings.ContainsRune("+-*/", lastMathRune) {
+			} else if strings.ContainsRune("*/", r) {
 				if lastMathRune == '(' {
 					possibleEnd = true
 				}
+				lastDigitOperRune = r
+			} else if strings.ContainsRune("+-", r) {
+				lastDigitOperRune = r
 			} else if unicode.IsDigit(r) {
 				if lastMathRune == ')' {
 					possibleEnd = true
 				}
+				lastDigitOperRune = r
 			}
 
-		} else {
-			// Non-math character, possibly end of an expression
+			lastMathRune = r
+		} else if !unicode.IsSpace(r) {
+			// Non-math character, except for spaces
+			// Possibly end of an expression
 			possibleEnd = true
 		}
 
@@ -85,10 +91,20 @@ func extractMathExpressions(s string) []string {
 			possibleEnd = true
 		}
 
-		if possibleEnd && inExpr {
+		if (possibleEnd || i == faultOperInd) && inExpr {
 
 			trimmed := strings.TrimSpace(expr.String())
-			if len(trimmed) > 0 && (parentheses == 0) && strings.ContainsAny(trimmed, "+-*/") {
+
+			if strings.ContainsRune("+-*/", lastDigitOperRune) {
+				faultOperInd = strings.LastIndex(
+					s[0:i],
+					string(lastDigitOperRune),
+				)
+
+				faultyOperator = true
+			}
+
+			if len(trimmed) > 0 && parentheses == 0 && strings.ContainsAny(trimmed, "+-*/") && !faultyOperator {
 
 				result = append(result, trimmed)
 
@@ -98,13 +114,18 @@ func extractMathExpressions(s string) []string {
 					i--
 				}
 
+				if i == faultOperInd {
+					faultOperInd = -1
+				}
+
 			} else {
-				// end of an expression,
-				// but its 0 length or invalid parenthesis
+				// end of an expression
 				i = startExprInd
 			}
 
 			inExpr = false
+			parentheses = 0
+			faultyOperator = false
 		}
 		possibleEnd = false
 
@@ -118,7 +139,6 @@ func extractMathExpressions(s string) []string {
 			}
 		}
 
-		lastMathRune = r
 		i++
 	}
 

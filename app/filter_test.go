@@ -17,18 +17,23 @@ var filterTests = []struct {
 	{"Here's multiples: (2+6* 3+5- (3*14/7+2)*5)+3 = -12, 1 + 2 + 3 + 4 - 5 = 5", "Here's multiples: -12 = -12, 5 = 5"},
 	{"Here's an arithmetic () (1+1,2+4) 1+1=2.", "Here's an arithmetic () (2,6) 2=2."},
 	{"Here's an arithmetic 1+d1=2.", "Here's an arithmetic 1+d1=2."},
+	{"Here's an arithmetic (1+)d1=2.", "Here's an arithmetic (1+)d1=2."},
 	{"Here's an arithmetic 1+1d=2.", "Here's an arithmetic 2d=2."},
 	{"Here's an arithmetic (1+(1))=2.", "Here's an arithmetic 2=2."},
 	{"Here's an arithmetic (1+(-1))=0.", "Here's an arithmetic 0=0."},
 	{"Here's an arithmetic (1+-1)=0.", "Here's an arithmetic 0=0."},
-	{"Here's an arithmetic (1+(-1)=0.", "Here's an arithmetic (1+-1=0."},
+	{"Here's an arithmetic (1+(-1)=0.", "Here's an arithmetic (0=0."},
 	{"Here's an arithmetic (1+-1))=0.", "Here's an arithmetic 0)=0."},
 	{"Here's an arithmetic (1+)-1)=0.", "Here's an arithmetic (1+)-1)=0."},
-	{"Here's an arithmetic )1+1(=0.", "Here's an arithmetic )2(=2."},
+	{"Here's an arithmetic )1+1(=2.", "Here's an arithmetic )2(=2."},
 	{"Here's no digits ().", "Here's no digits ()."},
 	{"Here's no digits (+).", "Here's no digits (+)."},
-	{"Here's a digit (+1).", "Here's a digit (1)."},
+	{"Here's a digit (+1).", "Here's a digit 1."},
 	{"Here's a digit (1+).", "Here's a digit (1+)."},
+	{"t -(-1)", "t 1"},
+	{"t --1", "t 1"},
+	{"t ---1", "t -1"},
+	{"t -+-1", "t 1"},
 }
 
 type FilterSuite struct {
@@ -52,6 +57,7 @@ func (s *FilterSuite) TestFilter(t provider.T) {
 	//t.Parallel()
 
 	for _, tt := range tests {
+		// t.WithNewAsyncStep(tt.in, func(sCtx provider.StepCtx) {
 		t.WithNewStep(tt.in, func(sCtx provider.StepCtx) {
 			str := strings.Trim(ReplaceMathExpressions(tt.in, EvalLib), " ")
 			sCtx.Assert().Equal(tt.out, str, "expected %s, got %s", tt.out, str)

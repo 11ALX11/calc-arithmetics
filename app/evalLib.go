@@ -20,13 +20,13 @@ func EvalLib(expression string) int {
 	out, err := expr.Eval(expression, nil)
 	if err != nil {
 		log.Printf("failed to evaluate an expression %s: %v", expression, err)
-		return -1
+		return -11
 	}
 
 	result, err := strconv.Atoi(fmt.Sprint(out))
 	if err != nil {
 		log.Printf("failed to convert result of an evaluation of %s to int: %v", expression, err)
-		return -2
+		return -12
 	}
 
 	return result
