@@ -38,8 +38,9 @@ jobs:
       - name: Run Go tests generating Allure results
         continue-on-error: true
         run: |
-          go test ./...
-          find . -type d -name "allure-results" ! -path "./allure-results" -exec cp -r {}/* ./allure-results/ \;
+          mkdir -p allure-results
+          go install github.com/ozontech/allure-go/cmd/allure-go@latest
+          allure-go run ./... --output ./allure-results
 
       # Load previous report history
       - name: Load test report history
