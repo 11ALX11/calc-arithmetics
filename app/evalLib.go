@@ -8,6 +8,13 @@ import (
 	"github.com/expr-lang/expr"
 )
 
+const (
+	// EvalLibEvaluationError is returned by EvalLib when expr-lang fails to evaluate the expression.
+	EvalLibEvaluationError = -11
+	// EvalLibConversionError is returned by EvalLib when the evaluated result cannot be converted to int.
+	EvalLibConversionError = -12
+)
+
 /*
 EvalLib evaluates(calculates) an arithmetic expr. Uses expr-lang lib.
 
@@ -20,13 +27,13 @@ func EvalLib(expression string) int {
 	out, err := expr.Eval(expression, nil)
 	if err != nil {
 		log.Printf("failed to evaluate an expression %s: %v", expression, err)
-		return -1
+		return EvalLibEvaluationError
 	}
 
 	result, err := strconv.Atoi(fmt.Sprint(out))
 	if err != nil {
 		log.Printf("failed to convert result of an evaluation of %s to int: %v", expression, err)
-		return -2
+		return EvalLibConversionError
 	}
 
 	return result

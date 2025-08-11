@@ -24,20 +24,18 @@ var cliCmd = &cobra.Command{
 		}
 
 		// flag: useEvalLib
-		var evalFunction func(string) int
+		evalFunction := app.Eval
 		if useEvalLib {
 			evalFunction = app.EvalLib
-		} else {
-			evalFunction = app.Eval
 		}
 
 		// flag: useFilterRegex
-		var sResult string
+		replaceFunction := app.ReplaceMathExpressions
 		if useFilterRegex {
-			sResult = app.ReplaceMathExpressionsRegex(content, evalFunction)
-		} else {
-			sResult = ""
+			replaceFunction = app.ReplaceMathExpressionsRegex
 		}
+
+		sResult := replaceFunction(content, evalFunction)
 
 		err = app.WriteFile(args[1], sResult)
 		if err != nil {

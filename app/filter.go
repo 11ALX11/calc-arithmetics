@@ -22,65 +22,126 @@ func ReplaceMathExpressions(input string, evalFunc func(string) int) string {
 	return result
 }
 
-// isMathChar checks if a rune is an arithmetic operator or parenthesis
-func isMathChar(r rune) bool {
-	return unicode.IsDigit(r) || strings.ContainsRune("+-*/()", r)
-}
-
 // extractMathExpressions extracts arithmetic expressions from a given input string.
-//
-// ToDo: manipulate i to return to a begining of an expr if ( didn't got closed.
-// As of now, (1+1,2+4) breaks
-// Also expr can end with ) if parentheses is 0
 func extractMathExpressions(s string) []string {
 	var result []string
-	var expr strings.Builder
-	inExpr := false
-	parentheses := 0
 
-	for i, r := range s {
-		if isMathChar(r) {
+	var expr strings.Builder // Buffer for an expression
+	inExpr := false          // Flag indicating when we iterate through an expression
+	parentheses := 0         // Parentheses pairs state counter
+	startExprInd := 0        // Index where current expression started
+	lastMathRune := 'd'      // Last mathematical character seen ('d' default, before we passed first character)
+	lastDigitOperRune := 'd' // Last digit or operator seen
+	possibleEnd := false     // Flag indicating possible expression end
+	faultOperInd := -1       // Index of faulty operator
+	faultyOperator := false  // Flag for invalid operator placement
+
+	// Append space to simplify end-of-string handling
+	s = s + " "
+
+	i := 0
+	for i < len(s) {
+		r := rune(s[i])
+
+		if unicode.IsDigit(r) || strings.ContainsRune("+-*/()", r) {
 			if !inExpr {
 				// Start of a new expression
 				inExpr = true
 				expr.Reset()
 				parentheses = 0
+				startExprInd = i
+				lastMathRune = 'd'
+				lastDigitOperRune = 'd'
 			}
-			expr.WriteRune(r)
-			switch r {
-			case '(':
-				parentheses++
-			case ')':
-				parentheses--
-			}
-		} else if unicode.IsSpace(r) && inExpr {
-			// Allow spaces *within* expressions but not at the start
-			// To prevent splitting expressions like "2 + 2"
-			expr.WriteRune(' ')
-		} else {
-			// Non-math character, possibly end of an expression
-			if inExpr {
-				trimmed := strings.TrimSpace(expr.String())
-				if len(trimmed) > 0 && (parentheses == 0) {
-					// Avoid single numbers
-					if strings.ContainsAny(trimmed, "+-*/") {
-						result = append(result, trimmed)
-					}
+
+			if r == '(' {
+				if unicode.IsDigit(lastMathRune) || lastMathRune == ')' {
+					possibleEnd = true
+				} else {
+					parentheses++
 				}
-				inExpr = false
+			} else if r == ')' {
+				if strings.ContainsRune("(+-/*", lastMathRune) || parentheses == 0 {
+					possibleEnd = true
+				} else {
+					parentheses--
+				}
+			} else if strings.ContainsRune("*/", r) {
+				if strings.ContainsRune("d(+-*/", lastMathRune) {
+					possibleEnd = true
+				}
+				lastDigitOperRune = r
+			} else if strings.ContainsRune("+-", r) {
+				lastDigitOperRune = r
+			} else if unicode.IsDigit(r) {
+				if lastMathRune == ')' {
+					possibleEnd = true
+				}
+				lastDigitOperRune = r
 			}
+
+			lastMathRune = r
+		} else if !unicode.IsSpace(r) {
+			// Non-math character, except for spaces
+			// Possibly end of an expression
+			possibleEnd = true
 		}
 
 		// Handle end of string
 		if i == len(s)-1 && inExpr {
-			trimmed := strings.TrimSpace(expr.String())
-			if len(trimmed) > 0 && (parentheses == 0) {
-				if strings.ContainsAny(trimmed, "+-*/") {
-					result = append(result, trimmed)
-				}
-			}
-			inExpr = false
+			possibleEnd = true
 		}
+
+		if (possibleEnd || i == faultOperInd) && inExpr {
+
+			trimmed := strings.TrimSpace(expr.String())
+
+			// Check if operator doesnt have digits after it at the end of an expression.
+			if strings.ContainsRune("+-*/", lastDigitOperRune) {
+				faultOperInd = strings.LastIndex(
+					s[0:i],
+					string(lastDigitOperRune),
+				)
+
+				faultyOperator = true
+			}
+
+			if len(trimmed) > 0 && parentheses == 0 && strings.ContainsAny(trimmed, "+-*/") && !faultyOperator {
+
+				result = append(result, trimmed)
+
+				// revisit and start new expr from current rune
+				// only if its not ')'
+				if r != ')' {
+					i--
+				}
+
+				if i == faultOperInd {
+					faultOperInd = -1
+				}
+
+			} else {
+				// end of an expression
+				i = startExprInd
+			}
+
+			inExpr = false
+			parentheses = 0
+			faultyOperator = false
+		}
+		possibleEnd = false
+
+		if inExpr {
+			if unicode.IsSpace(r) {
+				// Allow spaces *within* expressions but not at the start
+				// To prevent splitting expressions like "2 + 2"
+				expr.WriteRune(' ')
+			} else {
+				expr.WriteRune(r)
+			}
+		}
+
+		i++
 	}
 
 	return result
