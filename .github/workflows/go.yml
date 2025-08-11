@@ -46,6 +46,7 @@ jobs:
         run: |
           find . -type d -name "allure-results" ! -path "./allure-results"
           find . -type d -name "allure-results" ! -path "./allure-results" -exec cp -r {} ./ \;
+          ls -l ./allure-results
 
       # Load previous report history
       - name: Load test report history
