@@ -1,3 +1,3 @@
 #! /bin/bash
 
-go test ./app ./i18n || allure generate ./*/allure-results/ --clean
+go test ./... || allure generate ./*/allure-results/ --clean
