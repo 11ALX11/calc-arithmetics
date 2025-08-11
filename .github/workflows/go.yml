@@ -1,0 +1,85 @@
+name: Go Tests with Allure Report
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  test:
+    permissions:
+      contents: write        # required for gh-pages push
+      pull-requests: write   # required for PR comments
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout repo
+      - uses: actions/checkout@v4
+
+      # Go setup
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version-file: 'go.mod'
+
+      # Java setup for Allure CLI
+      - name: Set up java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      # Install Allure CLI
+      - name: Install Allure CLI
+        run: |
+          sudo npm install -g allure-commandline@2.34.1
+
+      # Run Go tests with Allure
+      - name: Run Go tests generating Allure results
+        continue-on-error: true
+        run: |
+          mkdir -p allure-results
+          go test -v ./...
+
+      # Run copy to collect allure-results
+      - name: Run copy to collect allure-results
+        run: |
+          find . -type d -name "allure-results" ! -path "./allure-results"
+          find . -type d -name "allure-results" ! -path "./allure-results" -exec cp -r {} ./ \;
+          ls -l ./allure-results
+
+      # Load previous report history
+      - name: Load test report history
+        uses: actions/checkout@v4
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      # Build report
+      - name: Build Allure report
+        uses: simple-elf/allure-report-action@v1.7
+        if: always()
+        with:
+          gh_pages: gh-pages
+          allure_history: allure-history
+          allure_results: allure-results
+
+      # Publish test report to gh-pages
+      - name: Publish Allure report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history
+
+      # Comment PR with report link
+      - name: Comment PR with Allure Report link
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: allure-report
+          message: |
+            🧪 **Allure Report:** [View here](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/)
