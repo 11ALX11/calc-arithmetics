@@ -18,11 +18,9 @@ jobs:
 
       # Go setup
       - name: Set up Go
-        uses: actions/setup-go@4
+        uses: actions/setup-go@v4
         with:
-          # Prefer tracking the version declared in go.mod
-          go-version-file: go.mod
-          cache: true
+          go-version: "1.23.11"
 
       # Java setup for Allure CLI
       - name: Set up java
