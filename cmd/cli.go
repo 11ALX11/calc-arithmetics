@@ -32,12 +32,14 @@ var cliCmd = &cobra.Command{
 		}
 
 		// flag: useFilterRegex
-		var sResult string
+		var replaceFunction func(string, func(string) int) string
 		if useFilterRegex {
-			sResult = app.ReplaceMathExpressionsRegex(content, evalFunction)
+			replaceFunction = app.ReplaceMathExpressionsRegex
 		} else {
-			sResult = ""
+			replaceFunction = app.ReplaceMathExpressions
 		}
+
+		sResult := replaceFunction(content, evalFunction)
 
 		err = app.WriteFile(args[1], sResult)
 		if err != nil {
