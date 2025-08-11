@@ -1,0 +1,75 @@
+name: Go Tests with Allure Report
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout repo
+      - uses: actions/checkout@v4
+
+      # Go setup
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.23.11"
+
+      # Java setup for Allure CLI
+      - name: Set up java
+        uses: actions/setup-java@v3
+        with:
+          distribution: zulu
+          java-version: 17
+
+      # Install Allure CLI
+      - name: Install Allure CLI
+        run: |
+          sudo npm install -g allure-commandline --save-dev
+
+      # Run Go tests with Allure
+      - name: Run Go tests generating Allure results
+        run: |
+          mkdir -p allure-results
+          go install github.com/ozontech/allure-go/cmd/allure-go@latest
+          allure-go run ./... --output ./allure-results
+
+      # Load previous report history
+      - name: Load test report history
+        uses: actions/checkout@v4
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      # Build report
+      - name: Build Allure report
+        uses: simple-elf/allure-report-action@v1.7
+        if: always()
+        with:
+          gh_pages: gh-pages
+          allure_history: allure-history
+          allure_results: allure-results
+
+      # Publish report to gh-pages
+      - name: Publish Allure report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history
+
+      # Comment PR with report link
+      - name: Comment PR with Allure Report link
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: allure-report
+          message: |
+            🧪 **Allure Report:** [View here](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/)
