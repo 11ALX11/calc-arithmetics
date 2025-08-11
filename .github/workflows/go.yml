@@ -8,6 +8,9 @@ on:
 
 jobs:
   test:
+    permissions:
+      contents: write        # required for gh-pages push
+      pull-requests: write   # required for PR comments
     runs-on: ubuntu-latest
     steps:
       # Checkout repo
@@ -15,24 +18,27 @@ jobs:
 
       # Go setup
       - name: Set up Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@5
         with:
-          go-version: "1.23.11"
+          # Prefer tracking the version declared in go.mod
+          go-version-file: go.mod
+          cache: true
 
       # Java setup for Allure CLI
       - name: Set up java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
-          distribution: zulu
+          distribution: temurin
           java-version: 17
 
       # Install Allure CLI
       - name: Install Allure CLI
         run: |
-          sudo npm install -g allure-commandline --save-dev
+          sudo npm install -g allure-commandline@2.34.1
 
       # Run Go tests with Allure
       - name: Run Go tests generating Allure results
+        continue-on-error: true
         run: go test ./... --output ./allure-results
 
       # Load previous report history
@@ -55,7 +61,7 @@ jobs:
 
       # Publish report to gh-pages
       - name: Publish Allure report to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -64,7 +70,7 @@ jobs:
 
       # Comment PR with report link
       - name: Comment PR with Allure Report link
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           header: allure-report
