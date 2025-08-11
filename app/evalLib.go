@@ -9,7 +9,9 @@ import (
 )
 
 const (
+	// EvalLibEvaluationError is returned by EvalLib when expr-lang fails to evaluate the expression.
 	EvalLibEvaluationError = -11
+	// EvalLibConversionError is returned by EvalLib when the evaluated result cannot be converted to int.
 	EvalLibConversionError = -12
 )
 
