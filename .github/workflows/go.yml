@@ -37,7 +37,9 @@ jobs:
       # Run Go tests with Allure
       - name: Run Go tests generating Allure results
         continue-on-error: true
-        run: go test ./... --output ./allure-results
+        run: |
+          go test ./...
+          find . -type d -name "allure-results" ! -path "./allure-results" -exec cp -r {}/* ./allure-results/ \;
 
       # Load previous report history
       - name: Load test report history
@@ -57,7 +59,7 @@ jobs:
           allure_history: allure-history
           allure_results: allure-results
 
-      # Publish report to gh-pages
+      # Publish test report to gh-pages
       - name: Publish Allure report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         if: always()
