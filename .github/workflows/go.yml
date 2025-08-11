@@ -40,7 +40,10 @@ jobs:
         run: |
           mkdir -p allure-results
           go test -v ./...
-          find . -type d -name "allure-results" ! -path "./allure-results" -exec cp -r {} ./ \;
+
+      # Run copy to collect allure-results
+      - name: Run copy to collect allure-results
+        run: find . -type d -name "allure-results" ! -path "./allure-results" -exec cp -r {} ./ \;
 
       # Load previous report history
       - name: Load test report history
