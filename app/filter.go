@@ -25,17 +25,18 @@ func ReplaceMathExpressions(input string, evalFunc func(string) int) string {
 // extractMathExpressions extracts arithmetic expressions from a given input string.
 func extractMathExpressions(s string) []string {
 	var result []string
-	var expr strings.Builder
-	inExpr := false
-	parentheses := 0
-	startExprInd := 0
-	lastMathRune := 'd'
-	lastDigitOperRune := 'd'
-	possibleEnd := false
-	faultOperInd := -1
-	faultyOperator := false
 
-	// simple fix to a check at an end of a line.
+	var expr strings.Builder // Buffer for an expression
+	inExpr := false          // Flag indicating when we iterate through an expression
+	parentheses := 0         // Parentheses pairs state counter
+	startExprInd := 0        // Index where current expression started
+	lastMathRune := 'd'      // Last mathematical character seen ('d' default, before we passed first character)
+	lastDigitOperRune := 'd' // Last digit or operator seen
+	possibleEnd := false     // Flag indicating possible expression end
+	faultOperInd := -1       // Index of faulty operator
+	faultyOperator := false  // Flag for invalid operator placement
+
+	// Append space to simplify end-of-string handling
 	s = s + " "
 
 	i := 0
@@ -66,7 +67,7 @@ func extractMathExpressions(s string) []string {
 					parentheses--
 				}
 			} else if strings.ContainsRune("*/", r) {
-				if lastMathRune == '(' {
+				if strings.ContainsRune("d(+-*/", lastMathRune) {
 					possibleEnd = true
 				}
 				lastDigitOperRune = r
@@ -95,6 +96,7 @@ func extractMathExpressions(s string) []string {
 
 			trimmed := strings.TrimSpace(expr.String())
 
+			// Check if operator doesnt have digits after it at the end of an expression.
 			if strings.ContainsRune("+-*/", lastDigitOperRune) {
 				faultOperInd = strings.LastIndex(
 					s[0:i],

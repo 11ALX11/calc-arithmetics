@@ -29,11 +29,17 @@ var filterTests = []struct {
 	{"Here's no digits ().", "Here's no digits ()."},
 	{"Here's no digits (+).", "Here's no digits (+)."},
 	{"Here's a digit (+1).", "Here's a digit 1."},
+	{"Here's a digit (-1).", "Here's a digit -1."},
 	{"Here's a digit (1+).", "Here's a digit (1+)."},
 	{"t -(-1)", "t 1"},
 	{"t --1", "t 1"},
 	{"t ---1", "t -1"},
 	{"t -+-1", "t 1"},
+	{"t 1-+-1", "t 2"},
+	{"t 1**1", "t 1**1"},
+	{"t 1-/1", "t 1-/1"},
+	{"t 1+*1", "t 1+*1"},
+	{"*1", "*1"},
 }
 
 type FilterSuite struct {
@@ -54,11 +60,10 @@ func (s *FilterSuite) TestFilter(t provider.T) {
 	tests = append(tests, filterTests...)
 	tests = append(tests, evalTests...)
 
-	//t.Parallel()
+	t.Parallel()
 
 	for _, tt := range tests {
-		// t.WithNewAsyncStep(tt.in, func(sCtx provider.StepCtx) {
-		t.WithNewStep(tt.in, func(sCtx provider.StepCtx) {
+		t.WithNewAsyncStep(tt.in, func(sCtx provider.StepCtx) {
 			str := strings.Trim(ReplaceMathExpressions(tt.in, EvalLib), " ")
 			sCtx.Assert().Equal(tt.out, str, "expected %s, got %s", tt.out, str)
 		})
