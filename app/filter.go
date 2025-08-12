@@ -36,14 +36,14 @@ func extractMathExpressions(s string) []string {
 	faultOperInd := -1       // Index of faulty operator
 	faultyOperator := false  // Flag for invalid operator placement
 
-	// Append space to simplify end-of-string handling
-	s = s + " "
+	// Append spaces to simplify string handling
+	s = " " + s + " "
 
 	i := 0
 	for i < len(s) {
 		r := rune(s[i])
 
-		if unicode.IsDigit(r) || strings.ContainsRune("+-*/()", r) {
+		if (unicode.IsDigit(r) || strings.ContainsRune("+-*/()", r)) && i != faultOperInd {
 			if !inExpr {
 				// Start of a new expression
 				inExpr = true
@@ -94,6 +94,10 @@ func extractMathExpressions(s string) []string {
 
 		if (possibleEnd || i == faultOperInd) && inExpr {
 
+			if i == faultOperInd {
+				faultOperInd = -1
+			}
+
 			trimmed := strings.TrimSpace(expr.String())
 
 			// Check if operator doesnt have digits after it at the end of an expression.
@@ -115,14 +119,31 @@ func extractMathExpressions(s string) []string {
 				if r != ')' {
 					i--
 				}
-
-				if i == faultOperInd {
-					faultOperInd = -1
-				}
-
 			} else {
 				// end of an expression
-				i = startExprInd
+
+				// Check if theres '(' somewhere in expression
+				if len(trimmed) > 0 && strings.ContainsAny(trimmed, "+-*/") && parentheses > 0 {
+					faultyParenthesisInd := startExprInd + strings.IndexRune(
+						s[startExprInd:i],
+						'(',
+					)
+
+					// Check if this '(' isn't in a begining of an expression
+					if faultyParenthesisInd > startExprInd {
+						// Divide expression.
+						// P.S. Shouldn't cause problem with operators, since we already checked them
+						// and should there be any, we are either triggered by them first
+						// or parenthesis comes first
+						faultOperInd = faultyParenthesisInd
+					}
+				}
+
+				if faultOperInd > startExprInd {
+					i = startExprInd - 1
+				} else {
+					i = startExprInd
+				}
 			}
 
 			inExpr = false
