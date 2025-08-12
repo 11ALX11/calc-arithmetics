@@ -20,7 +20,7 @@ EvalLib evaluates(calculates) an arithmetic expr. Uses expr-lang lib.
 @param expr string - string with an arithmetic expr to evaluate.
 String is allowed to contain only 0-9, +-/* and (), also expr itself needs to be correct.
 
-@return int - result of an expr.
+@return int - result of an expr, rounded to the nearest integer.
 */
 func EvalLib(expression string) int {
 
