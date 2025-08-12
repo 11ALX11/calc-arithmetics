@@ -1,0 +1,25 @@
+name: Go tests
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    # Checkout repo
+    - uses: actions/checkout@v4
+
+    # Go setup
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version-file: 'go.mod'
+
+    # Go test
+    - name: Test
+      run: go test -v -timeout 5s ./...

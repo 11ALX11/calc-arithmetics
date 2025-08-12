@@ -1,3 +1,5 @@
 #! /bin/bash
 
-go test ./... || allure generate ./*/allure-results/ --clean
+go test -timeout 5s ./...
+cp -r ./allure-report/history ./allure-results/ && echo "Copied history."
+allure generate ./allure-results/ ./*/allure-results/ --clean

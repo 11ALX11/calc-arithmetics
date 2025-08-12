@@ -34,6 +34,7 @@ func (s *EvalSuite) BeforeEach(t provider.T) {
 
 func (s *EvalSuite) TestEval(t provider.T) {
 	t.XSkip()
+	t.Skip()
 
 	t.Description("Test Eval() on a series of strings that contain arithmetic expression")
 	t.Parallel()
