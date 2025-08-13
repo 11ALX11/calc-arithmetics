@@ -27,8 +27,13 @@ func getPwdDirPath() (string, error) {
 
 	expectedSuffix := os.Getenv("APPROOTDIR")
 
+	// Check if APPROOTDIR is not set
+	if expectedSuffix == "" {
+		return "", fmt.Errorf("APPROOTDIR is not set")
+	}
+
 	// Assume that we can reach app root dir by climbing FS heirarchy
-	pattern := fmt.Sprintf(`^(.*?)(%s)`, regexp.QuoteMeta(expectedSuffix))
+	pattern := fmt.Sprintf(`^(.*)(?:%s)`, regexp.QuoteMeta(expectedSuffix))
 
 	re := regexp.MustCompile(pattern)
 	matches := re.FindStringSubmatch(rootPath)
