@@ -9,6 +9,7 @@ require github.com/spf13/cobra v1.9.1
 require github.com/joho/godotenv v1.5.1
 
 require (
+	github.com/GRbit/go-pcre v1.0.1
 	github.com/expr-lang/expr v1.17.5
 	github.com/ozontech/allure-go/pkg/framework v0.7.2
 )

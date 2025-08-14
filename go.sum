@@ -1,3 +1,5 @@
+github.com/GRbit/go-pcre v1.0.1 h1:8F7Wj1rxIq8ejKSXVVW2wE+4I4VnZbuOemrMk8kn3hc=
+github.com/GRbit/go-pcre v1.0.1/go.mod h1:0g7qVGbMpd2Odevd92x1RpaLpR3c3F/Gv2HEnI7CwEA=
 github.com/cpuguy83/go-md2man/v2 v2.0.6/go.mod h1:oOW0eioCTA6cOiMLiUPZOpcVxMig6NIQQ7OS05n1F4g=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
