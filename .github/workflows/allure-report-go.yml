@@ -39,7 +39,7 @@ jobs:
         continue-on-error: true
         run: |
           mkdir -p allure-results
-          go test -v -timeout 5s ./...
+          go test -v -count 3 -timeout 5s ./...
 
       # Run copy to collect allure-results
       - name: Run copy to collect allure-results
