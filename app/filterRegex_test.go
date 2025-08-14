@@ -21,9 +21,6 @@ func (s *FilterRegexSuite) BeforeEach(t provider.T) {
 func (s *FilterRegexSuite) TestFilterRegex(t provider.T) {
 	t.Description("Test ReplaceMathExpressionsRegex() on a series of strings that contain arithmetic expression to filter from sentences (using EvalLib())")
 
-	t.XSkip()
-	t.Skip()
-
 	var tests []struct{ in, out string }
 
 	tests = append(tests, filterTests...)
