@@ -7,13 +7,8 @@ import (
 	"github.com/GRbit/go-pcre"
 )
 
-/*
-ReplaceMathExpressionsRegex searches input string for arithmetic exprs,
-then replaces each one with result of an evaluation func. Uses regexp lib.
-*/
-func ReplaceMathExpressionsRegex(input string, evalFunc func(string) int) string {
-	// Define the PCRE expression (with extended syntax for better readability)
-	pattern := `(?x)
+// Define the PCRE expression
+const pcrePattern = `(?mx)
 		(?&expr)
 
 		(?(DEFINE)
@@ -38,13 +33,20 @@ func ReplaceMathExpressionsRegex(input string, evalFunc func(string) int) string
 			)
 		)`
 
-	// Compile the regular expression using pcre
-	re := pcre.MustCompileJIT(pattern, pcre.EXTENDED, pcre.CONFIG_JIT)
+// Compile the regular expression using pcre
+var regexpPcre pcre.Regexp = pcre.MustCompileJIT(pcrePattern, pcre.MULTILINE|pcre.EXTENDED, pcre.CONFIG_JIT)
+var matcherPcre pcre.Matcher = *regexpPcre.NewMatcherString("", pcre.MULTILINE|pcre.EXTENDED)
 
-	matcher := re.NewMatcherString(input, 0)
-	matcher.ExecString(input, 0)
+/*
+ReplaceMathExpressionsRegex searches input string for arithmetic exprs,
+then replaces each one with result of an evaluation func. Uses regexp lib.
+*/
+func ReplaceMathExpressionsRegex(input string, evalFunc func(string) int) string {
 
-	matches := matcher.ExtractString() // error
+	matcherPcre.ExecString(input, pcre.MULTILINE|pcre.EXTENDED)
+	matches := matcherPcre.ExtractString()
+
+	// No syntax errors, but nothing is matching
 
 	result := input
 
