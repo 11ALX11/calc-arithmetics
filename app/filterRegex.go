@@ -2,10 +2,13 @@ package app
 
 import (
 	"fmt"
+	"log"
 	"strings"
 
 	"github.com/GRbit/go-pcre"
 )
+
+const pcrePatternFlags = pcre.MULTILINE | pcre.EXTENDED
 
 // Define the PCRE expression
 const pcrePattern = `(?mx)
@@ -34,8 +37,8 @@ const pcrePattern = `(?mx)
 		)`
 
 // Compile the regular expression using pcre
-var regexpPcre pcre.Regexp = pcre.MustCompileJIT(pcrePattern, pcre.MULTILINE|pcre.EXTENDED, pcre.CONFIG_JIT)
-var matcherPcre pcre.Matcher = *regexpPcre.NewMatcherString("", pcre.MULTILINE|pcre.EXTENDED)
+var regexpPcre pcre.Regexp = pcre.MustCompileJIT(pcrePattern, pcrePatternFlags, pcre.CONFIG_JIT)
+var matcherPcre pcre.Matcher = *regexpPcre.NewMatcherString("", pcrePatternFlags)
 
 /*
 ReplaceMathExpressionsRegex searches input string for arithmetic exprs,
@@ -43,8 +46,11 @@ then replaces each one with result of an evaluation func. Uses regexp lib.
 */
 func ReplaceMathExpressionsRegex(input string, evalFunc func(string) int) string {
 
-	matcherPcre.ExecString(input, pcre.MULTILINE|pcre.EXTENDED)
+	matcherPcre.ExecString(input, pcrePatternFlags)
 	matches := matcherPcre.ExtractString()
+
+	log.Printf("Matcher: %v", matcherPcre)
+	log.Printf("Matches: %v", matches)
 
 	// No syntax errors, but nothing is matching
 
