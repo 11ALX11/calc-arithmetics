@@ -10,12 +10,12 @@ import (
 ReplaceMathExpressions searches input string for arithmetic exprs,
 then replaces each one with result of an evaluation func.
 */
-func ReplaceMathExpressions(input string, evalFunc func(string) int) string {
+func ReplaceMathExpressions(input string, evalFunc func(string) float64) string {
 
 	result := input
 
 	for _, substr := range extractMathExpressions(input) {
-		newstr := fmt.Sprint(evalFunc(substr))
+		newstr := fmt.Sprintf("%.4g", evalFunc(substr))
 		result = strings.Replace(result, substr, newstr, 1)
 	}
 

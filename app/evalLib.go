@@ -2,7 +2,6 @@ package app
 
 import (
 	"log"
-	"math"
 
 	"github.com/expr-lang/expr"
 )
@@ -22,7 +21,7 @@ String is allowed to contain only 0-9, +-/* and (), also expr itself needs to be
 
 @return int - result of an expr, rounded to the nearest integer.
 */
-func EvalLib(expression string) int {
+func EvalLib(expression string) float64 {
 
 	bytecode, err1 := expr.Compile(expression, expr.AsFloat64())
 	if err1 != nil {
@@ -36,7 +35,7 @@ func EvalLib(expression string) int {
 		return EvalLibRunError
 	}
 
-	result := int(math.Round(out.(float64)))
+	result := out.(float64)
 
 	return result
 }
