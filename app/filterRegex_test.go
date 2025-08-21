@@ -28,11 +28,10 @@ func (s *FilterRegexSuite) TestFilterRegex(t provider.T) {
 	tests = append(tests, filterTests...)
 	tests = append(tests, evalTests...)
 
-	// t.Parallel() //ToDo: uncomment after debug
+	t.Parallel()
 
 	for _, tt := range tests {
-		// t.WithNewAsyncStep(tt.in, func(sCtx provider.StepCtx) { //ToDo: uncomment after debug
-		t.WithNewStep(tt.in, func(sCtx provider.StepCtx) { //ToDo: delete line after debug
+		t.WithNewAsyncStep(tt.in, func(sCtx provider.StepCtx) {
 			str := strings.Trim(ReplaceMathExpressionsRegex(tt.in, EvalLib), " ")
 			sCtx.Assert().Equal(tt.out, str, "expected %s, got %s", tt.out, str)
 		})
