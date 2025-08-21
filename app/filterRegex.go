@@ -43,7 +43,7 @@ var regexpPcre pcre.Regexp = pcre.MustCompileJIT(pcrePattern, pcrePatternFlags, 
 ReplaceMathExpressionsRegex searches input string for arithmetic exprs,
 then replaces each one with result of an evaluation func. Uses regexp lib.
 */
-func ReplaceMathExpressionsRegex(input string, evalFunc func(string) int) string {
+func ReplaceMathExpressionsRegex(input string, evalFunc func(string) float64) string {
 
 	result := input
 	offset := 0
@@ -53,7 +53,7 @@ func ReplaceMathExpressionsRegex(input string, evalFunc func(string) int) string
 
 		match := strings.TrimSpace(matcher.GroupString(0))
 
-		newstr := fmt.Sprint(evalFunc(match))
+		newstr := fmt.Sprintf("%.4g", evalFunc(match))
 		result = strings.Replace(result, match, newstr, 1)
 
 		// Get next match (next iteration)
