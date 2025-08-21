@@ -14,8 +14,8 @@ var filterTests = []struct {
 }{
 	{"Here's an arithmetic 1+1=2.", "Here's an arithmetic 2=2."},
 	{"Here's another one: (2+6* 3+5- (3*14/7+2)*5)+3 = -12.", "Here's another one: -12 = -12."},
-	{"Here's another one: (2+6* 3+5- (3*14/(7+2)*5)+3 = 5.", "Here's another one: (5 = 5."},
-	{"Here's another one: 2+6* 3+5- (3*14/(7+2)*5)+3 = 5.", "Here's another one: 5 = 5."},
+	{"Here's another one: (2+6* 3+5- (3*14/(7+2)*5)+3 = 4.667.", "Here's another one: (4.667 = 4.667."},
+	{"Here's another one: 2+6* 3+5- (3*14/(7+2)*5)+3 = 4.667.", "Here's another one: 4.667 = 4.667."},
 	{"Here's another one: 2+6* 3+5- (3*14(/7+2)*5)+3", "Here's another one: 25- (42(/9)*5)3"},
 	{"Here's multiples: (2+6* 3+5- (3*14/7+2)*5)+3 = -12, 1 + 2 + 3 + 4 - 5 = 5", "Here's multiples: -12 = -12, 5 = 5"},
 	{"Here's an arithmetic () (1+1,2+4) 1+1=2.", "Here's an arithmetic () (2,6) 2=2."},

@@ -8,7 +8,7 @@ String is allowed to contain only 0-9, +-/* and (), also expression itself needs
 
 @return int - result of an expr.
 */
-func Eval(expression string) int {
+func Eval(expression string) float64 {
 	var precedence = func(operand byte) int {
 		switch operand {
 		case '(', ')':
@@ -19,7 +19,7 @@ func Eval(expression string) int {
 		return 2
 	}
 
-	var applyOperand = func(operand byte, b, a int) int {
+	var applyOperand = func(operand byte, b, a float64) float64 {
 		switch operand {
 		case '+':
 			return a + b
@@ -33,7 +33,7 @@ func Eval(expression string) int {
 		return 0
 	}
 
-	var numbers []int
+	var numbers []float64
 	var operands []byte
 
 	i := 0
@@ -42,9 +42,9 @@ func Eval(expression string) int {
 			i++
 			continue
 		} else if expression[i] >= '0' && expression[i] <= '9' {
-			number := 0
+			number := 0.
 			for i < len(expression) && expression[i] >= '0' && expression[i] <= '9' {
-				number = number*10 + int(expression[i]-'0')
+				number = number*10 + float64(expression[i]-'0')
 				i++
 			}
 			numbers = append(numbers, number)
