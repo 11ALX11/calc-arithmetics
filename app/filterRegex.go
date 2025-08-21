@@ -16,17 +16,17 @@ const pcrePattern = `(?mx)
 
 		(?(DEFINE)
 			(?<expr>
-				[+-]*\(\s*(?&inner)\s*\)
-				|
 				[+-]*\s*(?&term)(?:\s*[+\-*\/]\s*(?&term))+
 				|
-				[+-]+\d+
+				[+-]*\s*\(\s*(?&inner)\s*\)
+				|
+				(?:[+-]\s*)+\d+
 			)
 			(?<inner>
 				(?&term)(?:\s*[+\-*\/]\s*(?&term))*
 			)
 			(?<term>
-				(?&factor)(?:\s*[*\/]\s*(?&factor))*
+				(?&factor)(?:\s*[*\/]\s*(?&factor))*?
 			)
 			(?<factor>
 				\(\s*(?&inner)\s*\)
