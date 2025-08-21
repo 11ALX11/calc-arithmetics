@@ -31,7 +31,7 @@ const pcrePattern = `(?mx)
 			(?<factor>
 				\(\s*(?&inner)\s*\)
 				| \d+
-				| [+-]+\d+
+				| [+-]+\s*\d+
 				| [+-]+\(\s*(?&inner)\s*\)
 			)
 		)`
