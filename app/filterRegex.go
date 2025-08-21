@@ -8,6 +8,7 @@ import (
 	"github.com/GRbit/go-pcre"
 )
 
+// PCRE flags "mx"
 const pcrePatternFlags = pcre.MULTILINE | pcre.EXTENDED
 
 // Define the PCRE expression
@@ -46,19 +47,32 @@ then replaces each one with result of an evaluation func. Uses regexp lib.
 */
 func ReplaceMathExpressionsRegex(input string, evalFunc func(string) int) string {
 
-	matcherPcre.ExecString(input, pcrePatternFlags)
-	matches := matcherPcre.ExtractString()
-
-	log.Printf("Matcher: %v", matcherPcre)
-	log.Printf("Matches: %v", matches)
+	// matcherPcre.ExecString(input, pcrePatternFlags)
+	// matches := matcherPcre.ExtractString()
 
 	// No syntax errors, but nothing is matching
 
 	result := input
+	offset := 0
 
-	for _, substr := range matches {
-		newstr := fmt.Sprint(evalFunc(substr))
-		result = strings.Replace(result, substr, newstr, 1)
+	for offsetFromExec := matcherPcre.ExecString(input[offset:], pcre.STUDY_JIT_COMPILE); offsetFromExec > 0; {
+
+		matches := matcherPcre.ExtractString()
+		var match string
+
+		// log.Printf("Matcher: %v", matcherPcre)
+
+		if len(matches) > 0 {
+			match = matches[0]
+			log.Printf("Match: %v", match)
+		} else {
+			continue
+		}
+
+		newstr := fmt.Sprint(evalFunc(match))
+		result = strings.Replace(result, match, newstr, 1)
+
+		offset += matcherPcre.Index()[1] // advance past this match
 	}
 
 	return result
