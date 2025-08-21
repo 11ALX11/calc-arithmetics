@@ -34,6 +34,11 @@ jobs:
         run: |
           sudo npm install -g allure-commandline@2.34.1
 
+      # Install pcre lib
+      - name: Install pcre lib
+        run: |
+          sudo apt-get install -y libpcre3-dev
+
       # Run Go tests with Allure
       - name: Run Go tests generating Allure results
         continue-on-error: true

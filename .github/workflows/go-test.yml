@@ -20,6 +20,11 @@ jobs:
       with:
         go-version-file: 'go.mod'
 
+    # Install pcre lib
+    - name: Install pcre lib
+      run: |
+        sudo apt-get install -y libpcre3-dev
+
     # Go test
     - name: Test
       run: go test -v -count 3 -timeout 5s ./...
