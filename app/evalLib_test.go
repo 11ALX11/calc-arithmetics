@@ -19,7 +19,7 @@ func (s *EvalLibSuite) BeforeEach(t provider.T) {
 	t.Tags("app", "math", "lib")
 	t.Severity(allure.NORMAL)
 	t.Owner("github.com/11ALX11")
-	t.Link(allure.LinkLink("expr-lang lib", "github.com/expr-lang/expr"))
+	t.Link(allure.LinkLink("expr-lang lib", "https://github.com/expr-lang/expr"))
 }
 
 func (s *EvalLibSuite) TestEvalLib(t provider.T) {
