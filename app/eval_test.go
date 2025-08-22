@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/ozontech/allure-go/pkg/allure"
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 )
@@ -30,13 +31,17 @@ func (s *EvalSuite) BeforeEach(t provider.T) {
 	t.Epic("App")
 	t.Feature("Eval")
 	t.Tags("app", "math")
+	t.Severity(allure.CRITICAL)
+	t.Owner("github.com/11ALX11")
 }
 
 func (s *EvalSuite) TestEval(t provider.T) {
 	t.XSkip()
 	t.Skip()
 
+	t.Title("Test Eval()")
 	t.Description("Test Eval() on a series of strings that contain arithmetic expression")
+	t.Link(allure.IssueLink("https://github.com/11ALX11/calc-arithmetics/issues/9")) // temporary
 	t.Parallel()
 
 	for _, tt := range evalTests {

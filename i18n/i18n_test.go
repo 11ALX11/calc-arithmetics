@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/joho/godotenv"
+	"github.com/ozontech/allure-go/pkg/allure"
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 )
@@ -20,9 +21,13 @@ func (s *I18nSuite) BeforeEach(t provider.T) {
 	t.Epic("i18n")
 	t.Feature("i18n-core")
 	t.Tags("i18n", "env")
+	t.Severity(allure.NORMAL)
+	t.Owner("github.com/11ALX11")
+	t.Link(allure.LinkLink("PhraseApp-Blog i18n github", "https://github.com/PhraseApp-Blog/go-internationalization/tree/master/pkg/i18n"))
 }
 
 func (s *I18nSuite) TestInit(t provider.T) {
+	t.Title("Test Init()")
 	t.Description("Test Init: loading environment, initializing translations and checking basic translations")
 
 	err := Init()
@@ -35,7 +40,9 @@ func (s *I18nSuite) TestInit(t provider.T) {
 }
 
 func (s *I18nSuite) TestGetLanguageCodeLANGUAGE(t provider.T) {
+	t.Title("Test getLanguageCode()")
 	t.Description("Test getLanguageCode with LANGUAGE env")
+	t.WithParameters(allure.NewParameter("env", "LANGUAGE"))
 
 	t.Setenv("LANGUAGE", "ru_RU")
 
@@ -44,7 +51,9 @@ func (s *I18nSuite) TestGetLanguageCodeLANGUAGE(t provider.T) {
 }
 
 func (s *I18nSuite) TestGetLanguageCodeLC_ALL(t provider.T) {
+	t.Title("Test getLanguageCode()")
 	t.Description("Test getLanguageCode with LC_ALL env")
+	t.WithParameters(allure.NewParameter("env", "LC_ALL"))
 
 	t.Setenv("LC_ALL", "ru_RU")
 
@@ -53,7 +62,9 @@ func (s *I18nSuite) TestGetLanguageCodeLC_ALL(t provider.T) {
 }
 
 func (s *I18nSuite) TestGetLanguageCodeLC_MESSAGES(t provider.T) {
+	t.Title("Test getLanguageCode()")
 	t.Description("Test getLanguageCode with LC_MESSAGES env")
+	t.WithParameters(allure.NewParameter("env", "LC_MESSAGES"))
 
 	t.Setenv("LC_MESSAGES", "ru_RU")
 
@@ -62,7 +73,9 @@ func (s *I18nSuite) TestGetLanguageCodeLC_MESSAGES(t provider.T) {
 }
 
 func (s *I18nSuite) TestGetLanguageCodeLANG(t provider.T) {
+	t.Title("Test getLanguageCode()")
 	t.Description("Test getLanguageCode with LANG env")
+	t.WithParameters(allure.NewParameter("env", "LANG"))
 
 	t.Setenv("LANG", "ru_RU")
 
@@ -71,6 +84,7 @@ func (s *I18nSuite) TestGetLanguageCodeLANG(t provider.T) {
 }
 
 func (s *I18nSuite) TestGetSupportedLanguages(t provider.T) {
+	t.Title("Test GetSupportedLanguages()")
 	t.Description("Test GetSupportedLanguages returns at least 2 languages")
 
 	Init()
@@ -80,6 +94,7 @@ func (s *I18nSuite) TestGetSupportedLanguages(t provider.T) {
 }
 
 func (s *I18nSuite) TestNewLanguageFromString(t provider.T) {
+	t.Title("Test NewLanguageFromString()")
 	t.Description("Test NewLanguageFromString parses language codes")
 
 	t.Assert().Equal(NewLanguageFromString("ru_RU"), RU, "Expected ru_RU to be RU")
@@ -88,6 +103,7 @@ func (s *I18nSuite) TestNewLanguageFromString(t provider.T) {
 }
 
 func (s *I18nSuite) TestGetCurrentLanguage(t provider.T) {
+	t.Title("Test GetCurrentLanguage()")
 	t.Description("Test GetCurrentLanguage returns correct language based on LANGUAGE env")
 
 	t.Setenv("LANGUAGE", "ru_RU")
@@ -98,6 +114,7 @@ func (s *I18nSuite) TestGetCurrentLanguage(t provider.T) {
 }
 
 func (s *I18nSuite) TestT(t provider.T) {
+	t.Title("Test i18n.T()")
 	t.Description("Test T() returns correct translation for RU")
 
 	t.Setenv("LANGUAGE", "ru_RU")
@@ -109,6 +126,7 @@ func (s *I18nSuite) TestT(t provider.T) {
 }
 
 func (s *I18nSuite) TestSetCurrentLocale(t provider.T) {
+	t.Title("Test SetCurrentLocale()")
 	t.Description("Test SetCurrentLocale switches languages correctly")
 
 	Init()

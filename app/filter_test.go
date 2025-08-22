@@ -4,6 +4,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/ozontech/allure-go/pkg/allure"
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 )
@@ -59,9 +60,12 @@ func (s *FilterSuite) BeforeEach(t provider.T) {
 	t.Epic("App")
 	t.Feature("Filter")
 	t.Tags("app", "math")
+	t.Severity(allure.CRITICAL)
+	t.Owner("github.com/11ALX11")
 }
 
 func (s *FilterSuite) TestFilter(t provider.T) {
+	t.Title("Test filter")
 	t.Description("Test ReplaceMathExpressions() on a series of strings that contain arithmetic expression to filter from sentences (using EvalLib())")
 
 	var tests []struct{ in, out string }

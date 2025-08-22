@@ -17,10 +17,14 @@ type FilterRegexSuite struct {
 func (s *FilterRegexSuite) BeforeEach(t provider.T) {
 	t.Epic("App")
 	t.Feature("Filter")
-	t.Tags("app", "math", "regex")
+	t.Tags("app", "math", "regex", "lib")
+	t.Severity(allure.NORMAL)
+	t.Owner("github.com/11ALX11")
+	t.Link(allure.LinkLink("go-pcre lib", "https://pkg.go.dev/github.com/GRbit/go-pcre@v1.0.1"))
 }
 
 func (s *FilterRegexSuite) TestFilterRegex(t provider.T) {
+	t.Title("Test regex filter")
 	t.Description("Test ReplaceMathExpressionsRegex() on a series of strings that contain arithmetic expression to filter from sentences (using EvalLib())")
 
 	var tests []struct{ in, out string }
@@ -39,6 +43,7 @@ func (s *FilterRegexSuite) TestFilterRegex(t provider.T) {
 }
 
 func (s *FilterRegexSuite) TestRegexLib(t provider.T) {
+	t.Title("Test regex lib")
 	t.Description("Test github.com/GRbit/go-pcre lib with simple pattern and string")
 
 	const simplePattern = `\d+`

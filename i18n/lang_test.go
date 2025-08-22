@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/joho/godotenv"
+	"github.com/ozontech/allure-go/pkg/allure"
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 )
@@ -16,9 +17,13 @@ func (s *LanguageSuite) BeforeEach(t provider.T) {
 	t.Epic("i18n")
 	t.Feature("Language")
 	t.Tags("i18n")
+	t.Severity(allure.NORMAL)
+	t.Owner("github.com/11ALX11")
+	t.Link(allure.LinkLink("PhraseApp-Blog i18n github", "https://github.com/PhraseApp-Blog/go-internationalization/tree/master/pkg/i18n"))
 }
 
 func (s *LanguageSuite) TestLanguageT(t provider.T) {
+	t.Title("Test Language.T()")
 	t.Description("Test Language.T() for EN and RU returns expected strings")
 	t.Tag("env")
 
@@ -35,6 +40,7 @@ func (s *LanguageSuite) TestLanguageT(t provider.T) {
 }
 
 func (s *LanguageSuite) TestString(t provider.T) {
+	t.Title("Test LanguageCode.String()")
 	t.Description("Test String() for LanguageCode EN and RU")
 
 	t.Assert().Equal("en_US", EN.String(), "Expected EN.String() to be en_US")

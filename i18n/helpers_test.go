@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/joho/godotenv"
+	"github.com/ozontech/allure-go/pkg/allure"
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 )
@@ -24,9 +25,13 @@ func (s *HelpersSuite) BeforeEach(t provider.T) {
 	t.Epic("i18n")
 	t.Feature("Helpers")
 	t.Tags("i18n", "env")
+	t.Severity(allure.NORMAL)
+	t.Owner("github.com/11ALX11")
+	t.Link(allure.LinkLink("PhraseApp-Blog i18n github", "https://github.com/PhraseApp-Blog/go-internationalization/tree/master/pkg/i18n"))
 }
 
 func (s *HelpersSuite) TestGetLocalePath(t provider.T) {
+	t.Title("Test getLocalePath()")
 	t.Description("Check if getLocalePath() returns correct path")
 
 	expectedPath := path.Join(os.Getenv("APPROOTDIR"), os.Getenv("LOCALESDIR"))
@@ -39,6 +44,7 @@ func (s *HelpersSuite) TestGetLocalePath(t provider.T) {
 }
 
 func (s *HelpersSuite) TestIsLocaleDirExists(t provider.T) {
+	t.Title("Check locale dir")
 	t.Description("Check if locale dir exists")
 
 	localePath, err := getLocalePath()
@@ -50,9 +56,12 @@ func (s *HelpersSuite) TestIsLocaleDirExists(t provider.T) {
 }
 
 func (s *HelpersSuite) TestGetPwdDirPath(t provider.T) {
+	t.Title("Test getPwdDirPath()")
 	t.Description("Check if getPwdDirPath() returns correct root path")
 
 	expectedPath := os.Getenv("APPROOTDIR")
+	t.WithParameters(allure.NewParameter("APPROOTDIR", expectedPath))
+
 	rootPath, err := getPwdDirPath()
 	t.Assert().NoError(err, "Expected no error from getPwdDirPath()")
 
@@ -61,9 +70,11 @@ func (s *HelpersSuite) TestGetPwdDirPath(t provider.T) {
 }
 
 func (s *HelpersSuite) TestGetPwdDirPathWithEmptyEnv(t provider.T) {
+	t.Title("Test getPwdDirPath()")
 	t.Description("Check if getPwdDirPath() returns error when APPROOTDIR is empty")
 
 	t.Setenv("APPROOTDIR", "")
+	t.WithParameters(allure.NewParameter("APPROOTDIR", ""))
 
 	path, err := getPwdDirPath()
 	t.Assert().Error(err, "Expected error when APPROOTDIR is empty")
