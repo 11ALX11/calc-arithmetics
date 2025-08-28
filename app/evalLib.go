@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	// EvalLibEvaluationError is returned by EvalLib when expr-lang fails to compile the expression.
+	// EvalLibCompilationError is returned by EvalLib when expr-lang fails to compile the expression.
 	EvalLibCompilationError = -11
 	// EvalLibRunError is returned by EvalLib when expr-lang fails to run the bytecode
 	EvalLibRunError = -12
@@ -19,7 +19,7 @@ EvalLib evaluates(calculates) an arithmetic expr. Uses expr-lang lib.
 @param expr string - string with an arithmetic expr to evaluate.
 String is allowed to contain only 0-9, +-/* and (), also expr itself needs to be correct.
 
-@return int - result of an expr, rounded to the nearest integer.
+@return float64 - result of an expr.
 */
 func EvalLib(expression string) float64 {
 

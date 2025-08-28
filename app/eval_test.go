@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/ozontech/allure-go/pkg/allure"
@@ -21,6 +22,7 @@ var evalTests = []struct {
 	{"1 + -1*(-1)", "2"},
 	{"1 + -1 * -1", "2"},
 	{"1 - (-1)", "2"},
+	{"+ - + - - (--1)", "-1"},
 }
 
 type EvalSuite struct {
@@ -36,18 +38,34 @@ func (s *EvalSuite) BeforeEach(t provider.T) {
 }
 
 func (s *EvalSuite) TestEval(t provider.T) {
-	t.XSkip()
-	t.Skip()
-
 	t.Title("Test Eval()")
 	t.Description("Test Eval() on a series of strings that contain arithmetic expression")
-	t.Link(allure.IssueLink("https://github.com/11ALX11/calc-arithmetics/issues/9")) // temporary
 	t.Parallel()
 
 	for _, tt := range evalTests {
 		t.WithNewAsyncStep(tt.in, func(sCtx provider.StepCtx) {
 			num := Eval(tt.in)
 			sCtx.Assert().Equal(tt.out, fmt.Sprint(num), "expected %s, got %s", tt.out, fmt.Sprint(num))
+		})
+	}
+}
+
+func (s *EvalSuite) TestEvalPairedWithTestsFromFilter(t provider.T) {
+	t.Title("Test Eval() with tests for filters")
+	t.Description("Test Eval() with tests for filters paired with ReplaceMathExpressions()")
+
+	var tests []struct{ in, out string }
+
+	tests = append(tests, filterTests...)
+	tests = append(tests, evalTests...)
+
+	t.Parallel()
+
+	for _, tt := range tests {
+		tt := tt // Rebind tt before using it inside the async step.
+		t.WithNewAsyncStep(tt.in, func(sCtx provider.StepCtx) {
+			str := strings.Trim(ReplaceMathExpressions(tt.in, Eval), " ")
+			sCtx.Assert().Equal(tt.out, str, "expected %s, got %s", tt.out, str)
 		})
 	}
 }
