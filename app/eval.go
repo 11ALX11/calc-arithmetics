@@ -92,7 +92,8 @@ func Eval(expression string) float64 {
 			// unary
 			if len(numbers) < 1 {
 				log.Println("Eval(): Invalid expression (unary needs 1 operand)")
-				numbers = append(numbers, EvalInvalidExpression)
+				numbers = []float64{EvalInvalidExpression}
+				operands = nil
 				return
 			}
 			a := numbers[len(numbers)-1]
@@ -104,7 +105,8 @@ func Eval(expression string) float64 {
 		// binary
 		if len(numbers) < 2 {
 			log.Println("Eval(): Invalid expression (binary needs 2 operands)")
-			numbers = append(numbers, EvalInvalidExpression)
+			numbers = []float64{EvalInvalidExpression}
+			operands = nil
 			return
 		}
 		b := numbers[len(numbers)-1]
@@ -201,6 +203,7 @@ func Eval(expression string) float64 {
 
 		log.Printf("Eval(): Unexpected character: %q at %d\n", ch, i)
 		//return EvalUnexpectedCharacter // uh, just ignore it
+		i++
 	}
 
 	// apply remaining operators

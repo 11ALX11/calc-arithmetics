@@ -35,6 +35,7 @@ func (s *FilterRegexSuite) TestFilterRegex(t provider.T) {
 	t.Parallel()
 
 	for _, tt := range tests {
+		tt := tt // Rebind tt before using it inside the async step.
 		t.WithNewAsyncStep(tt.in, func(sCtx provider.StepCtx) {
 			str := strings.Trim(ReplaceMathExpressionsRegex(tt.in, EvalLib), " ")
 			sCtx.Assert().Equal(tt.out, str, "expected %s, got %s", tt.out, str)
