@@ -22,6 +22,7 @@ var evalTests = []struct {
 	{"1 + -1*(-1)", "2"},
 	{"1 + -1 * -1", "2"},
 	{"1 - (-1)", "2"},
+	{"+ - + - - (--1)", "-1"},
 }
 
 type EvalSuite struct {
@@ -34,7 +35,6 @@ func (s *EvalSuite) BeforeEach(t provider.T) {
 	t.Tags("app", "math")
 	t.Severity(allure.CRITICAL)
 	t.Owner("github.com/11ALX11")
-	t.Link(allure.IssueLink("https://github.com/11ALX11/calc-arithmetics/issues/9")) // ToDo: temporary
 }
 
 func (s *EvalSuite) TestEval(t provider.T) {

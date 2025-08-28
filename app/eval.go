@@ -18,26 +18,42 @@ const (
 )
 
 /*
-Eval evaluates(calculates) an arithmetic expression.
+Eval evaluates (calculates) an arithmetic expression.
 
-@param expression string - string with an arithmetic expression to evaluate.
-String is allowed to contain only 0-9, +-/* and (), also expression itself needs to be correct.
+Allowed tokens: digits 0-9, + - * / and parentheses ().
+Supports unary + and - (e.g., -1, --1, + - 1, -(-1), etc.).
 
-@return float64 - result of an expr.
+@return float64 - result of the expression, or a negative error code on parse/semantic error.
 */
 func Eval(expression string) float64 {
+	// Precedence: higher number = higher precedence
+	// Assign unary operators higher precedence than * and /
 	precedence := func(operand byte) int {
 		switch operand {
 		case '(', ')':
 			return 0
+		case 'p', 'n': // unary plus, unary minus
+			return 3
+		case '*', '/':
+			return 2
 		case '+', '-':
 			return 1
-		default: // *, /
-			return 2
+		default:
+			return -1
 		}
 	}
 
-	applyOperand := func(operand byte, b, a float64) float64 {
+	// Associativity: true if right-associative
+	isRightAssoc := func(operand byte) bool {
+		switch operand {
+		case 'p', 'n':
+			return true // unary operators are right-associative
+		default:
+			return false
+		}
+	}
+
+	applyBinary := func(operand byte, b, a float64) float64 {
 		switch operand {
 		case '+':
 			return a + b
@@ -53,35 +69,66 @@ func Eval(expression string) float64 {
 		}
 	}
 
+	applyUnary := func(operand byte, a float64) float64 {
+		switch operand {
+		case 'p': // unary plus
+			return a
+		case 'n': // unary minus
+			return -a
+		default:
+			log.Println("Eval(): Wrong unary operand")
+			return EvalWrongOperand
+		}
+	}
+
 	var numbers []float64
 	var operands []byte
 
-	// helper to apply top operator once (assumes stacks are valid)
 	applyTop := func() {
-		number2 := numbers[len(numbers)-1]
-		numbers = numbers[:len(numbers)-1]
-		number1 := numbers[len(numbers)-1]
-		numbers = numbers[:len(numbers)-1]
-		operand := operands[len(operands)-1]
+		op := operands[len(operands)-1]
 		operands = operands[:len(operands)-1]
-		numbers = append(numbers, applyOperand(operand, number2, number1))
+
+		if op == 'p' || op == 'n' {
+			// unary
+			if len(numbers) < 1 {
+				log.Println("Eval(): Invalid expression (unary needs 1 operand)")
+				numbers = append(numbers, EvalInvalidExpression)
+				return
+			}
+			a := numbers[len(numbers)-1]
+			numbers = numbers[:len(numbers)-1]
+			numbers = append(numbers, applyUnary(op, a))
+			return
+		}
+
+		// binary
+		if len(numbers) < 2 {
+			log.Println("Eval(): Invalid expression (binary needs 2 operands)")
+			numbers = append(numbers, EvalInvalidExpression)
+			return
+		}
+		b := numbers[len(numbers)-1]
+		numbers = numbers[:len(numbers)-1]
+		a := numbers[len(numbers)-1]
+		numbers = numbers[:len(numbers)-1]
+		numbers = append(numbers, applyBinary(op, b, a))
 	}
 
 	// isUnary context: true when the next + or - should be parsed as unary.
-	// This is true at expression start, after '(', or after another operator.
 	isUnary := true
 
 	i := 0
 	for i < len(expression) {
 		ch := expression[i]
 
+		// skip whitespace
 		if ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r' {
 			i++
 			continue
 		}
 
+		// number
 		if ch >= '0' && ch <= '9' {
-			// parse integer number
 			number := 0.0
 			for i < len(expression) && expression[i] >= '0' && expression[i] <= '9' {
 				number = number*10 + float64(expression[i]-'0')
@@ -89,9 +136,10 @@ func Eval(expression string) float64 {
 			}
 			numbers = append(numbers, number)
 			isUnary = false
-			continue // note: already advanced i
+			continue
 		}
 
+		// left paren
 		if ch == '(' {
 			operands = append(operands, ch)
 			isUnary = true
@@ -99,8 +147,8 @@ func Eval(expression string) float64 {
 			continue
 		}
 
+		// right paren
 		if ch == ')' {
-			// pop until '('
 			for len(operands) > 0 && operands[len(operands)-1] != '(' {
 				applyTop()
 			}
@@ -114,45 +162,45 @@ func Eval(expression string) float64 {
 			continue
 		}
 
-		// Operators: + - * /
+		// operators
 		if ch == '+' || ch == '-' || ch == '*' || ch == '/' {
+			// classify unary vs binary
+			op := ch
 			if isUnary {
-				// handle unary +/-
-				if ch == '+' {
-					// unary plus: no-op, just keep expecting a number/parenthesis next
-					// But to handle sequences like + - 1, we simply keep isUnary = true.
-					i++
-					// still unary until we actually read a number or '('
-					continue
-				}
-				if ch == '-' {
-					// unary minus: turn into "0 - (...)"
-					// Push a zero, then treat '-' as binary with high precedence resolution below.
-					numbers = append(numbers, 0.0)
-					// Now treat '-' as binary subtraction: fall through to normal binary handling
-					// but we must mark isUnary=false because we are placing an operator now expecting right operand.
-					// We won't increment i here; let the normal operator handling below consume '-'.
-					isUnary = true // remains true because after a binary operator we still expect an operand
-				} else {
-					// unary * or / is invalid in standard arithmetic
+				// only + and - are valid unary
+				switch ch {
+				case '+':
+					op = 'p' // unary plus
+				case '-':
+					op = 'n' // unary minus
+				default:
 					log.Println("Eval(): Invalid unary operator.")
 					return EvalInvalidUnaryOperator
 				}
 			}
 
-			// Now handle binary operators (including the '-' that came from unary minus transformation)
-			for len(operands) > 0 && operands[len(operands)-1] != '(' &&
-				precedence(operands[len(operands)-1]) >= precedence(ch) {
-				applyTop()
+			// pop while top of operator stack has greater precedence,
+			// or equal precedence and current operator is left-associative.
+			for len(operands) > 0 && operands[len(operands)-1] != '(' {
+				top := operands[len(operands)-1]
+				pt := precedence(top)
+				po := precedence(op)
+				if pt > po || (pt == po && !isRightAssoc(op)) {
+					applyTop()
+				} else {
+					break
+				}
 			}
-			operands = append(operands, ch)
-			isUnary = true // after a binary operator, next + or - could be unary
+
+			operands = append(operands, op)
+			// after any operator, we are in unary context again
+			isUnary = true
 			i++
 			continue
 		}
 
 		log.Printf("Eval(): Unexpected character: %q at %d\n", ch, i)
-		return EvalUnexpectedCharacter
+		//return EvalUnexpectedCharacter // uh, just ignore it
 	}
 
 	// apply remaining operators
