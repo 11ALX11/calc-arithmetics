@@ -39,48 +39,31 @@ func (s *I18nSuite) TestInit(t provider.T) {
 	t.Assert().Equal("Тест", RU.T("Test"), "Expected translation to RU to match")
 }
 
-func (s *I18nSuite) TestGetLanguageCodeLANGUAGE(t provider.T) {
+func (s *I18nSuite) getLanguageCodeTestBody(t provider.T, envVarName string) {
 	t.Title("Test getLanguageCode()")
-	t.Description("Test getLanguageCode with LANGUAGE env")
-	t.WithParameters(allure.NewParameter("env", "LANGUAGE"))
+	t.Description("Test getLanguageCode with " + envVarName + " env")
+	t.WithParameters(allure.NewParameter("env", envVarName))
 
-	t.Setenv("LANGUAGE", "ru_RU")
+	t.Setenv(envVarName, "ru_RU")
 
 	lang := getLanguageCode()
 	t.Assert().Equal("ru_RU", lang, "Expected language code to be ru_RU")
+}
+
+func (s *I18nSuite) TestGetLanguageCodeLANGUAGE(t provider.T) {
+	s.getLanguageCodeTestBody(t, "LANGUAGE")
 }
 
 func (s *I18nSuite) TestGetLanguageCodeLC_ALL(t provider.T) {
-	t.Title("Test getLanguageCode()")
-	t.Description("Test getLanguageCode with LC_ALL env")
-	t.WithParameters(allure.NewParameter("env", "LC_ALL"))
-
-	t.Setenv("LC_ALL", "ru_RU")
-
-	lang := getLanguageCode()
-	t.Assert().Equal("ru_RU", lang, "Expected language code to be ru_RU")
+	s.getLanguageCodeTestBody(t, "LC_ALL")
 }
 
 func (s *I18nSuite) TestGetLanguageCodeLC_MESSAGES(t provider.T) {
-	t.Title("Test getLanguageCode()")
-	t.Description("Test getLanguageCode with LC_MESSAGES env")
-	t.WithParameters(allure.NewParameter("env", "LC_MESSAGES"))
-
-	t.Setenv("LC_MESSAGES", "ru_RU")
-
-	lang := getLanguageCode()
-	t.Assert().Equal("ru_RU", lang, "Expected language code to be ru_RU")
+	s.getLanguageCodeTestBody(t, "LC_MESSAGES")
 }
 
 func (s *I18nSuite) TestGetLanguageCodeLANG(t provider.T) {
-	t.Title("Test getLanguageCode()")
-	t.Description("Test getLanguageCode with LANG env")
-	t.WithParameters(allure.NewParameter("env", "LANG"))
-
-	t.Setenv("LANG", "ru_RU")
-
-	lang := getLanguageCode()
-	t.Assert().Equal("ru_RU", lang, "Expected language code to be ru_RU")
+	s.getLanguageCodeTestBody(t, "LANG")
 }
 
 func (s *I18nSuite) TestGetSupportedLanguages(t provider.T) {
