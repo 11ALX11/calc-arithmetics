@@ -10,7 +10,7 @@ import (
 
 // cliCmd represents the cli command
 var cliCmd = &cobra.Command{
-	Use:   "cli",
+	Use:   "cli INPUT_FILE OUTPUT_FILE",
 	Short: i18n.T("Use a command-line interface"),
 	// Long:  `Use command-line interface.`,
 	Args: cobra.ExactArgs(2),
