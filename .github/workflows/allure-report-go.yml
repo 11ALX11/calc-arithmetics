@@ -62,6 +62,13 @@ jobs:
           ref: gh-pages
           path: gh-pages
 
+      # Copy master history to a newly created PR
+      - name: Copy master history to a newly created PR
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false
+        run: |
+          cp master/last-history ${{ github.ref_name }}/last-history
+          ls -l ${{ github.ref_name }}
+
       # Build report
       - name: Build Allure report
         uses: simple-elf/allure-report-action@v1.7
