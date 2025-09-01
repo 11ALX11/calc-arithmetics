@@ -70,7 +70,7 @@ jobs:
           gh_pages: gh-pages
           allure_history: allure-history
           allure_results: allure-results
-          subfolder: ${{ github.ref_name }}
+          subfolder: ${{ github.ref_name }} # Subfolder makes separate reports for separate branches (branch -> master PR)
 
       # Publish test report to gh-pages
       - name: Publish Allure report to GitHub Pages
