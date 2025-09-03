@@ -68,9 +68,9 @@ jobs:
         run: |
           mkdir -p ./gh-pages/${{ github.ref_name }}
           if [ -d "./gh-pages/master/last-history" ]; then
-                    cp -r ./gh-pages/master/last-history/ ./gh-pages/${{ github.ref_name }}/last-history
+            cp -r ./gh-pages/master/last-history/ ./gh-pages/${{ github.ref_name }}/last-history
           else
-                    echo "No master last-history found; skipping seed."
+            echo "No master last-history found; skipping seed."
           fi
 
           echo ./gh-pages
