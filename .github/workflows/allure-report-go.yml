@@ -66,6 +66,9 @@ jobs:
       - name: Copy master history to a newly created PR
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false
         run: |
+          ls -l ./
+          ls -l ./master
+
           mkdir -p ${{ github.ref_name }}
           cp -r master/last-history/ ${{ github.ref_name }}/last-history
           ls -l ${{ github.ref_name }}
