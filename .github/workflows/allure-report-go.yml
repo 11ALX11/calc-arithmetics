@@ -67,7 +67,11 @@ jobs:
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false
         run: |
           mkdir -p ./gh-pages/${{ github.ref_name }}
-          cp -r ./gh-pages/master/last-history/ ./gh-pages/${{ github.ref_name }}/last-history
+          if [ -d "./gh-pages/master/last-history" ]; then
+                    cp -r ./gh-pages/master/last-history/ ./gh-pages/${{ github.ref_name }}/last-history
+          else
+                    echo "No master last-history found; skipping seed."
+          fi
 
           echo ./gh-pages
           ls -l ./gh-pages
