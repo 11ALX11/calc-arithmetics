@@ -23,6 +23,15 @@ var cliCmd = &cobra.Command{
 			return
 		}
 
+		// flag: unzip
+		if unzip {
+			// content =
+		}
+		// flag: decipher
+		if decipher {
+			// content =
+		}
+
 		// flag: useEvalLib
 		evalFunction := app.Eval
 		if useEvalLib {
@@ -36,6 +45,15 @@ var cliCmd = &cobra.Command{
 		}
 
 		sResult := replaceFunction(content, evalFunction)
+
+		// flag: encode
+		if encode {
+			// sResult =
+		}
+		// flag: archive
+		if archive {
+			// sResult =
+		}
 
 		err = app.WriteFile(args[1], sResult)
 		if err != nil {

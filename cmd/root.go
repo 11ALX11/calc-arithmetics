@@ -35,8 +35,14 @@ func Execute() {
 
 var (
 	forceTranslation string
-	useEvalLib       bool
-	useFilterRegex   bool
+
+	useEvalLib     bool
+	useFilterRegex bool
+
+	unzip    bool
+	archive  bool
+	decipher bool
+	encode   bool
 )
 
 func init() {
@@ -54,4 +60,10 @@ func init() {
 
 	rootCmd.PersistentFlags().BoolVarP(&useEvalLib, "evalLib", "e", false, "Use an evaluation library expr-lang.")
 	rootCmd.PersistentFlags().BoolVarP(&useFilterRegex, "filterRegex", "f", false, "Use regex for filtering arithmetic expressions from file.")
+
+	// ToDo: using what
+	rootCmd.PersistentFlags().BoolVarP(&unzip, "unzip", "u", false, "Unzip input file using ")
+	rootCmd.PersistentFlags().BoolVarP(&archive, "archive", "a", false, "Archive output file using ")
+	rootCmd.PersistentFlags().BoolVar(&decipher, "decipher", false, "Decipher input file using ")
+	rootCmd.PersistentFlags().BoolVar(&encode, "encode", false, "Encode output file using ")
 }
