@@ -32,7 +32,7 @@ var cliCmd = &cobra.Command{
 		} else {
 			// flag: unzip
 
-			content, err = app.ReadZipFile(args[0], "data.txt")
+			content, err = app.ReadZipFile(args[0], app.DataFileInArchive)
 
 			if err != nil {
 				log.Fatalf("Failed to read an archive: %s; error: %s", args[0], err)

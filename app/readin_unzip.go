@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+const DataFileInArchive = "data.txt"
+
 func ReadZipFile(inputArchive, dataInputFile string) (string, error) {
 	// Open the ZIP archive for reading
 	zipFile, err := zip.OpenReader(inputArchive)
