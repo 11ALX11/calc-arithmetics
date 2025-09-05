@@ -17,10 +17,32 @@ var cliCmd = &cobra.Command{
 
 	Run: func(cmd *cobra.Command, args []string) {
 
-		content, err := app.ReadFile(args[0])
-		if err != nil {
-			log.Fatalf("Failed to read a file: %s; error: %s", args[0], err)
-			return
+		var content string
+		var err error
+
+		// Read normally
+		if !unzip {
+
+			content, err = app.ReadFile(args[0])
+
+			if err != nil {
+				log.Fatalf("Failed to read a file: %s; error: %s", args[0], err)
+				return
+			}
+		} else {
+			// flag: unzip
+
+			content, err = app.ReadZipFile(args[0], app.DataFileInArchive)
+
+			if err != nil {
+				log.Fatalf("Failed to read an archive: %s; error: %s", args[0], err)
+				return
+			}
+		}
+
+		// flag: decipher
+		if decipher {
+			// content =
 		}
 
 		// flag: useEvalLib
@@ -36,6 +58,15 @@ var cliCmd = &cobra.Command{
 		}
 
 		sResult := replaceFunction(content, evalFunction)
+
+		// flag: encode
+		if encode {
+			// sResult =
+		}
+		// flag: archive
+		if archive {
+			// sResult =
+		}
 
 		err = app.WriteFile(args[1], sResult)
 		if err != nil {
