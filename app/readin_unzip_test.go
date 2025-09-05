@@ -26,19 +26,21 @@ func (s *ReadZipFileSuite) TestReadZipFile(t provider.T) {
 	t.Description("Test ReadZipFile() on a zip archive containing data.txt")
 
 	expectedString := "asfegf 124 tg ewrhy\n wafdafag wegtwetg 35t\n"
-	t.NewStep("Get zip file.", allure.NewParameter("archived string", expectedString))
+	file := ".tmp/some-file.zip"
+	t.NewStep("Get zip file.", allure.NewParameters("Archived string", expectedString, "File", file)...)
+
 	// ¯\_(ツ)_/¯
 
 	t.NewStep("Unzip archive and read data.txt's contents.")
-	content, err := ReadZipFile("some file", DataFileInArchive)
+	content, err := ReadZipFile(file, DataFileInArchive)
 
 	t.WithNewStep("Check if there's any error", func(sCtx provider.StepCtx) {
 		sCtx.Assert().NoError(err, "Expect no error (nil).")
-	}, allure.NewParameter("err", err))
+	}, allure.NewParameter("Error", err))
 
 	t.WithNewStep("Compare expected and actual strings.", func(sCtx provider.StepCtx) {
 		sCtx.Assert().Equal(expectedString, content, "Expect strings to match.")
-	}, allure.NewParameters("expected", expectedString, "actual", content)...)
+	}, allure.NewParameters("Expected", expectedString, "Actual", content)...)
 }
 
 func TestReadZipFileSuite(t *testing.T) {
