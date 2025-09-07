@@ -50,7 +50,6 @@ func (s *WriteFileSuite) TestReadFile(t provider.T) {
 		)...,
 	)
 
-	// Need to write tmp file or tmp folder
 	err = WriteFile(file.Name(), expectedString)
 
 	t.WithNewStep(
