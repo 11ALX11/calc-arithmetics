@@ -29,10 +29,13 @@ func (s *EvalLibSuite) TestEvalLib(t provider.T) {
 	t.Parallel()
 
 	for _, tt := range evalTests {
-		t.WithNewAsyncStep(tt.in, func(sCtx provider.StepCtx) {
-			num := EvalLib(tt.in)
-			sCtx.Assert().Equal(tt.out, fmt.Sprint(num), "expected %s, got %s", tt.out, fmt.Sprint(num))
-		})
+		t.WithNewAsyncStep(
+			tt.in,
+			func(sCtx provider.StepCtx) {
+				num := EvalLib(tt.in)
+				sCtx.Assert().Equal(tt.out, fmt.Sprint(num), "expected %s, got %s", tt.out, fmt.Sprint(num))
+			},
+		)
 	}
 }
 

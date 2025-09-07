@@ -36,10 +36,13 @@ func (s *FilterRegexSuite) TestFilterRegex(t provider.T) {
 
 	for _, tt := range tests {
 		tt := tt // Rebind tt before using it inside the async step.
-		t.WithNewAsyncStep(tt.in, func(sCtx provider.StepCtx) {
-			str := strings.Trim(ReplaceMathExpressionsRegex(tt.in, EvalLib), " ")
-			sCtx.Assert().Equal(tt.out, str, "expected %s, got %s", tt.out, str)
-		})
+		t.WithNewAsyncStep(
+			tt.in,
+			func(sCtx provider.StepCtx) {
+				str := strings.Trim(ReplaceMathExpressionsRegex(tt.in, EvalLib), " ")
+				sCtx.Assert().Equal(tt.out, str, "expected %s, got %s", tt.out, str)
+			},
+		)
 	}
 }
 
@@ -48,13 +51,22 @@ func (s *FilterRegexSuite) TestRegexLib(t provider.T) {
 	t.Description("Test github.com/GRbit/go-pcre lib with simple pattern and string")
 
 	const simplePattern = `\d+`
-	t.NewStep("Define pattern, compile it and get matcher object.", allure.NewParameter("pattern", simplePattern))
+	t.NewStep(
+		"Define pattern, compile it and get matcher object.",
+		allure.NewParameter(
+			"pattern", simplePattern,
+		),
+	)
 
 	var simpleRe = pcre.MustCompileJIT(simplePattern, 0, pcre.CONFIG_JIT)
 	var testString = "abc 123 def"
 	var simpleMatcher = *simpleRe.NewMatcherString(testString, 0)
 
-	t.NewStep("Try to get a match from a test string and verify it.", allure.NewParameter("testString", testString))
+	t.NewStep("Try to get a match from a test string and verify it.",
+		allure.NewParameter(
+			"testString", testString,
+		),
+	)
 
 	if simpleMatcher.Matches {
 

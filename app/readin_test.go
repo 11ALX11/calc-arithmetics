@@ -29,7 +29,13 @@ func (s *ReadFileSuite) TestReadFile(t provider.T) {
 
 	expectedString := Test_in_txt_content
 	file := "../" + Test_in_txt_filepath // relative to 'app' package
-	t.NewStep("Try to get txt file.", allure.NewParameters("String in a file", expectedString, "File", file)...)
+	t.NewStep(
+		"Try to get txt file.",
+		allure.NewParameters(
+			"String in a file", expectedString,
+			"File", file,
+		)...,
+	)
 
 	t.NewStep("Try to read file's contents.")
 	content, err := ReadFile(file)
@@ -38,9 +44,16 @@ func (s *ReadFileSuite) TestReadFile(t provider.T) {
 		sCtx.Assert().NoError(err, "Expect no error (nil).")
 	}, allure.NewParameter("Error", err))
 
-	t.WithNewStep("Compare expected and actual strings.", func(sCtx provider.StepCtx) {
-		sCtx.Assert().Equal(expectedString, content, "Expect strings to match.")
-	}, allure.NewParameters("Expected", expectedString, "Actual", content)...)
+	t.WithNewStep(
+		"Compare expected and actual strings.",
+		func(sCtx provider.StepCtx) {
+			sCtx.Assert().Equal(expectedString, content, "Expect strings to match.")
+		},
+		allure.NewParameters(
+			"Expected", expectedString,
+			"Actual", content,
+		)...,
+	)
 }
 
 func TestReadFileSuite(t *testing.T) {

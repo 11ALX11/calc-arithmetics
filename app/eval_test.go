@@ -47,10 +47,13 @@ func (s *EvalSuite) TestEval(t provider.T) {
 	t.Parallel()
 
 	for _, tt := range evalTests {
-		t.WithNewAsyncStep(tt.in, func(sCtx provider.StepCtx) {
-			num := Eval(tt.in)
-			sCtx.Assert().Equal(tt.out, fmt.Sprint(num), "expected %s, got %s", tt.out, fmt.Sprint(num))
-		})
+		t.WithNewAsyncStep(
+			tt.in,
+			func(sCtx provider.StepCtx) {
+				num := Eval(tt.in)
+				sCtx.Assert().Equal(tt.out, fmt.Sprint(num), "expected %s, got %s", tt.out, fmt.Sprint(num))
+			},
+		)
 	}
 }
 
@@ -67,10 +70,13 @@ func (s *EvalSuite) TestEvalPairedWithTestsFromFilter(t provider.T) {
 
 	for _, tt := range tests {
 		tt := tt // Rebind tt before using it inside the async step.
-		t.WithNewAsyncStep(tt.in, func(sCtx provider.StepCtx) {
-			str := strings.Trim(ReplaceMathExpressions(tt.in, Eval), " ")
-			sCtx.Assert().Equal(tt.out, str, "expected %s, got %s", tt.out, str)
-		})
+		t.WithNewAsyncStep(
+			tt.in,
+			func(sCtx provider.StepCtx) {
+				str := strings.Trim(ReplaceMathExpressions(tt.in, Eval), " ")
+				sCtx.Assert().Equal(tt.out, str, "expected %s, got %s", tt.out, str)
+			},
+		)
 	}
 }
 
