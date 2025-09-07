@@ -13,6 +13,8 @@ type WriteFileSuite struct {
 	suite.Suite
 }
 
+const Tmp_Test_out_txt_filepath = "tmp-test-out.txt"
+
 func (s *WriteFileSuite) BeforeEach(t provider.T) {
 	t.Epic("App")
 	t.Feature("Output")
@@ -25,26 +27,65 @@ func (s *WriteFileSuite) TestReadFile(t provider.T) {
 	t.Title("Test file writing")
 	t.Description("Test WriteFile() on a txt file.")
 
-	expectedString := "asfegf 124 tg ewrhy\n wafdafag wegtwetg 35t\n"
-	file := "./tmp/some-file.txt"
-	t.NewStep("Write txt file.", allure.NewParameters("String to write", expectedString, "File", file)...)
+	file, err := os.CreateTemp("", Tmp_Test_out_txt_filepath)
+	defer os.Remove(file.Name())
 
-	// ¯\_(ツ)_/¯
-	err := WriteFile(file, expectedString)
+	t.WithNewStep(
+		"Try to create temporary file",
+		func(sCtx provider.StepCtx) {
+			sCtx.Assert().NoError(err, "Expect no error (nil).")
+		},
+		allure.NewParameters(
+			"File", Tmp_Test_out_txt_filepath,
+			"TmpFile", file.Name(),
+		)...,
+	)
 
-	t.WithNewStep("Check if there's any error", func(sCtx provider.StepCtx) {
-		sCtx.Assert().NoError(err, "Expect no error (nil).")
-	}, allure.NewParameter("Error", err))
+	expectedString := Test_in_txt_content // Any string will do.
+	t.NewStep(
+		"Try to write to a txt file.",
+		allure.NewParameters(
+			"String to write", expectedString,
+			"File", file.Name(),
+		)...,
+	)
 
-	content, err := os.ReadFile(file)
+	// Need to write tmp file or tmp folder
+	err = WriteFile(file.Name(), expectedString)
 
-	t.WithNewStep("Check if there's any error while reading file", func(sCtx provider.StepCtx) {
-		sCtx.Assert().NoError(err, "Expect no error (nil).")
-	}, allure.NewParameter("Error", err))
+	t.WithNewStep(
+		"Check if there's any error",
+		func(sCtx provider.StepCtx) {
+			sCtx.Assert().NoError(err, "Expect no error (nil).")
+		},
+		allure.NewParameter(
+			"Error", err,
+		),
+	)
 
-	t.WithNewStep("Compare expected and actual strings.", func(sCtx provider.StepCtx) {
-		sCtx.Assert().Equal(expectedString, content, "Expect strings to match.")
-	}, allure.NewParameters("Expected", expectedString, "Actual", content)...)
+	bytes, err := os.ReadFile(file.Name())
+	content := string(bytes)
+
+	t.WithNewStep(
+		"Check if there's any error while reading file",
+		func(sCtx provider.StepCtx) {
+			sCtx.Assert().NoError(err, "Expect no error (nil).")
+		},
+		allure.NewParameter(
+			"Error", err,
+		),
+	)
+
+	t.WithNewStep(
+		"Compare expected and actual strings.",
+		func(sCtx provider.StepCtx) {
+			sCtx.Assert().Equal(expectedString, content, "Expect strings to match.")
+		},
+		allure.NewParameters(
+			"Expected", expectedString,
+			"Actual", content,
+		)...,
+	)
 }
 
 func TestWriteFileSuite(t *testing.T) {

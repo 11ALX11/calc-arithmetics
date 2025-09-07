@@ -12,6 +12,9 @@ type ReadZipFileSuite struct {
 	suite.Suite
 }
 
+const Test_in_zip_content = Test_in_txt_content
+const Test_in_zip_filepath = "testdata/test-in.zip"
+
 func (s *ReadZipFileSuite) BeforeEach(t provider.T) {
 	t.Epic("App")
 	t.Feature("Input")
@@ -25,13 +28,11 @@ func (s *ReadZipFileSuite) TestReadZipFile(t provider.T) {
 	t.Title("Test zip deciphering")
 	t.Description("Test ReadZipFile() on a zip archive containing data.txt")
 
-	expectedString := "asfegf 124 tg ewrhy\n wafdafag wegtwetg 35t\n"
-	file := ".tmp/some-file.zip"
-	t.NewStep("Get zip file.", allure.NewParameters("Archived string", expectedString, "File", file)...)
+	expectedString := Test_in_zip_content
+	file := "../" + Test_in_zip_filepath // relative to 'app' package
+	t.NewStep("Try to get zip file.", allure.NewParameters("Archived string", expectedString, "File", file)...)
 
-	// ¯\_(ツ)_/¯
-
-	t.NewStep("Unzip archive and read data.txt's contents.")
+	t.NewStep("Try to unzip archive and read data.txt's contents.")
 	content, err := ReadZipFile(file, DataFileInArchive)
 
 	t.WithNewStep("Check if there's any error", func(sCtx provider.StepCtx) {

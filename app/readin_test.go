@@ -8,6 +8,9 @@ import (
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 )
 
+const Test_in_txt_content = "asfegf 124 tg ewrhy\n wafdafag wegtwetg 35t\n"
+const Test_in_txt_filepath = "testdata/test-in.txt"
+
 type ReadFileSuite struct {
 	suite.Suite
 }
@@ -24,13 +27,11 @@ func (s *ReadFileSuite) TestReadFile(t provider.T) {
 	t.Title("Test file reading")
 	t.Description("Test ReadFile() on a txt file.")
 
-	expectedString := "asfegf 124 tg ewrhy\n wafdafag wegtwetg 35t\n"
-	file := "./tmp/some-file.txt"
-	t.NewStep("Get txt file.", allure.NewParameters("String in a file", expectedString, "File", file)...)
+	expectedString := Test_in_txt_content
+	file := "../" + Test_in_txt_filepath // relative to 'app' package
+	t.NewStep("Try to get txt file.", allure.NewParameters("String in a file", expectedString, "File", file)...)
 
-	// ¯\_(ツ)_/¯
-
-	t.NewStep("Read file's contents.")
+	t.NewStep("Try to read file's contents.")
 	content, err := ReadFile(file)
 
 	t.WithNewStep("Check if there's any error", func(sCtx provider.StepCtx) {
