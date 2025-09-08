@@ -44,7 +44,7 @@ func (s *WriteZipFileSuite) TestReadFile(t provider.T) {
 
 	expectedString := Test_in_txt_content // Any string will do.
 	t.NewStep(
-		"Try to write to a txt file.",
+		"Try to create a zip file.",
 		allure.NewParameters(
 			"String to write", expectedString,
 			"File", file.Name(),
