@@ -63,12 +63,15 @@ var cliCmd = &cobra.Command{
 		if encode {
 			// sResult =
 		}
+
 		// flag: archive
 		if archive {
-			// sResult =
+			err = app.WriteZipFile(args[1], sResult, app.DataFileInArchive)
+		} else { // Write normally
+
+			err = app.WriteFile(args[1], sResult)
 		}
 
-		err = app.WriteFile(args[1], sResult)
 		if err != nil {
 			log.Fatalf("Failed to write a file: %s; error: %s", args[1], err)
 			return

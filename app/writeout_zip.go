@@ -1,0 +1,59 @@
+package app
+
+import (
+	"archive/zip"
+	"os"
+	"path/filepath"
+)
+
+// WriteZipFile creates a zip file containing a text file with the specified content.
+func WriteZipFile(outputFile, content, dataFile string) error {
+	// Create a temporary directory
+	tempDir, err := os.MkdirTemp("", "ziptemp")
+	if err != nil {
+		return err
+	}
+	defer os.RemoveAll(tempDir) // Clean up the temp directory
+
+	// Create the dataFile with the provided content
+	dataFilePath := filepath.Join(tempDir, dataFile)
+	if err := WriteFile(dataFilePath, content); err != nil {
+		return err
+	}
+
+	// Create the zip file
+	zipFile, err := os.Create(outputFile)
+	if err != nil {
+		return err
+	}
+	defer zipFile.Close()
+
+	// Create a new zip writer
+	zipWriter := zip.NewWriter(zipFile)
+	defer zipWriter.Close()
+
+	// Add dataFile to the zip file
+	if err := writeFileToZip(zipWriter, dataFilePath, dataFile); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func writeFileToZip(w *zip.Writer, file, fileInZip string) error {
+	dat, err := os.ReadFile(file)
+	if err != nil {
+		return err
+	}
+
+	f, err := w.Create(fileInZip)
+	if err != nil {
+		return err
+	}
+	_, err = f.Write(dat)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
