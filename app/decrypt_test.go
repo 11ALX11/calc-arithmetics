@@ -30,7 +30,7 @@ func (s *DecryptSuite) BeforeEach(t provider.T) {
 
 func (s *DecryptSuite) TestDecrypt(t provider.T) {
 	t.Title("Test decryption")
-	t.Description("Test Decrypt() on a preencoded string with a 16-bit AES key.")
+	t.Description("Test Decrypt() on a preencoded string with a 16-byte AES key.")
 
 	t.NewStep(
 		"Try to decrypt ciphertext with a key.",
@@ -66,7 +66,7 @@ func (s *DecryptSuite) TestDecrypt(t provider.T) {
 
 func (s *DecryptSuite) TestDecryptWithWrongKey(t provider.T) {
 	t.Title("Test decryption with wrong key")
-	t.Description("Test Decrypt() on a preencoded string with a wrong 16-bit AES key and expect an error.")
+	t.Description("Test Decrypt() on a preencoded string with a wrong 16-byte AES key and expect an error.")
 	t.Severity(allure.CRITICAL) // security issue
 
 	t.NewStep(
@@ -88,6 +88,58 @@ func (s *DecryptSuite) TestDecryptWithWrongKey(t provider.T) {
 			"Decoded message", decodedMsg,
 			"Error", err,
 		)...,
+	)
+}
+
+func (s *DecryptSuite) TestDecryptWithEmptyInput(t provider.T) {
+	t.Title("Decrypt with empty input")
+
+	ciphertext := ""
+
+	t.NewStep(
+		"Try to decrypt with empty input.",
+		allure.NewParameters(
+			"ciphertext", ciphertext,
+			"key", TestDecryptSuite_key,
+		)...,
+	)
+
+	_, err := Decrypt(ciphertext, TestDecryptSuite_key)
+
+	t.WithNewStep(
+		"Expect error on empty input",
+		func(sCtx provider.StepCtx) {
+			sCtx.Assert().Error(err)
+		},
+		allure.NewParameter(
+			"Error", err,
+		),
+	)
+}
+
+func (s *DecryptSuite) TestDecryptWithMalformedBase64(t provider.T) {
+	t.Title("Decrypt with malformed base64")
+
+	ciphertext := "$$$not_base64$$$"
+
+	t.NewStep(
+		"Try to decrypt with malformed base64.",
+		allure.NewParameters(
+			"ciphertext", ciphertext,
+			"key", TestDecryptSuite_key,
+		)...,
+	)
+
+	_, err := Decrypt(ciphertext, TestDecryptSuite_key)
+
+	t.WithNewStep(
+		"Expect base64 decode error",
+		func(sCtx provider.StepCtx) {
+			sCtx.Assert().Error(err)
+		},
+		allure.NewParameter(
+			"Error", err,
+		),
 	)
 }
 

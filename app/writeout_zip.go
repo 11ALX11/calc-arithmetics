@@ -3,6 +3,7 @@ package app
 import (
 	"archive/zip"
 	"errors"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -19,7 +20,17 @@ WriteZipFile creates a zip file containing a text file with the specified conten
 
 @return error - error if failed to write/create a zip. Nil if success.
 */
-func WriteZipFile(outputFile, content, dataFile string) error {
+func WriteZipFile(outputFile, content, dataFile string) (err error) {
+
+	// Validate dataFile path to prevent creating malicious archives
+	if strings.Contains(dataFile, "..") {
+		return errors.New("unsafe dataFile path: path traversal detected")
+	}
+	cleanPath := filepath.Clean(dataFile)
+	if filepath.IsAbs(cleanPath) {
+		return errors.New("unsafe dataFile path: absolute path detected")
+	}
+
 	// Create a temporary directory
 	tempDir, err := os.MkdirTemp("", "ziptemp")
 	if err != nil {
@@ -38,20 +49,19 @@ func WriteZipFile(outputFile, content, dataFile string) error {
 	if err != nil {
 		return err
 	}
-	defer zipFile.Close()
+	defer func() {
+		if cerr := zipFile.Close(); err == nil && cerr != nil {
+			err = cerr
+		}
+	}()
 
 	// Create a new zip writer
 	zipWriter := zip.NewWriter(zipFile)
-	defer zipWriter.Close()
-
-	// Validate dataFile path to prevent creating malicious archives
-	if strings.Contains(dataFile, "..") {
-		return errors.New("unsafe dataFile path: path traversal detected")
-	}
-	cleanPath := filepath.Clean(dataFile)
-	if filepath.IsAbs(cleanPath) {
-		return errors.New("unsafe dataFile path: absolute path detected")
-	}
+	defer func() {
+		if cerr := zipWriter.Close(); err == nil && cerr != nil {
+			err = cerr
+		}
+	}()
 
 	// Add dataFile to the zip file
 	if err := writeFileToZip(zipWriter, dataFilePath, dataFile); err != nil {
@@ -62,7 +72,7 @@ func WriteZipFile(outputFile, content, dataFile string) error {
 }
 
 func writeFileToZip(w *zip.Writer, file, fileInZip string) error {
-	dat, err := os.ReadFile(file)
+	src, err := os.Open(file)
 	if err != nil {
 		return err
 	}
@@ -71,8 +81,7 @@ func writeFileToZip(w *zip.Writer, file, fileInZip string) error {
 	if err != nil {
 		return err
 	}
-	_, err = f.Write(dat)
-	if err != nil {
+	if _, err := io.Copy(f, src); err != nil {
 		return err
 	}
 

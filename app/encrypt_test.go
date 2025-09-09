@@ -28,7 +28,7 @@ func (s *EncryptSuite) BeforeEach(t provider.T) {
 
 func (s *EncryptSuite) TestEncrypt(t provider.T) {
 	t.Title("Test encryption")
-	t.Description("Test Encrypt() on a string with a 16-bit AES key. Uses Decrypt() to decrypt back for comparison with original.")
+	t.Description("Test Encrypt() on a string with a 16-byte AES key. Uses Decrypt() to decrypt back for comparison with original.")
 
 	t.NewStep(
 		"Try to encrypt plaintext with a key.",

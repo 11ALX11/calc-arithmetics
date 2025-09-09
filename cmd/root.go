@@ -66,14 +66,14 @@ func init() {
 	rootCmd.PersistentFlags().BoolVarP(&useEvalLib, "evalLib", "e", false, "Use an evaluation library expr-lang.")
 	rootCmd.PersistentFlags().BoolVarP(&useFilterRegex, "filterRegex", "f", false, "Use regex for filtering arithmetic expressions from file.")
 
-	rootCmd.PersistentFlags().BoolVarP(&unzip, "unzip", "u", false, "Unzip input file using zip")
-	rootCmd.PersistentFlags().BoolVarP(&archive, "archive", "a", false, "Archive output file using zip")
+	rootCmd.PersistentFlags().BoolVarP(&unzip, "unzip", "u", false, "Read input file from a ZIP archive")
+	rootCmd.PersistentFlags().BoolVarP(&archive, "archive", "a", false, "Write output file as a ZIP archive")
 	rootCmd.PersistentFlags().StringVarP(
 		&dataFileInArchive,
 		"dataFileInArchive",
 		"d",
 		app.DataFileInArchive,
-		fmt.Sprintf("A file inside of an archive to extract or write to contents. Used together with either\\both --unzip or --archive. Default value is \"%s\"", app.DataFileInArchive),
+		fmt.Sprintf("Name of the file inside the ZIP to read (with --unzip) or write (with --archive). Can be used with either or both --unzip and --archive. Default: %q.", app.DataFileInArchive),
 	)
 
 	rootCmd.PersistentFlags().BoolVar(&decrypt, "decrypt", false, "Decrypt input file. Use with --keyPath")
