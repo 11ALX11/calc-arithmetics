@@ -29,6 +29,7 @@ func (s *EvalLibSuite) TestEvalLib(t provider.T) {
 	t.Parallel()
 
 	for _, tt := range evalTests {
+		tt := tt // Rebind tt before using it inside the async step.
 		t.WithNewAsyncStep(
 			tt.in,
 			func(sCtx provider.StepCtx) {

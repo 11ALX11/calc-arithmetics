@@ -61,7 +61,7 @@ func init() {
 	// when this action is called directly.
 	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
-	rootCmd.PersistentFlags().StringVarP(&forceTranslation, "forceTranslation", "t", "", "Forces translation of an app to prefered locale. Options: \"en_US\" | \"ru_RU\"")
+	rootCmd.PersistentFlags().StringVarP(&forceTranslation, "forceTranslation", "t", "", "Forces translation of the app to the preferred locale. Options: \"en_US\" | \"ru_RU\"")
 
 	rootCmd.PersistentFlags().BoolVarP(&useEvalLib, "evalLib", "e", false, "Use an evaluation library expr-lang.")
 	rootCmd.PersistentFlags().BoolVarP(&useFilterRegex, "filterRegex", "f", false, "Use regex for filtering arithmetic expressions from file.")
@@ -78,5 +78,5 @@ func init() {
 
 	rootCmd.PersistentFlags().BoolVar(&decrypt, "decrypt", false, "Decrypt input file. Use with --keyPath")
 	rootCmd.PersistentFlags().BoolVar(&encrypt, "encrypt", false, "Encrypt output file. Use with --keyPath")
-	rootCmd.PersistentFlags().StringVar(&keyPath, "keyPath", "", "The key argument should be the AES key, either 16, 24, or 32 bytes to select AES-128, AES-192, or AES-256.\nUsed together with either\\both --encrypt or --decrypt")
+	rootCmd.PersistentFlags().StringVar(&keyPath, "keyPath", "", "Path to a file containing the AES key, either 16, 24, or 32 bytes to select AES-128, AES-192, or AES-256.\nRequired when --encrypt or --decrypt is set")
 }

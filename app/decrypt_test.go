@@ -28,9 +28,9 @@ func (s *DecryptSuite) BeforeEach(t provider.T) {
 	t.Link(allure.LinkLink("pkg crypto", "https://pkg.go.dev/crypto"))
 }
 
-func (s *DecryptSuite) TestDecript(t provider.T) {
+func (s *DecryptSuite) TestDecrypt(t provider.T) {
 	t.Title("Test decryption")
-	t.Description("Test Decript() on a preencoded string with a 16-bit AES key.")
+	t.Description("Test Decrypt() on a preencoded string with a 16-bit AES key.")
 
 	t.NewStep(
 		"Try to decrypt ciphertext with a key.",
@@ -64,9 +64,9 @@ func (s *DecryptSuite) TestDecript(t provider.T) {
 	)
 }
 
-func (s *DecryptSuite) TestDecriptWithWrongKey(t provider.T) {
+func (s *DecryptSuite) TestDecryptWithWrongKey(t provider.T) {
 	t.Title("Test decryption with wrong key")
-	t.Description("Test Decript() on a preencoded string with a wrong 16-bit AES key and expect an error.")
+	t.Description("Test Decrypt() on a preencoded string with a wrong 16-bit AES key and expect an error.")
 	t.Severity(allure.CRITICAL) // security issue
 
 	t.NewStep(

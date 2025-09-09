@@ -2,8 +2,10 @@ package app
 
 import (
 	"archive/zip"
+	"errors"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 /*
@@ -41,6 +43,15 @@ func WriteZipFile(outputFile, content, dataFile string) error {
 	// Create a new zip writer
 	zipWriter := zip.NewWriter(zipFile)
 	defer zipWriter.Close()
+
+	// Validate dataFile path to prevent creating malicious archives
+	if strings.Contains(dataFile, "..") {
+		return errors.New("unsafe dataFile path: path traversal detected")
+	}
+	cleanPath := filepath.Clean(dataFile)
+	if filepath.IsAbs(cleanPath) {
+		return errors.New("unsafe dataFile path: absolute path detected")
+	}
 
 	// Add dataFile to the zip file
 	if err := writeFileToZip(zipWriter, dataFilePath, dataFile); err != nil {

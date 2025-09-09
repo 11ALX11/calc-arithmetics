@@ -23,7 +23,7 @@ func (s *WriteFileSuite) BeforeEach(t provider.T) {
 	t.Owner("github.com/11ALX11")
 }
 
-func (s *WriteFileSuite) TestReadFile(t provider.T) {
+func (s *WriteFileSuite) TestWriteFile(t provider.T) {
 	t.Title("Test file writing")
 	t.Description("Test WriteFile() on a txt file.")
 

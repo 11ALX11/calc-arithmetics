@@ -2,8 +2,8 @@ package app
 
 import (
 	"archive/zip"
-	"bufio"
-	"errors"
+	"fmt"
+	"io"
 	"strings"
 )
 
@@ -34,10 +34,11 @@ func ReadZipFile(inputArchive, dataInputFile string) (string, error) {
 		if strings.EqualFold(file.Name, dataInputFile) {
 			foundTarget = true
 			targetFile = file
+			break
 		}
 	}
 	if !foundTarget {
-		return "", errors.New("target file not found in archive")
+		return "", fmt.Errorf("target file %q not found in archive %q", dataInputFile, inputArchive)
 	}
 
 	// Open file
@@ -47,13 +48,10 @@ func ReadZipFile(inputArchive, dataInputFile string) (string, error) {
 	}
 	defer reader.Close()
 
-	// Read file
-	content := ""
-	scanner := bufio.NewScanner(reader)
-	for scanner.Scan() {
-		line := scanner.Text()
-		content += line + "\n"
+	// Read entire file
+	buf, err := io.ReadAll(reader)
+	if err != nil {
+		return "", err
 	}
-
-	return content, nil
+	return string(buf), nil
 }

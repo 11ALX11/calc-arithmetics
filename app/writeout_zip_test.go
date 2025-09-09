@@ -24,7 +24,7 @@ func (s *WriteZipFileSuite) BeforeEach(t provider.T) {
 	t.Link(allure.LinkLink("stackoverflow source of info", "https://stackoverflow.com/questions/37869793/how-do-i-zip-a-directory-containing-sub-directories-or-files-in-golang"))
 }
 
-func (s *WriteZipFileSuite) TestReadFile(t provider.T) {
+func (s *WriteZipFileSuite) TestWriteZipFile(t provider.T) {
 	t.Title("Test zip archiving")
 	t.Description("Test WriteZipFile() on a test string. Check is done with ReadZipFile().")
 
