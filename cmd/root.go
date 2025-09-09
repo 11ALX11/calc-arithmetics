@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/11ALX11/calc-arithmetics/app"
@@ -73,7 +72,7 @@ func init() {
 		"dataFileInArchive",
 		"d",
 		app.DataFileInArchive,
-		fmt.Sprintf("Name of the file inside the ZIP to read (with --unzip) or write (with --archive). Can be used with either or both --unzip and --archive. Default: %q.", app.DataFileInArchive),
+		"Name of the file inside the ZIP to read (with --unzip) or write (with --archive). Can be used with either or both --unzip and --archive",
 	)
 
 	rootCmd.PersistentFlags().BoolVar(&decrypt, "decrypt", false, "Decrypt input file. Use with --keyPath")
