@@ -12,7 +12,7 @@ const (
 	TestDecryptSuite_ciphertext = "lkoyKPU3Q7YCrDpoIxv6QUNRIyTgU4MSZKDQoF/trX04/2cs3xdaPQTAv8cVg2MAofM23oKMyd8vGTzw7Qp5vO2DqAvCZE5uuyM5emnIwlq/EnoE"
 	TestDecryptSuite_expected   = TestEncryptSuite_plaintext
 	TestDecryptSuite_key        = TestEncryptSuite_16bit_aes_key
-	TestDecryptSuite_wrong_key  = "012345abcdef6789"
+	TestDecryptSuite_wrong_key  = "012345abcdef6789" // gitleaks:allow test vector (not a secret)
 )
 
 type DecryptSuite struct {

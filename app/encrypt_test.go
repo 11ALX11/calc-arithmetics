@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	TestEncryptSuite_16bit_aes_key = "0123456789abcdef"
+	TestEncryptSuite_16bit_aes_key = "0123456789abcdef" // gitleaks:allow test vector (not a secret)
 	TestEncryptSuite_plaintext     = "woehfoew fewoifh ewiofhwpfqf 	owgh	obe	wgou	ewhgjbngd gd"
 )
 
