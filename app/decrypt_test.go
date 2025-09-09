@@ -9,10 +9,11 @@ import (
 )
 
 const (
-	TestDecryptSuite_ciphertext = "lkoyKPU3Q7YCrDpoIxv6QUNRIyTgU4MSZKDQoF/trX04/2cs3xdaPQTAv8cVg2MAofM23oKMyd8vGTzw7Qp5vO2DqAvCZE5uuyM5emnIwlq/EnoE"
-	TestDecryptSuite_expected   = TestEncryptSuite_plaintext
-	TestDecryptSuite_key        = TestEncryptSuite_16bit_aes_key
-	TestDecryptSuite_wrong_key  = "012345abcdef6789" // gitleaks:allow test vector (not a secret)
+	TestDecryptSuite_ciphertext      = "lkoyKPU3Q7YCrDpoIxv6QUNRIyTgU4MSZKDQoF/trX04/2cs3xdaPQTAv8cVg2MAofM23oKMyd8vGTzw7Qp5vO2DqAvCZE5uuyM5emnIwlq/EnoE"
+	TestDecryptSuite_expected        = TestEncryptSuite_plaintext
+	TestDecryptSuite_key             = TestEncryptSuite_16bit_aes_key
+	TestDecryptSuite_wrong_key       = "012345abcdef6789" // gitleaks:allow test vector (not a secret)
+	TestDecryptSuite_malformedBase64 = "$$$not_base64$$$"
 )
 
 type DecryptSuite struct {
@@ -120,17 +121,15 @@ func (s *DecryptSuite) TestDecryptWithEmptyInput(t provider.T) {
 func (s *DecryptSuite) TestDecryptWithMalformedBase64(t provider.T) {
 	t.Title("Decrypt with malformed base64")
 
-	ciphertext := "$$$not_base64$$$"
-
 	t.NewStep(
 		"Try to decrypt with malformed base64.",
 		allure.NewParameters(
-			"ciphertext", ciphertext,
+			"ciphertext", TestDecryptSuite_malformedBase64,
 			"key", TestDecryptSuite_key,
 		)...,
 	)
 
-	_, err := Decrypt(ciphertext, TestDecryptSuite_key)
+	_, err := Decrypt(TestDecryptSuite_malformedBase64, TestDecryptSuite_key)
 
 	t.WithNewStep(
 		"Expect base64 decode error",

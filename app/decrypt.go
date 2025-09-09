@@ -4,6 +4,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"encoding/base64"
+	"fmt"
 	"os"
 )
 
@@ -26,6 +27,11 @@ func Decrypt(ciphertext, key string) (string, error) {
 	data, err := base64.StdEncoding.DecodeString(ciphertext)
 	if err != nil {
 		return "", err
+	}
+
+	// Check if string doesn't contain nonce (probably its empty or malformed)
+	if len(data) < GCM_nonce_size {
+		return "", fmt.Errorf("decoded base64 string doesn't contain nonce. Possible reason is empty or malformed encrypted message")
 	}
 
 	// Create a new AES cipher
