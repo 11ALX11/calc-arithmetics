@@ -8,8 +8,10 @@ import (
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 )
 
-const Test_in_txt_content = "asfegf 124 tg ewrhy\n wafdafag wegtwetg 35t\n"
-const Test_in_txt_filepath = "testdata/test-in.txt"
+const (
+	Test_in_txt_content  = "asfegf 124 tg ewrhy\n wafdafag wegtwetg 35t\n"
+	Test_in_txt_filepath = "testdata/test-in.txt"
+)
 
 type ReadFileSuite struct {
 	suite.Suite

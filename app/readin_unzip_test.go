@@ -12,8 +12,10 @@ type ReadZipFileSuite struct {
 	suite.Suite
 }
 
-const Test_in_zip_content = Test_in_txt_content
-const Test_in_zip_filepath = "testdata/test-in.zip"
+const (
+	Test_in_zip_content  = Test_in_txt_content
+	Test_in_zip_filepath = "testdata/test-in.zip"
+)
 
 func (s *ReadZipFileSuite) BeforeEach(t provider.T) {
 	t.Epic("App")
