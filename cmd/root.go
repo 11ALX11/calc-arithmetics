@@ -39,10 +39,12 @@ var (
 	useEvalLib     bool
 	useFilterRegex bool
 
-	unzip    bool
-	archive  bool
-	decipher bool
-	encode   bool
+	unzip   bool
+	archive bool
+
+	decrypt bool
+	encrypt bool
+	keyPath string
 )
 
 func init() {
@@ -61,9 +63,10 @@ func init() {
 	rootCmd.PersistentFlags().BoolVarP(&useEvalLib, "evalLib", "e", false, "Use an evaluation library expr-lang.")
 	rootCmd.PersistentFlags().BoolVarP(&useFilterRegex, "filterRegex", "f", false, "Use regex for filtering arithmetic expressions from file.")
 
-	// ToDo: using what
 	rootCmd.PersistentFlags().BoolVarP(&unzip, "unzip", "u", false, "Unzip input file using zip")
 	rootCmd.PersistentFlags().BoolVarP(&archive, "archive", "a", false, "Archive output file using zip")
-	rootCmd.PersistentFlags().BoolVar(&decipher, "decipher", false, "Decipher input file using ")
-	rootCmd.PersistentFlags().BoolVar(&encode, "encode", false, "Encode output file using ")
+
+	rootCmd.PersistentFlags().BoolVar(&decrypt, "decrypt", false, "Decrypt input file. Use with --keyPath")
+	rootCmd.PersistentFlags().BoolVar(&encrypt, "encrypt", false, "Encrypt output file. Use with --keyPath")
+	rootCmd.PersistentFlags().StringVar(&keyPath, "keyPath", "", "The key argument should be the AES key, either 16, 24, or 32 bytes to select AES-128, AES-192, or AES-256.\nUsed together with either\\both --encrypt or --decrypt")
 }

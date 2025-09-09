@@ -40,9 +40,20 @@ var cliCmd = &cobra.Command{
 			}
 		}
 
-		// flag: decipher
-		if decipher {
-			// content =
+		// flag: keyPath. Check if set
+		if (decrypt || encrypt) && keyPath == "" {
+			log.Fatalf("keyPath is not set.")
+			return
+		}
+
+		// flag: decrypt
+		if decrypt {
+			content, err = app.DecryptFileKey(content, keyPath)
+
+			if err != nil {
+				log.Fatalf("Failed to decipher, error: %s", err)
+				return
+			}
 		}
 
 		// flag: useEvalLib
@@ -59,15 +70,21 @@ var cliCmd = &cobra.Command{
 
 		sResult := replaceFunction(content, evalFunction)
 
-		// flag: encode
-		if encode {
-			// sResult =
+		// flag: encrypt
+		if encrypt {
+			sResult, err = app.EncryptFileKey(sResult, keyPath)
+
+			if err != nil {
+				log.Fatalf("Failed to encode, error: %s", err)
+				return
+			}
 		}
 
 		// flag: archive
 		if archive {
 			err = app.WriteZipFile(args[1], sResult, app.DataFileInArchive)
-		} else { // Write normally
+		} else {
+			// Write normally
 
 			err = app.WriteFile(args[1], sResult)
 		}
