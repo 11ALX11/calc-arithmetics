@@ -6,7 +6,17 @@ import (
 	"path/filepath"
 )
 
-// WriteZipFile creates a zip file containing a text file with the specified content.
+/*
+WriteZipFile creates a zip file containing a text file with the specified content.
+
+@param outputFile - a filepath to a output file.
+
+@param content - a content to write.
+
+@param dataFile - a file inside of an archive to write contents to. Usually used const DataFileInArchive
+
+@return error - error if failed to write/create a zip. Nil if success.
+*/
 func WriteZipFile(outputFile, content, dataFile string) error {
 	// Create a temporary directory
 	tempDir, err := os.MkdirTemp("", "ziptemp")

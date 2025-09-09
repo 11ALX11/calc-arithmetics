@@ -7,8 +7,17 @@ import (
 	"strings"
 )
 
-const DataFileInArchive = "data.txt"
+const DataFileInArchive = "data.txt" // A file inside of an archive to extract or write to contents.
 
+/*
+ReadZipFile reads a zip archive and returns contents of an dataInputFile.
+
+@param inputArchive - filepath to an archive
+
+@param dataInputFile - a file inside of an archive to extract contents of. Usually used const DataFileInArchive
+
+@return (string, error) - content of a file in an archive and any error that can occure while reading zip. Nil if no error happened.
+*/
 func ReadZipFile(inputArchive, dataInputFile string) (string, error) {
 	// Open the ZIP archive for reading
 	zipFile, err := zip.OpenReader(inputArchive)
