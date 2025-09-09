@@ -1,8 +1,10 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 
+	"github.com/11ALX11/calc-arithmetics/app"
 	"github.com/11ALX11/calc-arithmetics/i18n"
 	"github.com/spf13/cobra"
 )
@@ -39,8 +41,9 @@ var (
 	useEvalLib     bool
 	useFilterRegex bool
 
-	unzip   bool
-	archive bool
+	unzip             bool
+	archive           bool
+	dataFileInArchive string
 
 	decrypt bool
 	encrypt bool
@@ -65,6 +68,13 @@ func init() {
 
 	rootCmd.PersistentFlags().BoolVarP(&unzip, "unzip", "u", false, "Unzip input file using zip")
 	rootCmd.PersistentFlags().BoolVarP(&archive, "archive", "a", false, "Archive output file using zip")
+	rootCmd.PersistentFlags().StringVarP(
+		&dataFileInArchive,
+		"dataFileInArchive",
+		"d",
+		app.DataFileInArchive,
+		fmt.Sprintf("A file inside of an archive to extract or write to contents. Used together with either\\both --unzip or --archive. Default value is \"%s\"", app.DataFileInArchive),
+	)
 
 	rootCmd.PersistentFlags().BoolVar(&decrypt, "decrypt", false, "Decrypt input file. Use with --keyPath")
 	rootCmd.PersistentFlags().BoolVar(&encrypt, "encrypt", false, "Encrypt output file. Use with --keyPath")
