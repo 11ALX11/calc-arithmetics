@@ -1,8 +1,10 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 
+	"github.com/11ALX11/calc-arithmetics/app"
 	"github.com/11ALX11/calc-arithmetics/i18n"
 	"github.com/spf13/cobra"
 )
@@ -35,8 +37,17 @@ func Execute() {
 
 var (
 	forceTranslation string
-	useEvalLib       bool
-	useFilterRegex   bool
+
+	useEvalLib     bool
+	useFilterRegex bool
+
+	unzip             bool
+	archive           bool
+	dataFileInArchive string
+
+	decrypt bool
+	encrypt bool
+	keyPath string
 )
 
 func init() {
@@ -50,8 +61,22 @@ func init() {
 	// when this action is called directly.
 	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
-	rootCmd.PersistentFlags().StringVarP(&forceTranslation, "forceTranslation", "t", "", "Forces translation of an app to prefered locale. Options: \"en_US\" | \"ru_RU\"")
+	rootCmd.PersistentFlags().StringVarP(&forceTranslation, "forceTranslation", "t", "", "Forces translation of the app to the preferred locale. Options: \"en_US\" | \"ru_RU\"")
 
 	rootCmd.PersistentFlags().BoolVarP(&useEvalLib, "evalLib", "e", false, "Use an evaluation library expr-lang.")
 	rootCmd.PersistentFlags().BoolVarP(&useFilterRegex, "filterRegex", "f", false, "Use regex for filtering arithmetic expressions from file.")
+
+	rootCmd.PersistentFlags().BoolVarP(&unzip, "unzip", "u", false, "Read input file from a ZIP archive")
+	rootCmd.PersistentFlags().BoolVarP(&archive, "archive", "a", false, "Write output file as a ZIP archive")
+	rootCmd.PersistentFlags().StringVarP(
+		&dataFileInArchive,
+		"dataFileInArchive",
+		"d",
+		app.DataFileInArchive,
+		fmt.Sprintf("Name of the file inside the ZIP to read (with --unzip) or write (with --archive). Can be used with either or both --unzip and --archive. Default: %q.", app.DataFileInArchive),
+	)
+
+	rootCmd.PersistentFlags().BoolVar(&decrypt, "decrypt", false, "Decrypt input file. Use with --keyPath")
+	rootCmd.PersistentFlags().BoolVar(&encrypt, "encrypt", false, "Encrypt output file. Use with --keyPath")
+	rootCmd.PersistentFlags().StringVar(&keyPath, "keyPath", "", "Path to a file containing the AES key, either 16, 24, or 32 bytes to select AES-128, AES-192, or AES-256.\nRequired when --encrypt or --decrypt is set")
 }
