@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/11ALX11/calc-arithmetics/app"
@@ -78,6 +79,11 @@ var cliCmd = &cobra.Command{
 				log.Fatalf("Failed to encode, error: %s", err)
 				return
 			}
+		}
+
+		// flag: outputToConsole
+		if outputToConsole {
+			fmt.Println(sResult)
 		}
 
 		// flag: archive
