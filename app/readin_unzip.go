@@ -27,18 +27,25 @@ func ReadZipFile(inputArchive, dataInputFile string) (string, error) {
 	defer zipFile.Close()
 
 	// Iterate through each file in the archive
-	var targetFile *zip.File
+	var targetFile *zip.File = nil
 	foundTarget := false
+	i := 0
 	for _, file := range zipFile.File {
 		// Check if the file is the one we want to process
 		if strings.EqualFold(file.Name, dataInputFile) {
 			foundTarget = true
 			targetFile = file
 			break
+		} else if i == 0 {
+			targetFile = file // remember first file in archive in case none match dataInputFile
 		}
+		i++
+	}
+	if targetFile == nil {
+		return "", fmt.Errorf("file not found in archive %q", inputArchive)
 	}
 	if !foundTarget {
-		return "", fmt.Errorf("target file %q not found in archive %q", dataInputFile, inputArchive)
+		// ToDo: info log
 	}
 
 	// Open file
