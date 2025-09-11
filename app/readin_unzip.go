@@ -11,6 +11,7 @@ const DataFileInArchive = "data.txt" // A file inside of an archive to extract o
 
 /*
 ReadZipFile reads a zip archive and returns contents of an dataInputFile.
+If dataInputFile is not found, it falls back to the first file in the archive.
 
 @param inputArchive - filepath to an archive
 
@@ -29,8 +30,7 @@ func ReadZipFile(inputArchive, dataInputFile string) (string, error) {
 	// Iterate through each file in the archive
 	var targetFile *zip.File = nil
 	foundTarget := false
-	i := 0
-	for _, file := range zipFile.File {
+	for i, file := range zipFile.File {
 		// Check if the file is the one we want to process
 		if strings.EqualFold(file.Name, dataInputFile) {
 			foundTarget = true
@@ -39,7 +39,6 @@ func ReadZipFile(inputArchive, dataInputFile string) (string, error) {
 		} else if i == 0 {
 			targetFile = file // remember first file in archive in case none match dataInputFile
 		}
-		i++
 	}
 	if targetFile == nil {
 		return "", fmt.Errorf("file not found in archive %q", inputArchive)
