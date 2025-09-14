@@ -66,7 +66,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&forceTranslation, "forceTranslation", "t", "", "Forces translation of the app to the preferred locale. Options: \"en_US\" | \"ru_RU\"")
 	rootCmd.PersistentFlags().BoolVarP(&outputToConsole, "outputToConsole", "o", false, "Also print the results to the console")
 	rootCmd.PersistentFlags().BoolVarP(&verboseOutput, "verbose", "v", false, "Enable verbose (info-level) logging")
-	rootCmd.PersistentFlags().BoolVar(&useOop, "oop", false, "Use app_oop package instead of app package")
+	rootCmd.PersistentFlags().BoolVar(&useOop, "oop", false, "Use the object‑oriented engine instead of the default engine")
 
 	rootCmd.PersistentFlags().BoolVarP(&useEvalLib, "evalLib", "e", false, "Use an evaluation library expr-lang.")
 	rootCmd.PersistentFlags().BoolVarP(&useFilterRegex, "filterRegex", "f", false, "Use regex for filtering arithmetic expressions from file.")
