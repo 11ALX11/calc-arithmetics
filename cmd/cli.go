@@ -169,8 +169,7 @@ func runAppOop(args []string) {
 	}
 
 	// flag: useEvalLib
-	evaluator := app_oop.NewEvaluator(useEvalLib)
-	evalFunction := evaluator.Evaluate
+	evalFunction := app_oop.NewEvalFactory(useEvalLib).GetEvalFunction().Evaluate
 
 	// flag: useFilterRegex
 	replaceFunction := app.ReplaceMathExpressions
