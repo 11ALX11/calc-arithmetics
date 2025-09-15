@@ -13,7 +13,7 @@ func NewEvalFactory(useEvalLib bool) *EvalFactory {
 }
 
 // NewEvaluator is a factory method that returns an Evaluator implementation based on the provided flag.
-func (e EvalFactory) GetEvalFunction() Evaluator {
+func (e EvalFactory) GetEvalImplementation() Evaluator {
 	if e.useEvalLib {
 		return &EvalLib{}
 	}
