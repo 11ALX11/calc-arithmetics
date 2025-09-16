@@ -12,7 +12,7 @@ func NewEvalFactory(useEvalLib bool) *EvalFactory {
 	return e
 }
 
-// NewEvaluator is a factory method that returns an Evaluator implementation based on the provided flag.
+// GetEvalImplementation() is a factory method that returns an Evaluator implementation based on the provided flag.
 func (e EvalFactory) GetEvalImplementation() Evaluator {
 	if e.useEvalLib {
 		return &EvalLib{}

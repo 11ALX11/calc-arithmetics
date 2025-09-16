@@ -169,15 +169,17 @@ func runAppOop(args []string) {
 	}
 
 	// flag: useEvalLib
-	evalFunction := app_oop.NewEvalFactory(useEvalLib).GetEvalImplementation().Evaluate
+	evalFunction := app_oop.
+		NewEvalFactory(useEvalLib).
+		GetEvalImplementation().
+		Evaluate
 
 	// flag: useFilterRegex
-	replaceFunction := app.ReplaceMathExpressions
-	if useFilterRegex {
-		replaceFunction = app.ReplaceMathExpressionsRegex
-	}
-
-	sResult := replaceFunction(content, evalFunction)
+	sResult := app_oop.
+		NewFilterFactory(useFilterRegex).
+		GetFilterImplementation().
+		SetEvalFunc(evalFunction).
+		ReplaceMathExpressions(content)
 
 	// flag: encrypt
 	if encrypt {
