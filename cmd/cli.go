@@ -169,16 +169,14 @@ func runAppOop(args []string) {
 	}
 
 	// flag: useEvalLib
-	evalFunction := app_oop.
-		NewEvalFactory(useEvalLib).
-		GetEvalImplementation().
-		Evaluate
-
 	// flag: useFilterRegex
 	sResult := app_oop.
 		NewFilterFactory(useFilterRegex).
 		GetFilterImplementation().
-		SetEvalFunc(evalFunction).
+		SetEvalFuncWithEvaluator(app_oop.
+			NewEvalFactory(useEvalLib).
+			GetEvalImplementation(),
+		).
 		ReplaceMathExpressions(content)
 
 	// flag: encrypt

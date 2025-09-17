@@ -13,6 +13,12 @@ func (f Filter) SetEvalFunc(evalFunc func(string) float64) Filtrator {
 	return f
 }
 
+// Setter for evalFunc attribute
+func (f Filter) SetEvalFuncWithEvaluator(evaluator Evaluator) Filtrator {
+	f.evalFunc = evaluator.Evaluate
+	return f
+}
+
 /*
 Same as ReplaceMathExpressions() in app package. Attribute evalFunc needs to be set before calling this method
 */

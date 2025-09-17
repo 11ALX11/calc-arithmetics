@@ -8,4 +8,6 @@ type Filtrator interface {
 
 	// Setter for evalFunc attribute
 	SetEvalFunc(evalFunc func(string) float64) Filtrator
+	// Setter for evalFunc attribute
+	SetEvalFuncWithEvaluator(evaluator Evaluator) Filtrator
 }
