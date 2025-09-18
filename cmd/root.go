@@ -78,7 +78,7 @@ func init() {
 		"dataFileInArchive",
 		"d",
 		app.DataFileInArchive,
-		"Name of the file inside the ZIP to read (with --unzip) or write (with --archive). Can be used with either or both --unzip and --archive. When reading, if the specified file is not present, the first file in the archive is used.",
+		"Name of the file inside the ZIP to read (with --unzip) or write (with --archive). Can be used with either or both --unzip and --archive.\nWhen reading, if the specified file is not present, the first file in the archive is used.",
 	)
 
 	rootCmd.PersistentFlags().BoolVar(&decrypt, "decrypt", false, "Decrypt input file. Use with --keyPath")

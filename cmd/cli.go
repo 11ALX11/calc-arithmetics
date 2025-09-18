@@ -47,6 +47,12 @@ func runApp(args []string) {
 	var content string
 	var err error
 
+	// flag: keyPath. Check if set
+	if (decrypt || encrypt) && keyPath == "" {
+		log.Fatalf("keyPath is not set.")
+		return
+	}
+
 	// Read normally
 	if !unzip {
 
@@ -65,12 +71,6 @@ func runApp(args []string) {
 			log.Fatalf("Failed to read an archive: %s; error: %s", args[0], err)
 			return
 		}
-	}
-
-	// flag: keyPath. Check if set
-	if (decrypt || encrypt) && keyPath == "" {
-		log.Fatalf("keyPath is not set.")
-		return
 	}
 
 	// flag: decrypt
@@ -129,43 +129,33 @@ func runApp(args []string) {
 
 func runAppOop(args []string) {
 
-	var content string
-	var err error
-
-	// Read normally
-	if !unzip {
-
-		content, err = app.ReadFile(args[0])
-
-		if err != nil {
-			log.Fatalf("Failed to read a file: %s; error: %s", args[0], err)
-			return
-		}
-	} else {
-		// flag: unzip
-
-		content, err = app.ReadZipFile(args[0], dataFileInArchive)
-
-		if err != nil {
-			log.Fatalf("Failed to read an archive: %s; error: %s", args[0], err)
-			return
-		}
-	}
-
 	// flag: keyPath. Check if set
 	if (decrypt || encrypt) && keyPath == "" {
 		log.Fatalf("keyPath is not set.")
 		return
 	}
 
+	// flag: unzip
+	reader := app_oop.
+		NewReaderFactory(unzip).
+		GetReaderImplementation().
+		SetDataInputFile(dataFileInArchive)
+
 	// flag: decrypt
 	if decrypt {
-		content, err = app.DecryptFileKey(content, keyPath)
+		// err := app.DecryptFileKey(content, keyPath)
 
-		if err != nil {
-			log.Fatalf("Failed to decipher, error: %s", err)
-			return
-		}
+		// if err != nil {
+		// 	log.Fatalf("Failed to decipher, error: %s", err)
+		// 	return
+		// }
+	}
+
+	content, err := reader.ReadFile(args[0])
+
+	if err != nil {
+		log.Fatalf("Failed to read an archive: %s; error: %s", args[0], err)
+		return
 	}
 
 	// flag: useEvalLib
