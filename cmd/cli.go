@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/11ALX11/calc-arithmetics/app"
-	app_oop "github.com/11ALX11/calc-arithmetics/app/app-oop"
+	app_oop "github.com/11ALX11/calc-arithmetics/app-oop"
 	"github.com/11ALX11/calc-arithmetics/i18n"
 	"github.com/spf13/cobra"
 )
@@ -135,7 +135,7 @@ func runAppOop(args []string) {
 		return
 	}
 
-	// flag: unzip
+	// flag: unzip, dataFileInArchive
 	reader := app_oop.
 		NewReaderFactory(unzip).
 		GetReaderImplementation().
