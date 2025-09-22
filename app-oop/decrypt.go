@@ -12,6 +12,7 @@ type Decrypt struct {
 	resultErr  error
 }
 
+// Constructor for Decrypt
 func NewDecrypt() *Decrypt {
 	d := new(Decrypt)
 	return d
