@@ -10,11 +10,6 @@ type Readin struct {
 	err     error
 }
 
-// Accepts ReaderVisitor implementations and calls DoForReadin()
-func (r *Readin) Accept(v ReaderVisitor) {
-	v.DoForReadin(r)
-}
-
 // Not used with Readin
 func (r *Readin) SetDataInputFile(dataInputFile string) Reader {
 	return r

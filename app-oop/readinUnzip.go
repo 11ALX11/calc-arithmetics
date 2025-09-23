@@ -10,11 +10,6 @@ type ReadinUnzip struct {
 	err     error
 }
 
-// Accepts ReaderVisitor implementations and calls DoForReadinUnzip()
-func (r *ReadinUnzip) Accept(v ReaderVisitor) {
-	v.DoForReadinUnzip(r)
-}
-
 // Setter for dataInputFile attribute
 func (r *ReadinUnzip) SetDataInputFile(dataInputFile string) Reader {
 	r.dataInputFile = dataInputFile

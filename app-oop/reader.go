@@ -3,9 +3,6 @@ package app_oop
 // Reader represents a type that can read from a file.
 type Reader interface {
 
-	// Accepts ReaderVisitor implementations and calls doFor*Implementation*()
-	Accept(v ReaderVisitor)
-
 	// Same as ReadFile() or ReadZipFile() in app package
 	ReadFile(inputFile string) Reader
 
