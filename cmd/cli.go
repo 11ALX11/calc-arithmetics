@@ -143,12 +143,12 @@ func runAppOop(args []string) {
 		ReadFile(args[0])
 
 	// flag: decrypt
-	if decrypt {
-		reader.Accept(app_oop.
-			NewDecrypt().
-			SetKeyPath(keyPath),
-		)
-	}
+	// if decrypt {
+	// 	reader.Accept(app_oop.
+	// 		NewDecrypt().
+	// 		SetKeyPath(keyPath),
+	// 	)
+	// }
 
 	content, err := reader.GetContentError()
 
