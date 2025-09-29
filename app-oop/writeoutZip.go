@@ -6,13 +6,13 @@ import (
 
 // Writer represents a type that can write to a txt file.
 type WriteoutZip struct {
-	dataInputFile string
+	dataFileInArchive string
 
 	err error
 }
 
 // Setter for dataInputFile attribute
-func (w WriteoutZip) SetDataInputFile(dataInputFile string) Writer {
+func (w *WriteoutZip) SetDataInputFile(dataFileInArchive string) Writer {
 	w.dataFileInArchive = dataFileInArchive
 	return w
 }
@@ -26,6 +26,6 @@ func (w WriteoutZip) GetError() error {
 Same as WriteZipFile() in app package
 */
 func (w *WriteoutZip) WriteFile(outputFile, content string) Writer {
-	w.err = app.WriteZipFile(outputFile, content, w.dataInputFile)
+	w.err = app.WriteZipFile(outputFile, content, w.dataFileInArchive)
 	return w
 }
