@@ -14,7 +14,8 @@ type ReaderDecorator interface {
 
 // // Setter for dataInputFile attribute
 // func (r *ReaderDecorator) SetDataInputFile(dataInputFile string) Reader {
-// 	return r.wrappee.SetDataInputFile(dataInputFile)
+// 	r.wrappee.SetDataInputFile(dataInputFile)
+//	return r
 // }
 
 // // Getter for content attribute
@@ -24,7 +25,8 @@ type ReaderDecorator interface {
 
 // // Setter for content attribute
 // func (r *ReaderDecorator) SetContent(s string) Reader {
-// 	return r.wrappee.SetContent(s)
+// 	r.wrappee.SetContent(s)
+//	return r
 // }
 
 // // Getter for err attribute
@@ -34,7 +36,8 @@ type ReaderDecorator interface {
 
 // // Setter for content attribute
 // func (r *ReaderDecorator) SetError(e error) Reader {
-// 	return r.wrappee.SetError(e)
+// 	r.wrappee.SetError(e)
+// 	return r
 // }
 
 // // Getter for both content and error.
@@ -48,5 +51,6 @@ type ReaderDecorator interface {
 // */
 // func (r *ReaderDecorator) ReadFile(inputFile string) Reader {
 // 	// modify here to insert action
-// 	return r.wrappee.ReadFile(inputFile)
+// 	r.wrappee.ReadFile(inputFile)
+//	return r
 // }

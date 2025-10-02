@@ -135,22 +135,21 @@ func runAppOop(args []string) {
 		return
 	}
 
+	reader := app_oop.NewReadin()
+
 	// flag: unzip, dataFileInArchive
-	reader := app_oop.
-		NewReaderFactory(unzip).
-		GetReaderImplementation().
-		SetDataInputFile(dataFileInArchive).
-		ReadFile(args[0])
+	if unzip {
+		reader = app_oop.NewUnzip(reader, dataFileInArchive)
+	}
 
 	// flag: decrypt
-	// if decrypt {
-	// 	reader.Accept(app_oop.
-	// 		NewDecrypt().
-	// 		SetKeyPath(keyPath),
-	// 	)
-	// }
+	if decrypt {
+		reader = app_oop.NewDecrypt(reader, keyPath)
+	}
 
-	content, err := reader.GetContentError()
+	content, err := reader.
+		ReadFile(args[0]).
+		GetContentError()
 
 	if err != nil {
 		log.Fatalf("Failed to read file: %s; error: %s", args[0], err)

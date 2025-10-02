@@ -9,57 +9,53 @@ type Decrypt struct {
 	wrappee Reader
 
 	keyPath string
-
-	resultText string
-	resultErr  error
 }
 
-// NewDecrypt is a constructor for a Decrypt.
-func NewDecrypt(reader Reader) *Decrypt {
-	f := new(Decrypt)
-	f.wrappee = reader
-	return f
-}
-
-// Setter for dataInputFile attribute
-func (r *Decrypt) SetDataInputFile(dataInputFile string) Reader {
-	return r.wrappee.SetDataInputFile(dataInputFile)
+// NewDecrypt is a constructor for Decrypt.
+func NewDecrypt(reader Reader, keyPath string) Reader {
+	d := new(Decrypt)
+	d.wrappee = reader
+	d.keyPath = keyPath
+	return d
 }
 
 // Getter for content attribute
-func (r Decrypt) GetContent() string {
-	return r.wrappee.GetContent()
+func (d Decrypt) GetContent() string {
+	return d.wrappee.GetContent()
 }
 
 // Setter for content attribute
-func (r *Decrypt) SetContent(s string) Reader {
-	return r.wrappee.SetContent(s)
+func (d *Decrypt) SetContent(s string) Reader {
+	d.wrappee.SetContent(s)
+	return d
 }
 
 // Getter for err attribute
-func (r Decrypt) GetError() error {
-	return r.wrappee.GetError()
+func (d Decrypt) GetError() error {
+	return d.wrappee.GetError()
 }
 
 // Setter for content attribute
-func (r *Decrypt) SetError(e error) Reader {
-	return r.wrappee.SetError(e)
+func (d *Decrypt) SetError(e error) Reader {
+	d.wrappee.SetError(e)
+	return d
 }
 
 // Getter for both content and error.
 // Ex: content, err := reader.GetContentError()
-func (r Decrypt) GetContentError() (string, error) {
-	return r.wrappee.GetContentError()
+func (d Decrypt) GetContentError() (string, error) {
+	return d.wrappee.GetContentError()
 }
 
 /*
 Same as ReadFile() in app package
 */
-func (r *Decrypt) ReadFile(inputFile string) Reader {
+func (d *Decrypt) ReadFile(inputFile string) Reader {
 
 	// ...
 
-	return r.wrappee.ReadFile(inputFile)
+	d.wrappee.ReadFile(inputFile)
+	return d
 }
 
 // Populate Decrypt fields with decrypted text and error if it happened.

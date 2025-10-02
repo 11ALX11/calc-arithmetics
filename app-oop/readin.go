@@ -10,8 +10,9 @@ type Readin struct {
 	err     error
 }
 
-// Not used with Readin
-func (r *Readin) SetDataInputFile(dataInputFile string) Reader {
+// NewUnzip is a constructor for Unzip.
+func NewReadin() Reader {
+	r := new(Readin)
 	return r
 }
 

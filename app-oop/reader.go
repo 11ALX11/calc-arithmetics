@@ -6,8 +6,6 @@ type Reader interface {
 	// Same as ReadFile() or ReadZipFile() in app package
 	ReadFile(inputFile string) Reader
 
-	// Setter for dataInputFile attribute
-	SetDataInputFile(dataInputFile string) Reader
 	// Getter for content attribute
 	GetContent() string
 	// Setter for content attribute
