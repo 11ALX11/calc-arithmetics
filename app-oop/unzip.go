@@ -46,9 +46,11 @@ func (u Unzip) GetContentError() (string, error) {
 }
 
 /*
-Same as ReadZipFile() in app package but
-reads a zip archive from a GetContent() string
+Uses ReadZipData() instead of ReadZipFile() (in app package)
+to read a zip archive from a GetContent() string
 to make possible decorator chains.
+
+Skips action if reader already has an error.
 */
 func (u *Unzip) ReadFile(inputFile string) Reader {
 

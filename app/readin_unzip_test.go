@@ -107,10 +107,10 @@ func (s *ReadZipFileSuite) TestReadZipData(t provider.T) {
 		func(sCtx provider.StepCtx) {
 			sCtx.Assert().NoError(berr, "Expect no error (nil).")
 		},
-		allure.NewParameter(
+		allure.NewParameters(
 			"binaryData", bcontent,
 			"Error", berr,
-		),
+		)...,
 	)
 
 	t.NewStep(

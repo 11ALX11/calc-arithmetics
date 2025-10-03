@@ -68,7 +68,7 @@ func readZipWithReader(zipFile ZipFileReader, dataInputFile string) (string, err
 		}
 	}
 	if targetFile == nil {
-		return "", fmt.Errorf("file not found in archive %q", dataInputFile)
+		return "", fmt.Errorf("file not found in archive, file %q", dataInputFile)
 	}
 	if !foundTarget {
 		// ToDo: info log
