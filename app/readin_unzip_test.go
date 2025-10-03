@@ -1,6 +1,7 @@
 package app
 
 import (
+	"os"
 	"testing"
 
 	"github.com/ozontech/allure-go/pkg/allure"
@@ -83,6 +84,63 @@ func (s *ReadZipFileSuite) TestReadZipFileWithEmptyDataFileInArchiveParam(t prov
 
 func (s *ReadZipFileSuite) TestReadZipFileManyFilesArchive(t provider.T) {
 	s.readZipFileTestBody(t, Test_in_multiple_zip_filepath, DataFileInArchive)
+}
+
+func (s *ReadZipFileSuite) TestReadZipData(t provider.T) {
+	t.Title("Test zip deciphering (ReadZipData())")
+	t.Description("Test ReadZipData() on a zip archive containing data.txt")
+
+	expectedString := Test_in_zip_content
+	file := "../" + Test_in_zip_filepath // relative to 'app' package
+	t.NewStep(
+		"Try to get zip file.",
+		allure.NewParameters(
+			"Archived string", expectedString,
+			"File", file,
+		)...,
+	)
+
+	bdata, berr := os.ReadFile(file)
+	bcontent := string(bdata)
+	t.WithNewStep(
+		"Check if there's any error while reading data from archive",
+		func(sCtx provider.StepCtx) {
+			sCtx.Assert().NoError(berr, "Expect no error (nil).")
+		},
+		allure.NewParameter(
+			"binaryData", bcontent,
+			"Error", berr,
+		),
+	)
+
+	t.NewStep(
+		"Try to read binary data in a string as an archive.",
+		allure.NewParameter(
+			"binaryData", bcontent,
+		),
+	)
+	content, err := ReadZipData(bcontent, DataFileInArchive)
+
+	t.WithNewStep(
+		"Check if there's any error",
+		func(sCtx provider.StepCtx) {
+			sCtx.Assert().NoError(err, "Expect no error (nil).")
+		},
+		allure.NewParameter(
+			"Error", err,
+		),
+	)
+
+	t.WithNewStep(
+		"Compare expected and actual strings.",
+		func(sCtx provider.StepCtx) {
+			sCtx.Assert().Equal(expectedString, content, "Expect strings to match.")
+		},
+		allure.NewParameters(
+			"Expected", expectedString,
+			"Actual", content,
+		)...,
+	)
 }
 
 func TestReadZipFileSuite(t *testing.T) {
