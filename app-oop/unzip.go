@@ -1,5 +1,7 @@
 package app_oop
 
+import "github.com/11ALX11/calc-arithmetics/app"
+
 // Unzip represents a type that can read a zip file. Implements ReaderDecorator
 type Unzip struct {
 	wrappee Reader
@@ -44,13 +46,20 @@ func (u Unzip) GetContentError() (string, error) {
 }
 
 /*
-Same as ReadZipFile() in app package
+Same as ReadZipFile() in app package but
+reads a zip archive from a GetContent() string
+to make possible decorator chains.
 */
 func (u *Unzip) ReadFile(inputFile string) Reader {
-	// content, err := app.ReadZipFile(inputFile, r.dataInputFile)
-
-	// ...
 
 	u.wrappee.ReadFile(inputFile)
+	if u.GetError() != nil {
+		return u
+	}
+
+	content, err := app.ReadZipData(u.GetContent(), u.dataInputFile)
+	u.SetContent(content)
+	u.SetError(err)
+
 	return u
 }

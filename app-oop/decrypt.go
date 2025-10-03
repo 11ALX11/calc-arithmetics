@@ -48,31 +48,22 @@ func (d Decrypt) GetContentError() (string, error) {
 }
 
 /*
-Same as ReadFile() in app package
+Decrypts ciphertext from GetContent().
+Skips action if reader already has an error.
 */
 func (d *Decrypt) ReadFile(inputFile string) Reader {
 
-	// ...
-
 	d.wrappee.ReadFile(inputFile)
+	if d.GetError() != nil {
+		return d
+	}
+
+	plaintext, err := d.DecryptFileKey(d.GetContent(), d.keyPath)
+	d.SetContent(plaintext)
+	d.SetError(err)
+
 	return d
 }
-
-// Populate Decrypt fields with decrypted text and error if it happened.
-// Decrypts ciphertext from Reader.GetContent().
-// Skips action if reader already has an error.
-// func (d Decrypt) DoGenericReaderDecrypt(r Reader) {
-// 	if r.GetError() != nil {
-// 		return
-// 	}
-
-// 	text, err := d.DecryptFileKey(r.GetContent(), d.keyPath)
-
-// 	d.resultText = text
-// 	r.SetContent(text)
-// 	d.resultErr = err
-// 	r.SetError(err)
-// }
 
 // Setter for keyPath attribute
 func (d Decrypt) SetKeyPath(keyPath string) Decrypt {
