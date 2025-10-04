@@ -19,13 +19,13 @@ type IFiltrator struct {
 }
 
 // Setter for evalFunc attribute
-func (f IFiltrator) SetEvalFunc(evalFunc func(string) float64) Filtrator {
+func (f *IFiltrator) SetEvalFunc(evalFunc func(string) float64) Filtrator {
 	f.evalFunc = evalFunc
 	return f
 }
 
 // Setter for evalFunc attribute
-func (f IFiltrator) SetEvalFuncWithEvaluator(evaluator Evaluator) Filtrator {
+func (f *IFiltrator) SetEvalFuncWithEvaluator(evaluator Evaluator) Filtrator {
 	f.evalFunc = evaluator.Evaluate
 	return f
 }

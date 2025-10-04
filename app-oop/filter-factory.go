@@ -14,8 +14,12 @@ func NewFilterFactory(useFilterRegex bool) *FilterFactory {
 
 // GetFilterImplementation() is a factory method that returns an Filtrator implementation based on the provided flag.
 func (f FilterFactory) GetFilterImplementation(evaluator Evaluator) Filtrator {
+
+	var filtrator Filtrator = &Filter{}
 	if f.useFilterRegex {
-		return (&FilterRegex{}).SetEvalFuncWithEvaluator(evaluator)
+		filtrator = &FilterRegex{}
 	}
-	return (&Filter{}).SetEvalFuncWithEvaluator(evaluator)
+
+	filtrator.SetEvalFuncWithEvaluator(evaluator)
+	return filtrator
 }
