@@ -20,6 +20,9 @@ func (f FilterFactory) GetFilterImplementation(evaluator Evaluator) Filtrator {
 		filtrator = &FilterRegex{}
 	}
 
+	// return filtrator.SetEvalFuncWithEvaluator(evaluator) doesn't work for some reason ¯\_(ツ)_/¯.
+	// So this is a workaround, since setter doesn't create new Filtrator,
+	// but modifies existing one (and returns existing one) (P.S. as it should).
 	filtrator.SetEvalFuncWithEvaluator(evaluator)
 	return filtrator
 }
