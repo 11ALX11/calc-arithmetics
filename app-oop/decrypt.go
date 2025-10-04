@@ -5,7 +5,6 @@ import "github.com/11ALX11/calc-arithmetics/app"
 // Decrypt is a type that decrypts a ciphertext string using AES. Implements ReaderDecorator
 type Decrypt struct {
 	IReaderDecorator
-
 	keyPath string
 }
 

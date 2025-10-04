@@ -5,7 +5,6 @@ import "github.com/11ALX11/calc-arithmetics/app"
 // Unzip represents a type that can read a zip file. Implements ReaderDecorator
 type Unzip struct {
 	IReaderDecorator
-
 	dataInputFile string
 }
 

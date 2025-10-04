@@ -1,8 +1,13 @@
 package app_oop
 
-// IReaderDecorator is an interface that represents a decorator for a Reader interface.
-type IReaderDecorator struct {
+// ReaderDecorator is an interface that represents a decorator for a Reader interface.
+type ReaderDecorator interface {
 	Reader
+}
+
+// Same as ReaderDecorator, but with defined fields, setters and getters
+type IReaderDecorator struct {
+	ReaderDecorator
 	wrappee Reader
 }
 
@@ -39,19 +44,4 @@ func (r *IReaderDecorator) SetError(e error) Reader {
 // Ex: content, err := reader.GetContentError()
 func (r IReaderDecorator) GetContentError() (string, error) {
 	return r.wrappee.GetContentError()
-}
-
-/*
-Same as ReadFile() in app package; modify to add decorator functionality
-*/
-func (r *IReaderDecorator) ReadFile(inputFile string) Reader {
-
-	r.wrappee.ReadFile(inputFile)
-	if r.GetError() != nil {
-		return r
-	}
-
-	// modify here to insert action
-
-	return r
 }

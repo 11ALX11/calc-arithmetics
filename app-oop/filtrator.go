@@ -11,3 +11,21 @@ type Filtrator interface {
 	// Setter for evalFunc attribute
 	SetEvalFuncWithEvaluator(evaluator Evaluator) Filtrator
 }
+
+// Same as Filtrator, but with defined fields and setters
+type IFiltrator struct {
+	Filtrator
+	evalFunc func(string) float64
+}
+
+// Setter for evalFunc attribute
+func (f IFiltrator) SetEvalFunc(evalFunc func(string) float64) Filtrator {
+	f.evalFunc = evalFunc
+	return f
+}
+
+// Setter for evalFunc attribute
+func (f IFiltrator) SetEvalFuncWithEvaluator(evaluator Evaluator) Filtrator {
+	f.evalFunc = evaluator.Evaluate
+	return f
+}

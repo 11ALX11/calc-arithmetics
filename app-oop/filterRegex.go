@@ -4,19 +4,7 @@ import "github.com/11ALX11/calc-arithmetics/app"
 
 // Eval represents a type that can replace arithmetic expressions in a string..
 type FilterRegex struct {
-	evalFunc func(string) float64
-}
-
-// Setter for evalFunc attribute
-func (f FilterRegex) SetEvalFunc(evalFunc func(string) float64) Filtrator {
-	f.evalFunc = evalFunc
-	return f
-}
-
-// Setter for evalFunc attribute
-func (f FilterRegex) SetEvalFuncWithEvaluator(evaluator Evaluator) Filtrator {
-	f.evalFunc = evaluator.Evaluate
-	return f
+	IFiltrator
 }
 
 /*

@@ -160,8 +160,7 @@ func runAppOop(args []string) {
 	// flag: useFilterRegex
 	sResult := app_oop.
 		NewFilterFactory(useFilterRegex).
-		GetFilterImplementation().
-		SetEvalFuncWithEvaluator(app_oop.
+		GetFilterImplementation(app_oop.
 			NewEvalFactory(useEvalLib).
 			GetEvalImplementation(),
 		).
