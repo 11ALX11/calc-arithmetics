@@ -1,12 +1,10 @@
 package app_oop
 
-import (
-	"github.com/11ALX11/calc-arithmetics/app"
-)
+import "github.com/11ALX11/calc-arithmetics/app"
 
 // Decrypt is a type that decrypts a ciphertext string using AES. Implements ReaderDecorator
 type Decrypt struct {
-	wrappee Reader
+	IReaderDecorator
 
 	keyPath string
 }
@@ -17,34 +15,6 @@ func NewDecrypt(reader Reader, keyPath string) Reader {
 	d.wrappee = reader
 	d.keyPath = keyPath
 	return d
-}
-
-// Getter for content attribute
-func (d Decrypt) GetContent() string {
-	return d.wrappee.GetContent()
-}
-
-// Setter for content attribute
-func (d *Decrypt) SetContent(s string) Reader {
-	d.wrappee.SetContent(s)
-	return d
-}
-
-// Getter for err attribute
-func (d Decrypt) GetError() error {
-	return d.wrappee.GetError()
-}
-
-// Setter for content attribute
-func (d *Decrypt) SetError(e error) Reader {
-	d.wrappee.SetError(e)
-	return d
-}
-
-// Getter for both content and error.
-// Ex: content, err := reader.GetContentError()
-func (d Decrypt) GetContentError() (string, error) {
-	return d.wrappee.GetContentError()
 }
 
 /*
