@@ -173,14 +173,14 @@ func runAppOop(args []string) {
 
 	writer := app_oop.NewWriteout()
 
-	// flag: encrypt
-	if encrypt {
-		writer = app_oop.NewEncrypt(writer, keyPath)
-	}
-
 	// flag: archive
 	if archive {
 		writer = app_oop.NewArchive(writer, dataFileInArchive)
+	}
+
+	// flag: encrypt
+	if encrypt {
+		writer = app_oop.NewEncrypt(writer, keyPath)
 	}
 
 	writer.WriteFile(args[1], sResult)

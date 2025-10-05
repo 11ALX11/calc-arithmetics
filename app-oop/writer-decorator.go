@@ -1,11 +1,13 @@
 package app_oop
 
-// ReaderDecorator is an interface that represents a decorator for a Reader interface.
+// WriterDecorator is an interface that represents a decorator for a Writer interface.
+// Applied first-inner to last-outer
+// or last decorator to apply will be executed first
 type WriterDecorator interface {
 	Writer
 }
 
-// Same as ReaderDecorator, but with defined fields, setters and getters
+// Same as WriterDecorator, but with defined fields, setters and getters
 type IWriterDecorator struct {
 	WriterDecorator
 	wrappee Writer

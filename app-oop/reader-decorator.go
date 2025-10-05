@@ -1,6 +1,7 @@
 package app_oop
 
 // ReaderDecorator is an interface that represents a decorator for a Reader interface.
+// Applied first-first to last-last
 type ReaderDecorator interface {
 	Reader
 }
