@@ -166,31 +166,26 @@ func runAppOop(args []string) {
 		).
 		ReplaceMathExpressions(content)
 
-	// flag: encrypt
-	if encrypt {
-		sResult, err = app.EncryptFileKey(sResult, keyPath)
-
-		if err != nil {
-			log.Fatalf("Failed to encode, error: %s", err)
-			return
-		}
-	}
-
 	// flag: outputToConsole
 	if outputToConsole {
 		fmt.Println(sResult)
 	}
 
-	// flag: archive
-	if archive {
-		err = app.WriteZipFile(args[1], sResult, dataFileInArchive)
-	} else {
-		// Write normally
+	writer := app_oop.NewWriteout()
 
-		err = app.WriteFile(args[1], sResult)
+	// flag: encrypt
+	if encrypt {
+		writer = app_oop.NewEncrypt(writer, keyPath)
 	}
 
-	if err != nil {
+	// flag: archive
+	if archive {
+		writer = app_oop.NewArchive(writer, dataFileInArchive)
+	}
+
+	writer.WriteFile(args[1], sResult)
+
+	if writer.GetError() != nil {
 		log.Fatalf("Failed to write a file: %s; error: %s", args[1], err)
 		return
 	}

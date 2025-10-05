@@ -6,17 +6,13 @@ import (
 
 // Writeout represents a type that can write to a txt file.
 type Writeout struct {
-	err error
+	IWriter
 }
 
-// Not used with Writeout
-func (r *Writeout) SetDataInputFile(dataInputFile string) Writer {
+// NewWriteout is a constructor for Writeout.
+func NewWriteout() Writer {
+	r := new(Writeout)
 	return r
-}
-
-// Getter for err attribute
-func (w Writeout) GetError() error {
-	return w.err
 }
 
 /*

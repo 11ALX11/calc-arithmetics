@@ -10,7 +10,7 @@ type Readin struct {
 	err     error
 }
 
-// NewUnzip is a constructor for Unzip.
+// NewReadin is a constructor for Readin.
 func NewReadin() Reader {
 	r := new(Readin)
 	return r
