@@ -2,6 +2,7 @@ package app
 
 import (
 	"archive/zip"
+	"bytes"
 	"errors"
 	"io"
 	"os"
@@ -22,13 +23,8 @@ WriteZipFile creates a zip file containing a text file with the specified conten
 */
 func WriteZipFile(outputFile, content, dataFile string) (err error) {
 
-	// Validate dataFile path to prevent creating malicious archives
-	if strings.Contains(dataFile, "..") {
-		return errors.New("unsafe dataFile path: path traversal detected")
-	}
-	cleanPath := filepath.Clean(dataFile)
-	if filepath.IsAbs(cleanPath) {
-		return errors.New("unsafe dataFile path: absolute path detected")
+	if err := validateDataFile(dataFile); err != nil {
+		return err
 	}
 
 	// Create a temporary directory
@@ -86,4 +82,53 @@ func writeFileToZip(w *zip.Writer, file, fileInZip string) error {
 	}
 
 	return nil
+}
+
+func validateDataFile(dataFilePath string) error {
+	// Validate dataFile path to prevent creating malicious archives
+	if strings.Contains(dataFilePath, "..") {
+		return errors.New("unsafe dataFile path: path traversal detected")
+	}
+	cleanPath := filepath.Clean(dataFilePath)
+	if filepath.IsAbs(cleanPath) {
+		return errors.New("unsafe dataFile path: absolute path detected")
+	}
+	return nil
+}
+
+/*
+GetZipData returns a binary string representing a zip file containing a text file with the specified content.
+
+@param content - a content to archive.
+
+@param dataFile - a file inside of an archive to write contents to. Usually used const DataFileInArchive
+
+@return (string, error) - string with archived content, error if failed to archive. Nil if success.
+*/
+func GetZipData(content, dataFile string) (s string, err error) {
+
+	if err := validateDataFile(dataFile); err != nil {
+		return "", err
+	}
+
+	// Create a buffer to hold the zip data
+	var zipBuffer *bytes.Buffer = new(bytes.Buffer)
+	var zipWriter *zip.Writer = zip.NewWriter(zipBuffer)
+
+	f, err := zipWriter.Create(dataFile)
+	if err != nil {
+		return "", err
+	}
+
+	_, err = f.Write([]byte(content))
+	if err != nil {
+		return "", err
+	}
+
+	// Close zipWriter
+	if err := zipWriter.Close(); err != nil {
+		return "", err
+	}
+
+	return zipBuffer.String(), nil
 }
