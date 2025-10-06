@@ -6,8 +6,6 @@ type Writer interface {
 	// Same as WriteFile() or WriteZipFile() in app package
 	WriteFile(outputFile, content string) Writer
 
-	// Setter for dataInputFile attribute
-	SetDataInputFile(dataInputFile string) Writer
 	// Setter for err attribute
 	SetError(err error) Writer
 	// Getter for err attribute
