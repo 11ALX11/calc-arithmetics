@@ -8,7 +8,7 @@ type Decrypt struct {
 	keyPath string
 }
 
-// NewDecrypt is a constructor for Decrypt.
+// NewDecrypt is a constructor for Decrypt decorator.
 func NewDecrypt(reader Reader, keyPath string) Reader {
 	d := new(Decrypt)
 	d.wrappee = reader

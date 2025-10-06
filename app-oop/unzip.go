@@ -8,7 +8,7 @@ type Unzip struct {
 	dataInputFile string
 }
 
-// NewUnzip is a constructor for Unzip.
+// NewUnzip is a constructor for Unzip decorator.
 func NewUnzip(reader Reader, dataInputFile string) Reader {
 	u := new(Unzip)
 	u.wrappee = reader

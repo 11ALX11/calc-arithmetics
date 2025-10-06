@@ -8,7 +8,7 @@ type Encrypt struct {
 	keyPath string
 }
 
-// NewEncrypt is a constructor for Encrypt.
+// NewEncrypt is a constructor for Encrypt decorator.
 func NewEncrypt(writer Writer, keyPath string) Writer {
 	e := new(Encrypt)
 	e.wrappee = writer

@@ -8,7 +8,7 @@ type Archive struct {
 	dataFileInArchive string
 }
 
-// NewDecrypt is a constructor for Decrypt.
+// NewArchive is a constructor for Archive decorator.
 func NewArchive(writer Writer, dataFileInArchive string) Writer {
 	a := new(Archive)
 	a.wrappee = writer
