@@ -21,7 +21,7 @@ WriteZipFile creates a zip file containing a text file with the specified conten
 
 @return error - error if failed to write/create a zip. Nil if success.
 */
-func WriteZipFile(outputFile, content, dataFile string) (err error) {
+func WriteZipFile(outputFile, content, dataFile string) error {
 
 	if err := validateDataFile(dataFile); err != nil {
 		return err
@@ -45,22 +45,20 @@ func WriteZipFile(outputFile, content, dataFile string) (err error) {
 	if err != nil {
 		return err
 	}
-	defer func() {
-		if cerr := zipFile.Close(); err == nil && cerr != nil {
-			err = cerr
-		}
-	}()
 
 	// Create a new zip writer
 	zipWriter := zip.NewWriter(zipFile)
-	defer func() {
-		if cerr := zipWriter.Close(); err == nil && cerr != nil {
-			err = cerr
-		}
-	}()
 
 	// Add dataFile to the zip file
 	if err := writeFileToZip(zipWriter, dataFilePath, dataFile); err != nil {
+		return err
+	}
+
+	if err := zipWriter.Close(); err == nil {
+		return err
+	}
+
+	if err := zipFile.Close(); err == nil {
 		return err
 	}
 
@@ -105,7 +103,7 @@ GetZipData returns a binary string representing a zip file containing a text fil
 
 @return (string, error) - string with archived content, error if failed to archive. Nil if success.
 */
-func GetZipData(content, dataFile string) (s string, err error) {
+func GetZipData(content, dataFile string) (string, error) {
 
 	if err := validateDataFile(dataFile); err != nil {
 		return "", err
