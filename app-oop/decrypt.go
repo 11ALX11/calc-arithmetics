@@ -10,10 +10,10 @@ type Decrypt struct {
 
 // NewDecrypt is a constructor for Decrypt decorator.
 func NewDecrypt(reader Reader, keyPath string) Reader {
-	d := new(Decrypt)
-	d.wrappee = reader
-	d.keyPath = keyPath
-	return d
+	return &Decrypt{
+		IReaderDecorator{wrappee: reader},
+		keyPath,
+	}
 }
 
 /*

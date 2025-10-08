@@ -12,8 +12,7 @@ type Readin struct {
 
 // NewReadin is a constructor for Readin.
 func NewReadin() Reader {
-	r := new(Readin)
-	return r
+	return &Readin{}
 }
 
 // Getter for content attribute

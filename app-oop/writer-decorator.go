@@ -14,10 +14,8 @@ type IWriterDecorator struct {
 }
 
 // NewWriterDecorator is a constructor for a decorator.
-// func NewWriterDecorator(reader Writer) *IWriterDecorator {
-// 	w := new(IWriterDecorator)
-// 	w.wrappee = reader
-// 	return w
+// func NewWriterDecorator(writer Writer) *IWriterDecorator {
+// 	return &IWriterDecorator{wrappee: writer}
 // }
 
 // Getter for err attribute

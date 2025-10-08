@@ -11,8 +11,7 @@ type Writeout struct {
 
 // NewWriteout is a constructor for Writeout.
 func NewWriteout() Writer {
-	w := new(Writeout)
-	return w
+	return &Writeout{}
 }
 
 /*

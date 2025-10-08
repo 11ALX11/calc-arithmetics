@@ -10,10 +10,10 @@ type Unzip struct {
 
 // NewUnzip is a constructor for Unzip decorator.
 func NewUnzip(reader Reader, dataInputFile string) Reader {
-	u := new(Unzip)
-	u.wrappee = reader
-	u.dataInputFile = dataInputFile
-	return u
+	return &Unzip{
+		IReaderDecorator{wrappee: reader},
+		dataInputFile,
+	}
 }
 
 /*

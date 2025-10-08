@@ -10,10 +10,10 @@ type Archive struct {
 
 // NewArchive is a constructor for Archive decorator.
 func NewArchive(writer Writer, dataFileInArchive string) Writer {
-	a := new(Archive)
-	a.wrappee = writer
-	a.dataFileInArchive = dataFileInArchive
-	return a
+	return &Archive{
+		IWriterDecorator{wrappee: writer},
+		dataFileInArchive,
+	}
 }
 
 // Setter for dataInputFile attribute

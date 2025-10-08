@@ -10,10 +10,10 @@ type Encrypt struct {
 
 // NewEncrypt is a constructor for Encrypt decorator.
 func NewEncrypt(writer Writer, keyPath string) Writer {
-	e := new(Encrypt)
-	e.wrappee = writer
-	e.keyPath = keyPath
-	return e
+	return &Encrypt{
+		IWriterDecorator{wrappee: writer},
+		keyPath,
+	}
 }
 
 // Setter for keyPath attribute

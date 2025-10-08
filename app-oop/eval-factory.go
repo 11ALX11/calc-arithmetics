@@ -7,9 +7,7 @@ type EvalFactory struct {
 
 // NewEvalFactory is a constructor for a factory that gives an Evaluator implementation based on the provided flag.
 func NewEvalFactory(useEvalLib bool) *EvalFactory {
-	e := new(EvalFactory)
-	e.useEvalLib = useEvalLib
-	return e
+	return &EvalFactory{useEvalLib}
 }
 
 // GetEvalImplementation() is a factory method that returns an Evaluator implementation based on the provided flag.

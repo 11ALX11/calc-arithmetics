@@ -7,9 +7,7 @@ type FilterFactory struct {
 
 // NewFilterFactory is a constructor for a factory that gives an Filtrator implementation based on the provided flag.
 func NewFilterFactory(useFilterRegex bool) *FilterFactory {
-	f := new(FilterFactory)
-	f.useFilterRegex = useFilterRegex
-	return f
+	return &FilterFactory{useFilterRegex}
 }
 
 // GetFilterImplementation() is a factory method that returns an Filtrator implementation based on the provided flag.

@@ -14,9 +14,7 @@ type IReaderDecorator struct {
 
 // NewReaderDecorator is a constructor for a decorator.
 // func NewReaderDecorator(reader Reader) *IReaderDecorator {
-// 	f := new(IReaderDecorator)
-// 	f.wrappee = reader
-// 	return f
+// 	return &IReaderDecorator{wrappee: reader}
 // }
 
 // Getter for content attribute
