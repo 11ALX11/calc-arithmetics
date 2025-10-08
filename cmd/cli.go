@@ -1,11 +1,7 @@
 package cmd
 
 import (
-	"fmt"
-	"log"
-
-	"github.com/11ALX11/calc-arithmetics/app"
-	app_oop "github.com/11ALX11/calc-arithmetics/app-oop"
+	"github.com/11ALX11/calc-arithmetics/cli"
 	"github.com/11ALX11/calc-arithmetics/i18n"
 	"github.com/spf13/cobra"
 )
@@ -16,7 +12,7 @@ var cliCmd = &cobra.Command{
 	Short: i18n.T("Use a command-line interface"),
 	// Long:  `Use command-line interface.`,
 	Args: cobra.ExactArgs(2),
-	Run:  run,
+	Run:  cli.Run,
 }
 
 func init() {
@@ -31,162 +27,4 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// cliCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-}
-
-func run(cmd *cobra.Command, args []string) {
-	// flag: useOop
-	if useOop {
-		runAppOop(args)
-	} else {
-		runApp(args)
-	}
-}
-
-func runApp(args []string) {
-
-	var content string
-	var err error
-
-	// flag: keyPath. Check if set
-	if (decrypt || encrypt) && keyPath == "" {
-		log.Fatalf("keyPath is not set.")
-		return
-	}
-
-	// Read normally
-	if !unzip {
-
-		content, err = app.ReadFile(args[0])
-
-		if err != nil {
-			log.Fatalf("Failed to read a file: %s; error: %s", args[0], err)
-			return
-		}
-	} else {
-		// flag: unzip
-
-		content, err = app.ReadZipFile(args[0], dataFileInArchive)
-
-		if err != nil {
-			log.Fatalf("Failed to read an archive: %s; error: %s", args[0], err)
-			return
-		}
-	}
-
-	// flag: decrypt
-	if decrypt {
-		content, err = app.DecryptFileKey(content, keyPath)
-
-		if err != nil {
-			log.Fatalf("Failed to decipher, error: %s", err)
-			return
-		}
-	}
-
-	// flag: useEvalLib
-	evalFunction := app.Eval
-	if useEvalLib {
-		evalFunction = app.EvalLib
-	}
-
-	// flag: useFilterRegex
-	replaceFunction := app.ReplaceMathExpressions
-	if useFilterRegex {
-		replaceFunction = app.ReplaceMathExpressionsRegex
-	}
-
-	sResult := replaceFunction(content, evalFunction)
-
-	// flag: encrypt
-	if encrypt {
-		sResult, err = app.EncryptFileKey(sResult, keyPath)
-
-		if err != nil {
-			log.Fatalf("Failed to encode, error: %s", err)
-			return
-		}
-	}
-
-	// flag: outputToConsole
-	if outputToConsole {
-		fmt.Println(sResult)
-	}
-
-	// flag: archive
-	if archive {
-		err = app.WriteZipFile(args[1], sResult, dataFileInArchive)
-	} else {
-		// Write normally
-
-		err = app.WriteFile(args[1], sResult)
-	}
-
-	if err != nil {
-		log.Fatalf("Failed to write a file: %s; error: %s", args[1], err)
-		return
-	}
-}
-
-func runAppOop(args []string) {
-
-	// flag: keyPath. Check if set
-	if (decrypt || encrypt) && keyPath == "" {
-		log.Fatalf("keyPath is not set.")
-		return
-	}
-
-	reader := app_oop.NewReadin()
-
-	// flag: unzip, dataFileInArchive
-	if unzip {
-		reader = app_oop.NewUnzip(reader, dataFileInArchive)
-	}
-
-	// flag: decrypt
-	if decrypt {
-		reader = app_oop.NewDecrypt(reader, keyPath)
-	}
-
-	content, err := reader.
-		ReadFile(args[0]).
-		GetContentError()
-
-	if err != nil {
-		log.Fatalf("Failed to read file: %s; error: %s", args[0], err)
-		return
-	}
-
-	// flag: useEvalLib
-	// flag: useFilterRegex
-	sResult := app_oop.
-		NewFilterFactory(useFilterRegex).
-		GetFilterImplementation(app_oop.
-			NewEvalFactory(useEvalLib).
-			GetEvalImplementation(),
-		).
-		ReplaceMathExpressions(content)
-
-	// flag: outputToConsole
-	if outputToConsole {
-		fmt.Println(sResult)
-	}
-
-	writer := app_oop.NewWriteout()
-
-	// flag: archive
-	if archive {
-		writer = app_oop.NewArchive(writer, dataFileInArchive)
-	}
-
-	// flag: encrypt
-	if encrypt {
-		writer = app_oop.NewEncrypt(writer, keyPath)
-	}
-
-	writer.WriteFile(args[1], sResult)
-
-	if writer.GetError() != nil {
-		log.Fatalf("Failed to write a file: %s; error: %s", args[1], err)
-		return
-	}
 }
