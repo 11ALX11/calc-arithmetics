@@ -8,7 +8,15 @@ import (
 	"github.com/11ALX11/calc-arithmetics/flags"
 )
 
-func runAppOop(args []string) {
+type CliRunner struct {
+	args []string
+}
+
+func NewCliRunner(args []string) *CliRunner {
+	return &CliRunner{args}
+}
+
+func (c CliRunner) Run() {
 
 	// flag: keyPath. Check if set
 	if (flags.Decrypt || flags.Encrypt) && flags.KeyPath == "" {
@@ -29,11 +37,11 @@ func runAppOop(args []string) {
 	}
 
 	content, err := reader.
-		ReadFile(args[0]).
+		ReadFile(c.args[0]).
 		GetContentError()
 
 	if err != nil {
-		log.Fatalf("Failed to read file: %s; error: %s", args[0], err)
+		log.Fatalf("Failed to read file: %s; error: %s", c.args[0], err)
 		return
 	}
 
@@ -64,10 +72,10 @@ func runAppOop(args []string) {
 		writer = app_oop.NewEncrypt(writer, flags.KeyPath)
 	}
 
-	writer.WriteFile(args[1], sResult)
+	writer.WriteFile(c.args[1], sResult)
 
 	if writer.GetError() != nil {
-		log.Fatalf("Failed to write a file: %s; error: %s", args[1], err)
+		log.Fatalf("Failed to write a file: %s; error: %s", c.args[1], err)
 		return
 	}
 }

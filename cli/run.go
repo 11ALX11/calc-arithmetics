@@ -8,7 +8,7 @@ import (
 func Run(cmd *cobra.Command, args []string) {
 	// flag: useOop
 	if flags.UseOop {
-		runAppOop(args)
+		NewCliRunner(args).Run()
 	} else {
 		runApp(args)
 	}
