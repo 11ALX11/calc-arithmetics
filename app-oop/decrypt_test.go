@@ -32,7 +32,6 @@ func (s *DecryptOopSuite) BeforeEach(t provider.T) {
 
 func createTmpFile(t provider.StepCtx, filePath, content string) string {
 	file, err := os.CreateTemp("", filePath)
-	// defer os.Remove(file.Name())
 
 	t.WithNewStep(
 		"Try to create temporary file",
@@ -47,6 +46,7 @@ func createTmpFile(t provider.StepCtx, filePath, content string) string {
 	if err != nil {
 		return ""
 	}
+	defer file.Close()
 
 	_, err = file.Write([]byte(content))
 

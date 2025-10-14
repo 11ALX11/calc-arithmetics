@@ -31,7 +31,7 @@ func (r Readin) GetError() error {
 	return r.err
 }
 
-// Setter for content attribute
+// Setter for err attribute
 func (r *Readin) SetError(e error) Reader {
 	r.err = e
 	return r

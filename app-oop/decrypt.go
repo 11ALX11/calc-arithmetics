@@ -35,7 +35,7 @@ func (d *Decrypt) ReadFile(inputFile string) Reader {
 }
 
 // Setter for keyPath attribute
-func (d Decrypt) SetKeyPath(keyPath string) Decrypt {
+func (d *Decrypt) SetKeyPath(keyPath string) *Decrypt {
 	d.keyPath = keyPath
 	return d
 }

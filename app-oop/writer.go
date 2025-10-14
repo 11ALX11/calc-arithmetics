@@ -24,7 +24,7 @@ func (w IWriter) GetError() error {
 }
 
 // Setter for err attribute
-func (w IWriter) SetError(err error) Writer {
+func (w *IWriter) SetError(err error) Writer {
 	w.err = err
 	return w
 }

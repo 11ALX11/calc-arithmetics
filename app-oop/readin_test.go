@@ -25,7 +25,7 @@ func (s *ReadinOopSuite) BeforeEach(t provider.T) {
 	t.Owner("github.com/11ALX11")
 }
 
-func (s *ReadinOopSuite) TestDecryptReadFile(t provider.T) {
+func (s *ReadinOopSuite) TestReadFile(t provider.T) {
 	t.Title("Test Readin Reader")
 	t.Description("Test ReadFile() in a Readin.")
 

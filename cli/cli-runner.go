@@ -75,7 +75,7 @@ func (c CliRunner) Run() {
 	writer.WriteFile(c.args[1], sResult)
 
 	if writer.GetError() != nil {
-		log.Fatalf("Failed to write a file: %s; error: %s", c.args[1], err)
+		log.Fatalf("Failed to write a file: %s; error: %s", c.args[1], writer.GetError())
 		return
 	}
 }

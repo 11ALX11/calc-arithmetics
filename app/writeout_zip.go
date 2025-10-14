@@ -54,11 +54,11 @@ func WriteZipFile(outputFile, content, dataFile string) error {
 		return err
 	}
 
-	if err := zipWriter.Close(); err == nil {
+	if err := zipWriter.Close(); err != nil {
 		return err
 	}
 
-	if err := zipFile.Close(); err == nil {
+	if err := zipFile.Close(); err != nil {
 		return err
 	}
 

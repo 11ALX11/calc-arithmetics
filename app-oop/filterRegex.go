@@ -2,7 +2,8 @@ package app_oop
 
 import "github.com/11ALX11/calc-arithmetics/app"
 
-// Eval represents a type that can replace arithmetic expressions in a string..
+// FilterRegex represents a type that can replace arithmetic expressions in a string using regex.
+
 type FilterRegex struct {
 	IFiltrator
 }
@@ -10,6 +11,6 @@ type FilterRegex struct {
 /*
 Same as ReplaceMathExpressionsRegex() in app package. Attribute evalFunc needs to be set before calling this method
 */
-func (f FilterRegex) ReplaceMathExpressions(input string) string {
+func (f *FilterRegex) ReplaceMathExpressions(input string) string {
 	return app.ReplaceMathExpressionsRegex(input, f.evalFunc)
 }

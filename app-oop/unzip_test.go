@@ -27,7 +27,7 @@ func (s *UnzipOopSuite) BeforeEach(t provider.T) {
 	t.Link(allure.LinkLink("CodeSignal learn course", "https://codesignal.com/learn/courses/large-data-handling-techniques-in-go/lessons/reading-data-from-archived-files-in-go"))
 }
 
-func (s *UnzipOopSuite) TestDecryptReadFile(t provider.T) {
+func (s *UnzipOopSuite) TestUnzipReadFile(t provider.T) {
 	t.Title("Test Unzip ReaderDecorator")
 	t.Description("Test ReadFile() in a Unzip.")
 

@@ -2,7 +2,7 @@ package app_oop
 
 import "github.com/11ALX11/calc-arithmetics/app"
 
-// Writer represents a type that can write to a txt file.
+// Encrypt is a decorator that encrypts content before writing.
 type Encrypt struct {
 	IWriterDecorator
 	keyPath string

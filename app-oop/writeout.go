@@ -18,6 +18,7 @@ func NewWriteout() Writer {
 Same as WriteFile() in app package
 */
 func (w *Writeout) WriteFile(outputFile, content string) Writer {
-	w.err = app.WriteFile(outputFile, content)
+	err := app.WriteFile(outputFile, content)
+	w.SetError(err)
 	return w
 }

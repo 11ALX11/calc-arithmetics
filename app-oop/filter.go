@@ -8,7 +8,8 @@ type Filter struct {
 }
 
 /*
-Same as ReplaceMathExpressions() in app package. Attribute evalFunc needs to be set before calling this method
+Same as ReplaceMathExpressions() in app package.
+Assumes evalFunc has been set via SetEvalFunc or SetEvalFuncWithEvaluator (as of 14.10.2025: guaranteed by factory).
 */
 func (f Filter) ReplaceMathExpressions(input string) string {
 	return app.ReplaceMathExpressions(input, f.evalFunc)

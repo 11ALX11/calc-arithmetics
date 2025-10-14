@@ -17,7 +17,7 @@ func NewArchive(writer Writer, dataFileInArchive string) Writer {
 }
 
 // Setter for dataInputFile attribute
-func (a *Archive) SetDataInputFile(dataFileInArchive string) Writer {
+func (a *Archive) SetDataFileInArchive(dataFileInArchive string) *Archive {
 	a.dataFileInArchive = dataFileInArchive
 	return a
 }
