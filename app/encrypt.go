@@ -12,13 +12,13 @@ import (
 const GCM_nonce_size = 12 // GCM nonce size is 12 bytes
 
 // Same as Encrypt, but use key file path instead of a key string
-func EncryptFileKey(ciphertext, keyPath string) (string, error) {
+func EncryptFileKey(plaintext, keyPath string) (string, error) {
 	key, err := os.ReadFile(keyPath)
 	if err != nil {
 		return "", err
 	}
 
-	return Encrypt(ciphertext, string(key))
+	return Encrypt(plaintext, string(key))
 }
 
 // Encrypt encrypts a plaintext string using AES and returns the ciphertext

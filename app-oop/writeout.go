@@ -1,0 +1,24 @@
+package app_oop
+
+import (
+	"github.com/11ALX11/calc-arithmetics/app"
+)
+
+// Writeout represents a type that can write to a txt file.
+type Writeout struct {
+	IWriter
+}
+
+// NewWriteout is a constructor for Writeout.
+func NewWriteout() Writer {
+	return &Writeout{}
+}
+
+/*
+Same as WriteFile() in app package
+*/
+func (w *Writeout) WriteFile(outputFile, content string) Writer {
+	err := app.WriteFile(outputFile, content)
+	w.SetError(err)
+	return w
+}

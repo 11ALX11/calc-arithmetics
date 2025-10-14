@@ -1,10 +1,7 @@
 package cmd
 
 import (
-	"fmt"
-	"log"
-
-	"github.com/11ALX11/calc-arithmetics/app"
+	"github.com/11ALX11/calc-arithmetics/cli"
 	"github.com/11ALX11/calc-arithmetics/i18n"
 	"github.com/spf13/cobra"
 )
@@ -15,91 +12,7 @@ var cliCmd = &cobra.Command{
 	Short: i18n.T("Use a command-line interface"),
 	// Long:  `Use command-line interface.`,
 	Args: cobra.ExactArgs(2),
-
-	Run: func(cmd *cobra.Command, args []string) {
-
-		var content string
-		var err error
-
-		// Read normally
-		if !unzip {
-
-			content, err = app.ReadFile(args[0])
-
-			if err != nil {
-				log.Fatalf("Failed to read a file: %s; error: %s", args[0], err)
-				return
-			}
-		} else {
-			// flag: unzip
-
-			content, err = app.ReadZipFile(args[0], dataFileInArchive)
-
-			if err != nil {
-				log.Fatalf("Failed to read an archive: %s; error: %s", args[0], err)
-				return
-			}
-		}
-
-		// flag: keyPath. Check if set
-		if (decrypt || encrypt) && keyPath == "" {
-			log.Fatalf("keyPath is not set.")
-			return
-		}
-
-		// flag: decrypt
-		if decrypt {
-			content, err = app.DecryptFileKey(content, keyPath)
-
-			if err != nil {
-				log.Fatalf("Failed to decipher, error: %s", err)
-				return
-			}
-		}
-
-		// flag: useEvalLib
-		evalFunction := app.Eval
-		if useEvalLib {
-			evalFunction = app.EvalLib
-		}
-
-		// flag: useFilterRegex
-		replaceFunction := app.ReplaceMathExpressions
-		if useFilterRegex {
-			replaceFunction = app.ReplaceMathExpressionsRegex
-		}
-
-		sResult := replaceFunction(content, evalFunction)
-
-		// flag: encrypt
-		if encrypt {
-			sResult, err = app.EncryptFileKey(sResult, keyPath)
-
-			if err != nil {
-				log.Fatalf("Failed to encode, error: %s", err)
-				return
-			}
-		}
-
-		// flag: outputToConsole
-		if outputToConsole {
-			fmt.Println(sResult)
-		}
-
-		// flag: archive
-		if archive {
-			err = app.WriteZipFile(args[1], sResult, dataFileInArchive)
-		} else {
-			// Write normally
-
-			err = app.WriteFile(args[1], sResult)
-		}
-
-		if err != nil {
-			log.Fatalf("Failed to write a file: %s; error: %s", args[1], err)
-			return
-		}
-	},
+	Run:  cli.Run,
 }
 
 func init() {
