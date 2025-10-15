@@ -10,7 +10,7 @@ import (
 // guiCmd represents the gui command
 var guiCmd = &cobra.Command{
 	Use:   "gui",
-	Short: i18n.T("Use a graphic user interface"),
+	Short: "Use a graphic user interface",
 	// Long: `Use an user interface.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(i18n.T("gui not supported yet."))

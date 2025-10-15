@@ -10,7 +10,7 @@ import (
 // webCmd represents the web command
 var webCmd = &cobra.Command{
 	Use:   "web",
-	Short: i18n.T("Use a web-based interface"),
+	Short: "Use a web-based interface",
 	// Long:  `Use a web-based interface.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(i18n.T("web not supported yet."))

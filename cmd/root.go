@@ -12,8 +12,8 @@ import (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "calc-arithmetics",
-	Short: i18n.T("Find all arithmetic operations, calculate and replace."),
-	Long:  i18n.T(`Find all arithmetic operations in the input file, calculate and replace with the results in the output file.`),
+	Short: "Find all arithmetic operations, calculate and replace.",
+	Long:  `Find all arithmetic operations in the input file, calculate and replace with the results in the output file.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		// flag: forceTranslation
 		if flags.ForceTranslation != "" {

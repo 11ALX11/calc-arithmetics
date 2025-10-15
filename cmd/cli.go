@@ -2,14 +2,13 @@ package cmd
 
 import (
 	"github.com/11ALX11/calc-arithmetics/cli"
-	"github.com/11ALX11/calc-arithmetics/i18n"
 	"github.com/spf13/cobra"
 )
 
 // cliCmd represents the cli command
 var cliCmd = &cobra.Command{
 	Use:   "cli INPUT_FILE OUTPUT_FILE",
-	Short: i18n.T("Use a command-line interface"),
+	Short: "Use a command-line interface",
 	// Long:  `Use command-line interface.`,
 	Args: cobra.ExactArgs(2),
 	Run:  cli.Run,

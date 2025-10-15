@@ -10,7 +10,7 @@ import (
 // consoleCmd represents the console command
 var consoleCmd = &cobra.Command{
 	Use:   "console",
-	Short: i18n.T("Use a console-based interface"),
+	Short: "Use a console-based interface",
 	// Long:  `Use a console-based interface.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(i18n.T("console not supported yet."))
