@@ -1,9 +1,7 @@
 package cmd
 
 import (
-	"fmt"
-
-	"github.com/11ALX11/calc-arithmetics/i18n"
+	"github.com/11ALX11/calc-arithmetics/console"
 	"github.com/spf13/cobra"
 )
 
@@ -12,9 +10,7 @@ var consoleCmd = &cobra.Command{
 	Use:   "console",
 	Short: "Use a console-based interface",
 	// Long:  `Use a console-based interface.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(i18n.T("console not supported yet."))
-	},
+	Run: console.Run,
 }
 
 func init() {

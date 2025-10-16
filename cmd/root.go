@@ -3,7 +3,6 @@ package cmd
 import (
 	"os"
 
-	"github.com/11ALX11/calc-arithmetics/app"
 	"github.com/11ALX11/calc-arithmetics/flags"
 	"github.com/11ALX11/calc-arithmetics/i18n"
 	"github.com/spf13/cobra"
@@ -47,24 +46,6 @@ func init() {
 	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
 	rootCmd.PersistentFlags().StringVarP(&flags.ForceTranslation, "forceTranslation", "t", "", "Forces translation of the app to the preferred locale. Options: \"en_US\" | \"ru_RU\"")
-	rootCmd.PersistentFlags().BoolVarP(&flags.OutputToConsole, "outputToConsole", "o", false, "Also print the results to the console")
 	rootCmd.PersistentFlags().BoolVarP(&flags.VerboseOutput, "verbose", "v", false, "Enable verbose (info-level) logging")
 	rootCmd.PersistentFlags().BoolVar(&flags.UseOop, "oop", false, "Use the object‑oriented engine instead of the default engine")
-
-	rootCmd.PersistentFlags().BoolVarP(&flags.UseEvalLib, "evalLib", "e", false, "Use an evaluation library expr-lang.")
-	rootCmd.PersistentFlags().BoolVarP(&flags.UseFilterRegex, "filterRegex", "f", false, "Use regex for filtering arithmetic expressions from file.")
-
-	rootCmd.PersistentFlags().BoolVarP(&flags.Unzip, "unzip", "u", false, "Read input file from a ZIP archive")
-	rootCmd.PersistentFlags().BoolVarP(&flags.Archive, "archive", "a", false, "Write output file as a ZIP archive")
-	rootCmd.PersistentFlags().StringVarP(
-		&flags.DataFileInArchive,
-		"dataFileInArchive",
-		"d",
-		app.DataFileInArchive,
-		"Name of the file inside the ZIP to read (with --unzip) or write (with --archive). Can be used with either or both --unzip and --archive.\nWhen reading, if the specified file is not present, the first file in the archive is used.",
-	)
-
-	rootCmd.PersistentFlags().BoolVar(&flags.Decrypt, "decrypt", false, "Decrypt input file. Use with --keyPath")
-	rootCmd.PersistentFlags().BoolVar(&flags.Encrypt, "encrypt", false, "Encrypt output file. Use with --keyPath")
-	rootCmd.PersistentFlags().StringVar(&flags.KeyPath, "keyPath", "", "Path to a file containing the AES key, either 16, 24, or 32 bytes to select AES-128, AES-192, or AES-256.\nRequired when --encrypt or --decrypt is set")
 }
