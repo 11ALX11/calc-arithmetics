@@ -3,9 +3,13 @@ package flags
 // --- cmd/root.go ---
 var (
 	ForceTranslation string
-	OutputToConsole  bool
 	VerboseOutput    bool
 	UseOop           bool
+)
+
+// --- cmd/cli.go ---
+var (
+	OutputToConsole bool
 
 	UseEvalLib     bool
 	UseFilterRegex bool
