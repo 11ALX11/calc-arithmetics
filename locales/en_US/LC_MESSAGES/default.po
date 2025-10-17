@@ -52,3 +52,37 @@ msgstr "web not supported yet."
 # filename: main.go, offset: 185, line: 12, column: 14
 msgid "failed to initialize i18n: %v"
 msgstr "failed to initialize i18n: %v"
+
+# filename: console/runApp.go
+msgid "Path to file to read input data from:\n"
+msgstr "Path to file to read input data from:\n"
+
+msgid "Is input file an archive? (y/N): "
+msgstr "Is input file an archive? (y/N): "
+
+msgid "Name of the file inside the ZIP to read (data.txt):\n"
+msgstr "Name of the file inside the ZIP to read (data.txt):\n"
+
+msgid "Is input file encoded? (y/N): "
+msgstr "Is input file encoded? (y/N): "
+
+msgid "Path to file with encryption key to decode with:\n"
+msgstr "Path to file with encryption key:\n"
+
+msgid "Use evaluation library? (y/N): "
+msgstr "Use evaluation library? (y/N): "
+
+msgid "Use regex for filtering arithmetic expressions? (y/N): "
+msgstr "Use regex for filtering arithmetic expressions? (y/N): "
+
+msgid "Do you wish to encrypt result? (y/N): "
+msgstr "Do you wish to encrypt result? (y/N): "
+
+msgid "Path to file to write result to:\n"
+msgstr "Path to file to write result to:\n"
+
+msgid "Do you wish to archive output file? (y/N): "
+msgstr "Do you wish to archive output file? (y/N): "
+
+msgid "Also print the results to the console? (y/N): "
+msgstr "Also print the results to the console? (y/N): "

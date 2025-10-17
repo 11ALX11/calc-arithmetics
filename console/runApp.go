@@ -11,21 +11,30 @@ import (
 	"github.com/11ALX11/calc-arithmetics/i18n"
 )
 
+const (
+	promptInputFile         = "Path to file to read input data from:\n"
+	promptIsInputArchive    = "Is input file an archive? (y/N): "
+	promptDataFileInArchive = "Name of the file inside the ZIP to read (data.txt):\n"
+	promptIsInputEncoded    = "Is input file encoded? (y/N): "
+	promptKeyPath           = "Path to file with encryption key to:\n"
+	promptUseEvalLib        = "Use evaluation library? (y/N): "
+	promptUseFilterRegex    = "Use regex for filtering arithmetic expressions? (y/N): "
+	promptEncryptResult     = "Do you wish to encrypt result? (y/N): "
+	promptOutputFile        = "Path to file to write result to:\n"
+	promptArchiveOutput     = "Do you wish to archive output file? (y/N): "
+	promptOutputToConsole   = "Also print the results to the console? (y/N): "
+)
+
 func runApp() {
 
 	var content, keyPath, dataFileInArchive string
 	var err error
 
-	inputFile := prompt(
-		i18n.T("Path to file to read input data from:\n"),
-	)
+	inputFile := prompt(i18n.T(promptInputFile))
 
-	unzip := promptB(
-		i18n.T("Is input file an archive? (y/N): "),
-	)
+	unzip := promptB(i18n.T(promptIsInputArchive))
 
 	if !unzip {
-
 		content, err = app.ReadFile(inputFile)
 
 		if err != nil {
@@ -33,10 +42,7 @@ func runApp() {
 			return
 		}
 	} else {
-
-		dataFileInArchive = prompt(
-			i18n.T("Name of the file inside the ZIP to read (data.txt):\n"),
-		)
+		dataFileInArchive = prompt(i18n.T(promptDataFileInArchive))
 		if dataFileInArchive == "" {
 			dataFileInArchive = app.DataFileInArchive
 		}
@@ -49,14 +55,10 @@ func runApp() {
 		}
 	}
 
-	decrypt := promptB(
-		i18n.T("Is input file encoded? (y/N): "),
-	)
+	decrypt := promptB(i18n.T(promptIsInputEncoded))
 
 	if decrypt {
-		keyPath = prompt(
-			i18n.T("Path to file with encryption key to decode with:\n"),
-		)
+		keyPath = prompt(i18n.T(promptKeyPath))
 
 		content, err = app.DecryptFileKey(content, keyPath)
 
@@ -66,18 +68,14 @@ func runApp() {
 		}
 	}
 
-	useEvalLib := promptB(
-		i18n.T("Use evaluation library? (y/N): "),
-	)
+	useEvalLib := promptB(i18n.T(promptUseEvalLib))
 
 	evalFunction := app.Eval
 	if useEvalLib {
 		evalFunction = app.EvalLib
 	}
 
-	useFilterRegex := promptB(
-		i18n.T("Use regex for filtering arithmetic expressions? (y/N): "),
-	)
+	useFilterRegex := promptB(i18n.T(promptUseFilterRegex))
 
 	replaceFunction := app.ReplaceMathExpressions
 	if useFilterRegex {
@@ -86,15 +84,11 @@ func runApp() {
 
 	sResult := replaceFunction(content, evalFunction)
 
-	encrypt := promptB(
-		i18n.T("Do you wish to encrypt result? (y/N): "),
-	)
+	encrypt := promptB(i18n.T(promptEncryptResult))
 
 	if encrypt {
 		if keyPath == "" {
-			keyPath = prompt(
-				i18n.T("Path to file with encryption key to decode with:\n"),
-			)
+			keyPath = prompt(i18n.T(promptKeyPath))
 		}
 		sResult, err = app.EncryptFileKey(sResult, keyPath)
 
@@ -104,20 +98,13 @@ func runApp() {
 		}
 	}
 
-	outputFile := prompt(
-		i18n.T("Path to file to write result to:\n"),
-	)
+	outputFile := prompt(i18n.T(promptOutputFile))
 
-	archive := promptB(
-		i18n.T("Do you wish to archive output file? (y/N): "),
-	)
+	archive := promptB(i18n.T(promptArchiveOutput))
 
 	if archive {
-
 		if dataFileInArchive == "" {
-			dataFileInArchive = prompt(
-				i18n.T("Name of the file inside the ZIP to write (data.txt):\n"),
-			)
+			dataFileInArchive = prompt(i18n.T(promptDataFileInArchive))
 			if dataFileInArchive == "" {
 				dataFileInArchive = app.DataFileInArchive
 			}
@@ -125,7 +112,6 @@ func runApp() {
 
 		err = app.WriteZipFile(outputFile, sResult, dataFileInArchive)
 	} else {
-
 		err = app.WriteFile(outputFile, sResult)
 	}
 
@@ -134,9 +120,7 @@ func runApp() {
 		return
 	}
 
-	outputToConsole := promptB(
-		i18n.T("Also print the results to the console? (y/N): "),
-	)
+	outputToConsole := promptB(i18n.T(promptOutputToConsole))
 
 	if outputToConsole {
 		fmt.Println(sResult)
