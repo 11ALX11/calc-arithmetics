@@ -1,9 +1,7 @@
 package cmd
 
 import (
-	"fmt"
-
-	"github.com/11ALX11/calc-arithmetics/i18n"
+	"github.com/11ALX11/calc-arithmetics/web"
 	"github.com/spf13/cobra"
 )
 
@@ -12,9 +10,7 @@ var webCmd = &cobra.Command{
 	Use:   "web",
 	Short: "Use a web-based interface",
 	// Long:  `Use a web-based interface.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(i18n.T("web not supported yet."))
-	},
+	Run: web.Run,
 }
 
 func init() {
