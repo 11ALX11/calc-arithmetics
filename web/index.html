@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Expression Replacer</title>
+</head>
+<body>
+    <h1>Replace Mathematical Expressions</h1>
+    <form id="mathForm" action="/replace-math-expression" method="POST">
+        <input type="text" name="expression" placeholder="Enter math expression" required>
+        <button type="submit">Replace</button>
+    </form>
+    <div id="result"></div>
+    <script>
+        document.getElementById('mathForm').onsubmit = function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = `Result: ${data.result}`;
+            });
+        };
+    </script>
+</body>
+</html>
