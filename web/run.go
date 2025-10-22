@@ -16,10 +16,8 @@ func Run(cmd *cobra.Command, args []string) {
 
 	router.POST("/replace-math-expression", func(c *gin.Context) {
 		expression := c.PostForm("expression")
-		// Here you can implement your logic to replace math expressions
-		// For demonstration, let's just return the received expression
-		// result := replaceMathExpressions(expression)
-		c.JSON(http.StatusOK, gin.H{"result": expression})
+		result, err := replaceMathExpressions(expression)
+		c.JSON(http.StatusOK, gin.H{"result": result, "error": err})
 	})
 
 	router.LoadHTMLFiles("web/index.html")
