@@ -9,6 +9,14 @@
     <h1>Replace Mathematical Expressions</h1>
     <form id="mathForm" action="/replace-math-expression" method="POST">
         <input type="text" name="expression" placeholder="Enter math expression" required>
+        <input type="checkbox" name="decrypt"> Decrypt
+        <input type="checkbox" name="encrypt"> Encrypt
+        <input type="text" name="keyPath" placeholder="Key Path">
+        <input type="checkbox" name="unzip"> Unzip
+        <input type="checkbox" name="useEvalLib"> Use Eval Library
+        <input type="checkbox" name="useFilterRegex"> Use Filter Regex
+        <input type="checkbox" name="archive"> Archive
+        <input type="text" name="dataFileInArchive" placeholder="Data File In Archive">
         <button type="submit">Replace</button>
     </form>
     <div id="result"></div>
