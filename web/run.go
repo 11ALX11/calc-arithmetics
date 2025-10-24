@@ -20,14 +20,20 @@ func Run(cmd *cobra.Command, args []string) {
 
 		flags.Decrypt = c.PostForm("decrypt") == "on"
 		flags.Encrypt = c.PostForm("encrypt") == "on"
-		flags.KeyPath = c.PostForm("keyPath")
-		flags.Unzip = c.PostForm("unzip") == "on"
+		flags.KeyPath = c.PostForm("keyPath")     // ToDo: paste as plain text, maybe different flag ("key")
+		flags.Unzip = c.PostForm("unzip") == "on" // ToDo: input as a file
 		flags.UseEvalLib = c.PostForm("useEvalLib") == "on"
 		flags.UseFilterRegex = c.PostForm("useFilterRegex") == "on"
-		flags.Archive = c.PostForm("archive") == "on"
+		flags.Archive = c.PostForm("archive") == "on" // ToDo: output as a file
 		flags.DataFileInArchive = c.PostForm("dataFileInArchive")
 
 		result, err := replaceMathExpressions(expression)
+
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"result": result, "error": err.Error()})
+			return
+		}
+
 		c.JSON(http.StatusOK, gin.H{"result": result, "error": err})
 	})
 

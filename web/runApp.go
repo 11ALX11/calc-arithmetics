@@ -20,7 +20,6 @@ func replaceMathExpressions(expr string) (string, error) {
 	// flag: unzip
 	if flags.Unzip {
 
-		// ToDo: debug, doesnt work, error `{}` on front and no result
 		content, err = app.ReadZipData(content, flags.DataFileInArchive)
 
 		if err != nil {
